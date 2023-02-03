@@ -1,4 +1,4 @@
-export default function GridBox({ parentClasses, children }) {
+export default function GridBox({ children }) {
     return (
         <div>
             {children}
