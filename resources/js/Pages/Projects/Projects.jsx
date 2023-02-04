@@ -2,8 +2,7 @@ import { Link, Head } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import PrimaryButton from '@/Components/PrimaryButton';
 
-export default function Projects(props) {
-    
+export default function Projects(props) {    
     return (
         <>
         <AuthenticatedLayout
@@ -54,6 +53,13 @@ export default function Projects(props) {
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+                <div className="fab-container">
+                    <div className="custom-button icon-button" onClick={() => {alert('Open the create project dialog')}}>
+                        <svg fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" {...props}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                     </div>
                 </div>
             </div>

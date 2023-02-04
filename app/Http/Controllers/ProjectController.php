@@ -17,7 +17,7 @@ class ProjectController extends Controller
     public function index()
     {
         // Return the Inertia view
-        return Inertia::render('Projects', [
+        return Inertia::render('Projects/Projects', [
             'projects' => [
                 [
                     'id' => 1,
