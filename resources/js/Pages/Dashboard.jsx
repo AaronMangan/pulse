@@ -7,7 +7,7 @@ import { Head } from '@inertiajs/react';
 export default function Dashboard(props) {
     const getChildren = () => {
         return (
-            <div className="grid w-full grid-cols-1 gap-4 bg-gray-100 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+            <div className="grid grid-cols-1 gap-4 bg-gray-100 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
                 <GridItem 
                     title="Transmittals"
                     blurb="Send and receive documents to other parties"
@@ -35,7 +35,7 @@ export default function Dashboard(props) {
                 />
                 <GridItem 
                     title="Logout"
-                    blurb="Logout of Pulse and check if the widths are fixed for these elements?"
+                    blurb="Logout of Pulse"
                     href={route('logout')}
                     as="button"
                     method="post"
@@ -53,7 +53,7 @@ export default function Dashboard(props) {
             <Head title="Dashboard" />
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="bg-gray-100 sm:rounded-lg">
+                    <div className="pl-12 bg-gray-100 sm:rounded-lg">
                         <GridBox children={getChildren()} />
                     </div>
                 </div>
