@@ -16,38 +16,9 @@ class ProjectController extends Controller
      */
     public function index()
     {
+        $projects = Project::all();
         // Return the Inertia view
-        return Inertia::render('Projects/Projects', [
-            'projects' => [
-                [
-                    'id' => 1,
-                    'name' => 'Test Project',
-                    'status' => 'active',
-                    'description' => 'A simple test project',
-                    'project_code' => 'TEST',
-                    'project_start' => date('Y-m-d H:i:s', time()) ?? '2023-02-03 22:31:58',
-                    'project_end' => date('Y-m-d H:i:s', time()) ?? '2023-02-03 22:31:58',
-                ],
-                [
-                    'id' => 2,
-                    'name' => 'Test Project #2',
-                    'status' => 'active',
-                    'description' => 'A simple test project',
-                    'project_code' => 'TST2',
-                    'project_start' => date('Y-m-d H:i:s', time()) ?? '2023-02-03 22:31:58',
-                    'project_end' => date('Y-m-d H:i:s', time()) ?? '2023-02-03 22:31:58',
-                ],
-                [
-                    'id' => 3,
-                    'name' => 'Test Project #3',
-                    'status' => 'inactive',
-                    'description' => 'A simple test project',
-                    'project_code' => 'TST3',
-                    'project_start' => date('Y-m-d H:i:s', time()) ?? '2023-02-03 22:31:58',
-                    'project_end' => date('Y-m-d H:i:s', time()) ?? '2023-02-03 22:31:58',
-                ],
-            ]
-        ]);
+        return Inertia::render('Projects/Projects', ['projects' => $projects]);
     }
 
     /**
@@ -68,7 +39,17 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        //
+        // Get validated data.
+        $validated = $request->validated();
+        
+        $created = Project::create([
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'project_start' => date('Y-m-d H:i:s', strtotime($validated['project_start'])),
+            'project_end' => null,
+            'project_code' => $validated['project_code']
+        ]);
+        return redirect()->back();
     }
 
     /**

@@ -16,11 +16,11 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
-            $table->string('status', 100)->default('new');
+            $table->string('status', 100)->default('active');
             $table->longText('description')->nullable();
             $table->string('project_code');
             $table->dateTime('project_start');
-            $table->dateTime('project_end');
+            $table->dateTime('project_end')->nullable();
             $table->timestamps();
         });
     }
