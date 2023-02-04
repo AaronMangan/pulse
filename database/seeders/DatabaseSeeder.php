@@ -14,11 +14,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        if(env('APP_ENV') === 'local'){
+            \App\Models\User::create([
+                'name' => 'Aaron Mangan',
+                'email' => 'azza.mangan@gmail.com',
+                'email_verified_at' => '2023-02-03 22:31:58',
+                'password' => '$2y$10$Va/KW5rmRpOW5gKROSc3SeZYd3PmhQ9FGQNaXOsrqDdfIatfa01Ye',
+            ]);
+            $this->call(RevisionSeeder::class);
+            $this->call(StatusSeeder::class);
+        }
     }
 }
