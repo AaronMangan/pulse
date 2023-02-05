@@ -7,8 +7,9 @@ import TextInput from '@/Components/TextInput';
 import "react-datepicker/dist/react-datepicker.css";
 import { useRef, useState } from 'react';
 import { useForm } from '@inertiajs/react';
+import Dropdown from '@/Components/Dropdown';
 
-export default function Revisions({ className, props }) {
+export default function Revisions({className, revisions}) {
     const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
     const passwordInput = useRef();
 
@@ -62,13 +63,11 @@ export default function Revisions({ className, props }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {/* {props.projects.map(project => (
-                        <tr key={project.id} className={project.status == 'active' ? 'bg-white border-b' : 'bg-gray-200 border-b'}>
-                            <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">{project.id}</td>
-                            <td className="px-6 py-4 text-sm font-light font-bold text-gray-900 whitespace-nowrap">{project.name}</td>
-                            <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{project.code}</td>
-                            <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{project.start}</td>
-                            <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{project.end}</td>
+                    {revisions.map(revision => (
+                        <tr key={revision.id} className={revision.status == 'active' ? 'bg-white border-b' : 'bg-gray-200 border-b'}>
+                            <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">{revision.id}</td>
+                            <td className="px-6 py-4 text-sm font-light font-bold text-gray-900 whitespace-nowrap">{revision.name}</td>
+                            <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{revision.status}</td>
                             <td className="px-6 py-4 text-sm font-light text-center text-gray-900 whitespace-nowrap">
                                 <Dropdown>
                                     <Dropdown.Trigger>
@@ -96,10 +95,10 @@ export default function Revisions({ className, props }) {
                                     <Dropdown.Content>
                                         <Dropdown.Link href="">View</Dropdown.Link>
                                         <Dropdown.Link href="">Edit</Dropdown.Link>
-                                        <Dropdown.Link href={route('projects.archive', project)}  method="post" as="button">
-                                            {
+                                        <Dropdown.Link href="" method="post" as="button">Option
+                                            {/* {
                                                 project.status == 'active' ? 'Archive' : 'Restore'
-                                            }
+                                            } */}
                                         </Dropdown.Link>
                                         <Dropdown.Link href="" method="post" as="button">
                                             Delete
@@ -108,7 +107,7 @@ export default function Revisions({ className, props }) {
                                 </Dropdown>
                             </td>
                         </tr>
-                    ))} */}
+                    ))}
                 </tbody>
             </table>
             <DangerButton onClick={confirmUserDeletion}>Add Revision</DangerButton>

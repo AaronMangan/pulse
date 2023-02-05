@@ -14,6 +14,6 @@ class Revision extends Model
     ];
 
     protected $visible = [
-        'name', 'status', 'description', 'created_at', 'updated_at'
+        'id', 'name', 'status', 'description', 'created_at', 'updated_at'
     ];
 }
