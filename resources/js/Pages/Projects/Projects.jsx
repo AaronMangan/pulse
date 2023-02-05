@@ -70,7 +70,6 @@ export default function Projects(props) {
                                 <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Code</th>
                                 <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Start Date</th>
                                 <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">End Date</th>
-                                <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Description</th> 
                                 <th scope="col" className="px-6 py-4 text-sm text-white font-large">Actions</th> 
                             </tr>
                         </thead>
@@ -82,7 +81,6 @@ export default function Projects(props) {
                                     <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{project.code}</td>
                                     <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{project.start}</td>
                                     <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{project.end}</td>
-                                    <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{project.description}</td>
                                     <td className="px-6 py-4 text-sm font-light text-center text-gray-900 whitespace-nowrap">
                                         <Dropdown>
                                             <Dropdown.Trigger>

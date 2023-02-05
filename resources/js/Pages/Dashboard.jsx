@@ -36,7 +36,7 @@ export default function Dashboard(props) {
                 <GridItem 
                     title="Settings"
                     blurb="Modify your settings to get them just the way you need them"
-                    href="#"
+                    href="settings"
                 />
                 <GridItem 
                     title="Logout"
