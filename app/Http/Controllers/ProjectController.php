@@ -16,7 +16,9 @@ class ProjectController extends Controller
      */
     public function index()
     {
+        // Fetch projects.
         $projects = Project::all();
+        
         // Return the Inertia view
         return Inertia::render('Projects/Projects', ['projects' => $projects]);
     }
@@ -60,7 +62,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
+        // 
     }
 
     /**
@@ -95,5 +97,19 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         //
+    }
+
+    /**
+     * Archive or Restore the project.
+     *
+     * @param Project $project
+     * @return \Illuminate\Http\Response
+     */
+    public function archive(Project $project)
+    {
+        // Change the status to 'inactive'
+        $project->status = ($project->status == 'active') ? 'inactive' : 'active';
+        $project->save();
+        return redirect()->back();
     }
 }
