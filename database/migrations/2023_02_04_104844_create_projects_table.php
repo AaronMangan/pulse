@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('name', 255);
             $table->string('status', 100)->default('active');
             $table->longText('description')->nullable();
-            $table->string('project_code');
-            $table->dateTime('project_start');
-            $table->dateTime('project_end')->nullable();
+            $table->string('code');
+            $table->dateTime('start');
+            $table->dateTime('end')->nullable();
             $table->timestamps();
         });
     }

@@ -45,9 +45,9 @@ class ProjectController extends Controller
         $created = Project::create([
             'name' => $validated['name'],
             'description' => $validated['description'],
-            'project_start' => date('Y-m-d H:i:s', strtotime($validated['project_start'])),
-            'project_end' => null,
-            'project_code' => $validated['project_code']
+            'start' => date('Y-m-d H:i:s', strtotime($validated['start'])),
+            'end' => null,
+            'code' => $validated['code']
         ]);
         return redirect()->back();
     }

@@ -10,6 +10,11 @@ class Project extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'status', 'description', 'project_code', 'project_start', 'project_end'
+        'name', 'status', 'description', 'code', 'start', 'end'
+    ];
+
+    protected $casts = [
+        'start' => 'datetime:d-m-Y',
+        'end' => 'datetime:d-m-Y',
     ];
 }

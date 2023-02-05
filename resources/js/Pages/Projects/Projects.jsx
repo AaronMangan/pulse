@@ -27,8 +27,8 @@ export default function Projects(props) {
     } = useForm({
         name: '',
         description: '',
-        project_code: '',
-        project_start: startDate,
+        code: '',
+        start: startDate,
     });
 
     const showNewProjectModal = () => {
@@ -79,24 +79,12 @@ export default function Projects(props) {
                                     {props.projects.map(project => (
                                         <tr key={project.id} className={project.status == 'active' ? 'bg-white border-b' : 'bg-gray-200 border-b'}>
                                             <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">{project.id}</td>
-                                            <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">
-                                                {project.name}
-                                            </td>
-                                            <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">
-                                                {project.project_code}
-                                            </td>
-                                            <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">
-                                                {project.project_start}
-                                            </td>
-                                            <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">
-                                                {project.project_end}
-                                            </td>
-                                            <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">
-                                                {project.description}
-                                            </td>
-                                            <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">
-                                                <PrimaryButton>Actions</PrimaryButton>
-                                            </td>
+                                            <td className="px-6 py-4 text-sm font-light font-bold text-gray-900 whitespace-nowrap">{project.name}</td>
+                                            <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{project.code}</td>
+                                            <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{project.start}</td>
+                                            <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{project.end}</td>
+                                            <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{project.description}</td>
+                                            <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"><PrimaryButton>Actions</PrimaryButton></td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -133,19 +121,19 @@ export default function Projects(props) {
 
                         {/* Project Code */}
                         <div className="w-full p-0 mt-6">
-                            <InputLabel className="font-bold" for="project_code" value="Project Code" />
+                            <InputLabel className="font-bold" for="code" value="Project Code" />
 
                             <TextInput
-                                id="project_code"
+                                id="code"
                                 type="text"
-                                name="project_code"
-                                value={data.project_code}
-                                handleChange={(e) => setData('project_code', e.target.value)}
+                                name="code"
+                                value={data.code}
+                                handleChange={(e) => setData('code', e.target.value)}
                                 className="block w-full mt-1"
                                 placeholder="QBR1"
                             />
 
-                            <InputError message={errors.project_code} className="mt-2" />
+                            <InputError message={errors.code} className="mt-2" />
                             <small className='italic text-gray-400'>This will become a placeholder for Document Numbering</small>
                         </div>
 
@@ -157,9 +145,9 @@ export default function Projects(props) {
                                     closeOnScroll={(e) => e.target === document}
                                     selected={startDate}
                                     onChange={(date) => setStartDate(date)}
-                                    value={data.project_start}
-                                    name="project_start"
-                                    id="project_start"
+                                    value={data.start}
+                                    name="start"
+                                    id="start"
                                     dateFormat='d/M/Y'
                                     placeholder="Select start date"
                                 />
