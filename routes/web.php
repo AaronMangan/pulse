@@ -26,25 +26,37 @@ Route::get('/', function () {
     ]);
 });
 
+/**
+ * Dashboard Routes.
+ */
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+/**
+ * Profile Routes.
+ */
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-/* Project Routes */
+/**
+ * Project Routes.
+ */
 Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::post('/projects/create', [ProjectController::class, 'store'])->name('projects.create');
     Route::post('/projects/archive/{project}', [ProjectController::class, 'archive'])->name('projects.archive');
 });
 
-/* Settings Route */
+/**
+ * Settings Routes.
+ */
 Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
+    Route::post('/settings/revision', [\App\Http\Controllers\SettingsController::class, 'storeRevision'])->name('settings.revision.create');
+    Route::post('/settings/revision/archive/{revision}', [\App\Http\Controllers\SettingsController::class, 'archiveRevision'])->name('settings.revision.archive');
 });
 require __DIR__.'/auth.php';

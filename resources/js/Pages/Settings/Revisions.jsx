@@ -2,6 +2,7 @@ import Modal from '@/Components/Modal';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import SecondaryButton from '@/Components/SecondaryButton';
+import PrimaryButton from '@/Components/PrimaryButton';
 import DangerButton from '@/Components/DangerButton';
 import TextInput from '@/Components/TextInput';
 import "react-datepicker/dist/react-datepicker.css";
@@ -16,12 +17,12 @@ export default function Revisions({className, revisions}) {
     const {
         data,
         setData,
-        delete: destroy,
+        post,
         processing,
         reset,
         errors,
     } = useForm({
-        password: '',
+        revision: ''
     });
 
     const confirmUserDeletion = () => {
@@ -31,7 +32,7 @@ export default function Revisions({className, revisions}) {
     const deleteUser = (e) => {
         e.preventDefault();
 
-        destroy(route('profile.destroy'), {
+        post(route('settings.revision.create'), {
             preserveScroll: true,
             onSuccess: () => closeModal(),
             onError: () => passwordInput.current.focus(),
@@ -67,7 +68,13 @@ export default function Revisions({className, revisions}) {
                         <tr key={revision.id} className={revision.status == 'active' ? 'bg-white border-b' : 'bg-gray-200 border-b'}>
                             <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">{revision.id}</td>
                             <td className="px-6 py-4 text-sm font-light font-bold text-gray-900 whitespace-nowrap">{revision.name}</td>
-                            <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{revision.status}</td>
+                            <td className="px-6 py-4 text-sm font-light text-gray-900 uppercase whitespace-nowrap">
+                                {
+                                    revision.status == 'active'
+                                        ? <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">active</span>
+                                        : <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">inactive</span>
+                                }
+                            </td>
                             <td className="px-6 py-4 text-sm font-light text-center text-gray-900 whitespace-nowrap">
                                 <Dropdown>
                                     <Dropdown.Trigger>
@@ -95,10 +102,10 @@ export default function Revisions({className, revisions}) {
                                     <Dropdown.Content>
                                         <Dropdown.Link href="">View</Dropdown.Link>
                                         <Dropdown.Link href="">Edit</Dropdown.Link>
-                                        <Dropdown.Link href="" method="post" as="button">Option
-                                            {/* {
-                                                project.status == 'active' ? 'Archive' : 'Restore'
-                                            } */}
+                                        <Dropdown.Link href={route('settings.revision.archive', revision)} method="post" as="button">
+                                            {
+                                                revision.status == 'active' ? 'Archive' : 'Restore'
+                                            }
                                         </Dropdown.Link>
                                         <Dropdown.Link href="" method="post" as="button">
                                             Delete
@@ -113,40 +120,31 @@ export default function Revisions({className, revisions}) {
             <DangerButton onClick={confirmUserDeletion}>Add Revision</DangerButton>
 
             <Modal show={confirmingUserDeletion} onClose={closeModal}>
+                <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeModal}>&times;</span>
                 <form onSubmit={deleteUser} className="p-6">
-                    <h2 className="text-lg font-medium text-gray-900">
-                        Are you sure you want to delete your account?
-                    </h2>
-
-                    <p className="mt-1 text-sm text-gray-600">
-                        Once your account is deleted, all of its resources and data will be permanently deleted. Please
-                        enter your password to confirm you would like to permanently delete your account.
-                    </p>
+                    <h2 className="text-lg font-medium font-bold text-gray-900">Create New Revision</h2>
+                    <hr class="mt-2 text-gray-300"></hr>
 
                     <div className="mt-6">
-                        <InputLabel for="password" value="Password" className="sr-only" />
-
+                        <InputLabel className="font-bold" for="name" value="Revision" />
                         <TextInput
-                            id="password"
-                            type="password"
-                            name="password"
-                            ref={passwordInput}
-                            value={data.password}
-                            handleChange={(e) => setData('password', e.target.value)}
-                            className="block w-3/4 mt-1"
+                            id="revision"
+                            type="text"
+                            name="revision"
+                            value={data.revision}
+                            handleChange={(e) => setData('revision', e.target.value)}
+                            className="block w-full mt-1"
                             isFocused
-                            placeholder="Password"
-                        />
-
-                        <InputError message={errors.password} className="mt-2" />
+                            placeholder="A, B, 0, 1"
+                        />                                        
+                        <InputError message={errors.revision} className="mt-2" />
                     </div>
 
                     <div className="flex justify-end mt-6">
+                        <PrimaryButton className="mr-3" processing={processing}>
+                            Create Revision
+                        </PrimaryButton>
                         <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
-
-                        <DangerButton className="ml-3" processing={processing}>
-                            Delete Account
-                        </DangerButton>
                     </div>
                 </form>
             </Modal>
