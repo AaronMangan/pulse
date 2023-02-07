@@ -1,9 +1,9 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import Revisions from './Revisions';
+import Statuses from './Statuses';
 
 export default function Settings(props) {
-    console.log(props.revisions);
     return (
         <AuthenticatedLayout
             auth={props.auth}
@@ -20,6 +20,7 @@ export default function Settings(props) {
 
                     <div className="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
                         {/* Element Here */}
+                        <Statuses statuses={props.statuses}/>
                     </div>
 
                     <div className="p-4 bg-white shadow sm:p-8 sm:rounded-lg">

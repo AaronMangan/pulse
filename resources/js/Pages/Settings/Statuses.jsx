@@ -10,10 +10,9 @@ import { useRef, useState } from 'react';
 import { useForm } from '@inertiajs/react';
 import Dropdown from '@/Components/Dropdown';
 
-export default function Revisions({className, revisions}) {
+export default function Statuses({className, statuses}) {
     const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
-    const passwordInput = useRef();
-
+    const nameInput = useRef();
     const {
         data,
         setData,
@@ -22,20 +21,22 @@ export default function Revisions({className, revisions}) {
         reset,
         errors,
     } = useForm({
-        revision: ''
+        status: 'active',
+        name: '',
+        code: '',
     });
 
     const confirmUserDeletion = () => {
         setConfirmingUserDeletion(true);
     };
 
-    const deleteUser = (e) => {
+    const createStatus = (e) => {
         e.preventDefault();
 
-        post(route('settings.revision.create'), {
+        post(route('settings.status.create'), {
             preserveScroll: true,
             onSuccess: () => closeModal(),
-            onError: () => passwordInput.current.focus(),
+            onError: () => nameInput.current.focus(),
             onFinish: () => reset(),
         });
     };
@@ -49,9 +50,9 @@ export default function Revisions({className, revisions}) {
     return (
         <section className={`space-y-6 ${className}`}>
             <header>
-                <h2 className="text-lg font-medium font-bold text-gray-900">Revisions</h2>
+                <h2 className="text-lg font-medium font-bold text-gray-900">Statuses</h2>
                 <p className="mt-1 text-xs text-gray-600">
-                    Manage the revisions that can be applied to your documents.
+                    Manage the statuses that can be applied to your documents. These codes indicate the current state of the document.
                 </p>
             </header>
             <table className="min-w-full rounded-md">
@@ -59,18 +60,20 @@ export default function Revisions({className, revisions}) {
                     <tr>
                         <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Id</th>
                         <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Name</th>
+                        <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Code</th>
                         <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Status</th>
                         <th scope="col" className="px-6 py-4 text-sm text-white font-large">Actions</th> 
                     </tr>
                 </thead>
                 <tbody>
-                    {revisions.map(revision => (
-                        <tr key={revision.id} className={revision.status == 'active' ? 'bg-white border-b' : 'bg-gray-200 border-b'}>
-                            <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">{revision.id}</td>
-                            <td className="px-6 py-4 text-sm font-light font-bold text-gray-900 whitespace-nowrap">{revision.name}</td>
+                    {(statuses) ? statuses.map(status => (
+                        <tr key={status.id} className={status.status == 'active' ? 'bg-white border-b' : 'bg-gray-200 border-b'}>
+                            <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">{status.id}</td>
+                            <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{status.name}</td>
+                            <td className="px-6 py-4 text-sm font-light font-bold text-gray-900 whitespace-nowrap">{status.code}</td>
                             <td className="px-6 py-4 text-sm font-light text-gray-900 uppercase whitespace-nowrap">
                                 {
-                                    revision.status == 'active'
+                                    status.status == 'active'
                                         ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">active</span>
                                         : <span className="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">inactive</span>
                                 }
@@ -102,9 +105,9 @@ export default function Revisions({className, revisions}) {
                                     <Dropdown.Content>
                                         <Dropdown.Link href="">View</Dropdown.Link>
                                         <Dropdown.Link href="">Edit</Dropdown.Link>
-                                        <Dropdown.Link href={route('settings.revision.archive', revision)} method="post" as="button">
+                                        <Dropdown.Link href={route('settings.status.archive', {status})} method="post" as="button">
                                             {
-                                                revision.status == 'active' ? 'Archive' : 'Restore'
+                                                status.status == 'active' ? 'Archive' : 'Restore'
                                             }
                                         </Dropdown.Link>
                                         <Dropdown.Link href="" method="post" as="button">
@@ -114,35 +117,52 @@ export default function Revisions({className, revisions}) {
                                 </Dropdown>
                             </td>
                         </tr>
-                    ))}
+                    )) : {}}
                 </tbody>
             </table>
-            <PrimaryButton onClick={confirmUserDeletion}>Add Revision</PrimaryButton>
+            <PrimaryButton onClick={confirmUserDeletion}>Add Status</PrimaryButton>
 
             <Modal show={confirmingUserDeletion} onClose={closeModal}>
                 <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeModal}>&times;</span>
-                <form onSubmit={deleteUser} className="p-6">
-                    <h2 className="text-lg font-medium font-bold text-gray-900">Create New Revision</h2>
+                <form onSubmit={createStatus} className="p-6">
+                    <h2 className="text-lg font-medium font-bold text-gray-900">Create New Status</h2>
                     <hr className="mt-2 text-gray-300"></hr>
 
+                    {/* Name */}
                     <div className="mt-6">
-                        <InputLabel className="font-bold" for="name" value="Revision" />
+                        <InputLabel className="font-bold" for="name" value="Name" />
                         <TextInput
-                            id="revision"
+                            id="name"
                             type="text"
-                            name="revision"
-                            value={data.revision}
-                            handleChange={(e) => setData('revision', e.target.value)}
+                            name="name"
+                            // value={data.name}
+                            ref={nameInput}
+                            handleChange={(e) => setData('name', e.target.value)}
                             className="block w-full mt-1"
                             isFocused
                             placeholder="A, B, 0, 1"
                         />                                        
-                        <InputError message={errors.revision} className="mt-2" />
+                        <InputError message={errors.name} className="mt-2" />
+                    </div>
+
+                    {/* Code */}
+                    <div className="mt-6">
+                        <InputLabel className="font-bold" for="name" value="Code" />
+                        <TextInput
+                            id="code"
+                            type="text"
+                            name="code"
+                            // value={data.code}
+                            handleChange={(e) => setData('code', e.target.value)}
+                            className="block w-full mt-1 uppercase"
+                            placeholder="DFT, SUP, OBS"
+                        />                                        
+                        <InputError message={errors.code} className="mt-2" />
                     </div>
 
                     <div className="flex justify-end mt-6">
                         <PrimaryButton className="mr-3" processing={processing}>
-                            Create Revision
+                            Create Status
                         </PrimaryButton>
                         <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
                     </div>

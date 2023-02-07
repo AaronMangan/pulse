@@ -58,5 +58,9 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
     Route::post('/settings/revision', [\App\Http\Controllers\SettingsController::class, 'storeRevision'])->name('settings.revision.create');
     Route::post('/settings/revision/archive/{revision}', [\App\Http\Controllers\SettingsController::class, 'archiveRevision'])->name('settings.revision.archive');
+    
+    // 
+    Route::post('/settings/status/archive/{status}', [\App\Http\Controllers\SettingsController::class, 'archiveStatus'])->name('settings.status.archive');
+    Route::post('/settings/status', [\App\Http\Controllers\SettingsController::class, 'storeStatus'])->name('settings.status.create');
 });
 require __DIR__.'/auth.php';
