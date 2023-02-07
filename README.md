@@ -13,15 +13,11 @@ You have several options to setup Pulse locally. You may use a plain local insta
 via *Laradock* or *Laravel Sail*
 
 ### Local Setups
-
     #### Vanilla (Plain)
-
     #### Valet
 
 ### Docker
-
     ##### Laradock
-
     #### Laravel Sail
 
 ## First Time Setup
