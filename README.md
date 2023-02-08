@@ -30,6 +30,10 @@ Pulse can be setup locally using Homebrew:
 
 `npm install && npm run dev`
 
+Then, in a separate terminal run:
+
+`php artisan serve`
+
 #### Valet
 
 ### Docker
