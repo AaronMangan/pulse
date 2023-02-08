@@ -12,9 +12,25 @@
 You have several options to setup Pulse locally. You may use a plain local installation use *Laravel Valet* or DIY. You can also use Docker,
 via *Laradock* or *Laravel Sail*
 
+___
+
 ### Local Setups
-    #### Vanilla (Plain)
-    #### Valet
+
+**Vanilla Stack**
+
+Pulse can be setup locally using Homebrew:
+
+`brew install composer mysql php npm`
+
+> **Note:** Check out the Composer docs if you want to install it globally (recommended). You should also secure your MySQL installation.
+
+`composer install`
+
+`php artisan key:generate`
+
+`npm install && npm run dev`
+
+#### Valet
 
 ### Docker
     ##### Laradock
