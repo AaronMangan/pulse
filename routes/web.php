@@ -62,5 +62,13 @@ Route::middleware(['auth', 'verified'])->group(function() {
     // 
     Route::post('/settings/status/archive/{status}', [\App\Http\Controllers\SettingsController::class, 'archiveStatus'])->name('settings.status.archive');
     Route::post('/settings/status', [\App\Http\Controllers\SettingsController::class, 'storeStatus'])->name('settings.status.create');
+    
+    //
+    Route::post('/settings/discipline/archive/{discipline}', [\App\Http\Controllers\SettingsController::class, 'archiveType'])->name('settings.discipline.archive');
+    Route::post('/settings/discipline', [\App\Http\Controllers\SettingsController::class, 'storeDiscipline'])->name('settings.discipline.create');
+    
+    // 
+    Route::post('/settings/type/archive/{type}', [\App\Http\Controllers\SettingsController::class, 'archiveType'])->name('settings.type.archive');
+    Route::post('/settings/type', [\App\Http\Controllers\SettingsController::class, 'storeType'])->name('settings.type.create');
 });
 require __DIR__.'/auth.php';

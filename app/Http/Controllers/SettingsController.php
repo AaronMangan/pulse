@@ -7,6 +7,8 @@ use Inertia\Inertia;
 use App\Models\Revision;
 use App\Models\Status;
 use App\Models\History;
+use App\Models\Discipline;
+use App\Models\Type;
 use Illuminate\Support\Facades\Validator;
 
 class SettingsController extends Controller
@@ -22,11 +24,15 @@ class SettingsController extends Controller
         $revisions = Revision::all();
         $statuses = Status::all();
         $history = History::with('user')->get();
+        $disciplines = Discipline::all();
+        $types = Type::all();
 
         return Inertia::render('Settings/Settings', [
-            'revisions' => $revisions,
-            'statuses' => $statuses,
+            'revisions' => $revisions ?? [],
+            'statuses' => $statuses ?? [],
             'history' => $history ?? [],
+            'disciplines' => $disciplines ?? [],
+            'types' => $types ?? [],
         ]);
     }
 
@@ -63,6 +69,82 @@ class SettingsController extends Controller
             return redirect()->back()->with('flash.success', 'Revision created successfully');
         } else {
             return redirect()->back()->with('flash.error', 'Unable to create new revision');
+        }
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function storeDiscipline(Request $request)
+    {
+        // Create the validator.
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:disciplines,name|max:255',
+            'code' => 'required|unique:disciplines,code|max:10',
+        ]);
+ 
+        // If validation fails.
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+ 
+        // Retrieve the validated input...
+        $validated = $validator->validated();
+ 
+        // Create the revision.
+        $created = Discipline::create([
+            'name' => $validated['name'],
+            'code' => $validated['code'],
+        ]);
+
+        // Return the appropriate response.
+        if($created) {
+            return redirect()->back()->with('flash.success', 'Discipline created successfully');
+        } else {
+            return redirect()->back()->with('flash.error', 'Unable to create new Discipline');
+        }
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function storeType(Request $request)
+    {
+        // Create the validator.
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:types,name|max:255',
+            'code' => 'required|unique:types,code|max:10',
+        ]);
+ 
+        // If validation fails.
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+ 
+        // Retrieve the validated input...
+        $validated = $validator->validated();
+ 
+        // Create the revision.
+        $created = Type::create([
+            'name' => $validated['name'],
+            'code' => $validated['code'],
+        ]);
+
+        // Return the appropriate response.
+        if($created) {
+            return redirect()->back()->with('flash.success', 'Type created successfully');
+        } else {
+            return redirect()->back()->with('flash.error', 'Unable to create new Type');
         }
     }
 
