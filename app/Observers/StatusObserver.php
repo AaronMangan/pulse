@@ -16,6 +16,7 @@ class StatusObserver
     public function created(Status $status)
     {
         $user = \Auth::user();
+        $name = $user->name ?? 'system';
         
         // Add the history event.
         History::create([
@@ -26,7 +27,7 @@ class StatusObserver
             'level' => 'user',
             'old' => json_encode([]),
             'new' => json_encode($status->toArray()),
-            'description' => "New model created by: {$user->name}",
+            'description' => "New status {$status->code} created by: {$name}",
         ]);
     }
 

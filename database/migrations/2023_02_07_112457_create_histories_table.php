@@ -16,8 +16,11 @@ return new class extends Migration
         Schema::create('histories', function (Blueprint $table) {
             $table->id();
             $table->string('model');
-            $table->int('model_id');
-            $table->int('user_id');
+            $table->integer('model_id');
+
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            
             $table->string('event', 100);
             $table->string('level');
             $table->json('old')->nullable();

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Revision;
 use App\Models\Status;
+use App\Models\History;
 use Illuminate\Support\Facades\Validator;
 
 class SettingsController extends Controller
@@ -20,9 +21,12 @@ class SettingsController extends Controller
     {
         $revisions = Revision::all();
         $statuses = Status::all();
+        $history = History::with('user')->get();
+
         return Inertia::render('Settings/Settings', [
             'revisions' => $revisions,
             'statuses' => $statuses,
+            'history' => $history ?? [],
         ]);
     }
 

@@ -2,6 +2,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import Revisions from './Revisions';
 import Statuses from './Statuses';
+import History from './History';
 
 export default function Settings(props) {
     return (
@@ -25,6 +26,7 @@ export default function Settings(props) {
 
                     <div className="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
                         {/* Element Here */}
+                        <History history={props.history}/>
                     </div>
                 </div>
             </div>
