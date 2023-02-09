@@ -29,6 +29,9 @@ return new class extends Migration
             $table->unsignedBigInteger('status_id');
             $table->foreign('status_id')->references('id')->on('statuses');
 
+            $table->unsignedBigInteger('discipline_id');
+            $table->foreign('discipline_id')->references('id')->on('disciplines');
+
             $table->json('metadata')->nullable();
             $table->longText('notes')->nullable();
             $table->timestamps();
