@@ -46,6 +46,7 @@ class TypeController extends Controller
 
         // Return the appropriate response.
         if($created) {
+            notify()->success('Laravel Notify is awesome!');
             return redirect()->back()->with('flash.success', 'Type created successfully');
         } else {
             return redirect()->back()->with('flash.error', 'Unable to create new Type');

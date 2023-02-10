@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function NavBar({ className }) {
     const [open, setOpen] = useState(false);
@@ -38,6 +40,7 @@ export default function NavBar({ className }) {
                 : null 
                 }
             </div>
+            <ToastContainer />
         </nav>
     );
 }
