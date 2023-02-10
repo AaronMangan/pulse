@@ -25,11 +25,13 @@ class StatusController extends Controller
         ]);
 
         // Return the appropriate response.
-        if($created) {
-            return redirect()->back()->with('flash.success', 'Revision created successfully');
-        } else {
-            return redirect()->back()->with('flash.error', 'Unable to create new revision');
-        }
+        $request->toast(
+            ($created) ? 'success' : 'error',
+            ($created) ? "Status {$created->name} was created successfully!" : ''
+        );
+
+        // Return the user to the settings index.
+        return redirect()->route('settings.index');
     }
 
     /**

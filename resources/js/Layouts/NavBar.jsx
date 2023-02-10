@@ -3,12 +3,12 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export default function NavBar({ className }) {
+export default function NavBar({ props }) {
     const [open, setOpen] = useState(false);
     const toggleOpen = () => {
         setOpen((previousState) => !previousState);
     };
-    
+
     return (
         <nav className="p-3 border-gray-200 rounded bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
             <div className="container flex flex-wrap items-center justify-between mx-auto">

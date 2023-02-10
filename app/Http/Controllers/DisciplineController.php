@@ -9,6 +9,11 @@ use App\Http\Requests\StoreDisciplineRequest;
 class DisciplineController extends Controller
 {
     /**
+     * Error when creating discipline.
+     */
+    const CREATE_DISCIPLINE_ERROR = 'An error has occured, please try again or contact your administrator';
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -36,7 +41,7 @@ class DisciplineController extends Controller
      */
     public function store(StoreDisciplineRequest $request)
     {
-        //
+        // Get validated data only
         $validated = $request->safe()->only(['name', 'code']);
 
         // Create the revision.
@@ -45,12 +50,14 @@ class DisciplineController extends Controller
             'code' => strtoupper($validated['code']),
         ]);
 
-        // Return the appropriate response.
-        if($created) {
-            return redirect()->back()->with('flash.success', 'Discipline created successfully');
-        } else {
-            return redirect()->back()->with('flash.error', 'Unable to create new Discipline');
-        }
+        // Make some toast!
+        $request->toast(
+            ($created) ? 'success' : 'error',
+            ($created) ? 'Discipline was created successfully!' : self::CREATE_DISCIPLINE_ERROR
+        );
+
+        // Return to the index.
+        return redirect()->route('settings.index');
     }
 
     /**

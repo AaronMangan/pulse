@@ -43,14 +43,15 @@ class TypeController extends Controller
             'name' => ucwords($validated['name']),
             'code' => strtoupper($validated['code']),
         ]);
+        
+        // Notify the user of the outcome of making a new type.
+        $request->toast(
+            ($created) ? 'success' : 'error',
+            ($created) ? "Type {$created->name} was created successfully!" : ''
+        );
 
-        // Return the appropriate response.
-        if($created) {
-            notify()->success('Laravel Notify is awesome!');
-            return redirect()->back()->with('flash.success', 'Type created successfully');
-        } else {
-            return redirect()->back()->with('flash.error', 'Unable to create new Type');
-        }
+        // Return to the settings index.
+        return redirect()->route('settings.index');
     }
 
     /**

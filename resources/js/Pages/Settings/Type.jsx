@@ -5,15 +5,15 @@ import SecondaryButton from '@/Components/SecondaryButton';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import "react-datepicker/dist/react-datepicker.css";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useRef, useState } from 'react';
 import { useForm } from '@inertiajs/react';
 import Dropdown from '@/Components/Dropdown';
+import NoData from '@/Components/NoData';
 
 export default function History({className, types}) {
     const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
     const passwordInput = useRef();
-    const hasDiscipline = types.length > 0 ? true : false;
+    const hasData = types.length > 0 ? true : false;
     const {
         data,
         setData,
@@ -55,7 +55,7 @@ export default function History({className, types}) {
                 </p>
             </header>
             {
-                hasDiscipline ? (
+                hasData ? (
                     <div>
                         <table className="min-w-full rounded-md">
                             <thead className="bg-gray-600 border-b">
@@ -124,12 +124,10 @@ export default function History({className, types}) {
                         </table>
                     </div>
                 ) : (
-                    <div>
-                        <div className="container flex items-center justify-center max-w-screen-lg mx-auto">
-                        <InformationCircleIcon className="h-24 text-gray-300" />
-                        </div>
-                        <h2 className='text-3xl text-center text-gray-300'>No Types</h2>
-                    </div>
+                    <NoData
+                        title="No Types"
+                        blurb="To add a type, click the 'Add Type' button."
+                    />
                 )
             }
             <PrimaryButton onClick={confirmUserDeletion}>Add Types</PrimaryButton>

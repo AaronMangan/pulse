@@ -1,15 +1,10 @@
 import Modal from '@/Components/Modal';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
 import SecondaryButton from '@/Components/SecondaryButton';
 import PrimaryButton from '@/Components/PrimaryButton';
-import DangerButton from '@/Components/DangerButton';
-import TextInput from '@/Components/TextInput';
 import "react-datepicker/dist/react-datepicker.css";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useRef, useState } from 'react';
 import { useForm } from '@inertiajs/react';
-import Dropdown from '@/Components/Dropdown';
 
 export default function History({className, history}) {
     const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);

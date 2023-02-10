@@ -6,15 +6,15 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import DangerButton from '@/Components/DangerButton';
 import TextInput from '@/Components/TextInput';
 import "react-datepicker/dist/react-datepicker.css";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useRef, useState } from 'react';
 import { useForm } from '@inertiajs/react';
 import Dropdown from '@/Components/Dropdown';
+import NoData from '@/Components/NoData';
 
 export default function History({className, disciplines}) {
     const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
     const passwordInput = useRef();
-    const hasDiscipline = disciplines.length > 0 ? true : false;
+    const hasData = disciplines.length > 0 ? true : false;
     const {
         data,
         setData,
@@ -56,7 +56,7 @@ export default function History({className, disciplines}) {
                 </p>
             </header>
             {
-                hasDiscipline ? (
+                hasData ? (
                     <div>
                         <table className="min-w-full rounded-md">
                             <thead className="bg-gray-600 border-b">
@@ -125,12 +125,10 @@ export default function History({className, disciplines}) {
                         </table>
                     </div>
                 ) : (
-                    <div>
-                        <div className="container flex items-center justify-center max-w-screen-lg mx-auto">
-                        <InformationCircleIcon className="h-24 text-gray-300" />
-                        </div>
-                        <h2 className='text-3xl text-center text-gray-300'>No Disciplines</h2>
-                    </div>
+                    <NoData
+                        title="No Disciplines"
+                        blurb="To add a discipline, click the 'Add Discipline' button."
+                    />
                 )
             }
             <PrimaryButton onClick={confirmUserDeletion}>Add Discipline</PrimaryButton>
@@ -151,7 +149,7 @@ export default function History({className, disciplines}) {
                             handleChange={(e) => setData('name', e.target.value)}
                             className="block w-full mt-1 capitalize"
                             isFocused
-                            placeholder="e.g. Mechanical, Civil"
+                            placeholder="Mechanical"
                         />                                        
                         <InputError message={errors.name} className="mt-2" />
                     </div>
@@ -165,7 +163,7 @@ export default function History({className, disciplines}) {
                             value={data.code}
                             handleChange={(e) => setData('code', e.target.value)}
                             className="block w-full mt-1 uppercase"
-                            placeholder="3 to 5 Letters that represent the name"
+                            placeholder="MECH"
                         />                                        
                         <InputError message={errors.name} className="mt-2" />
                     </div>

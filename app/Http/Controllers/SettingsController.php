@@ -10,6 +10,7 @@ use App\Models\History;
 use App\Models\Discipline;
 use App\Models\Type;
 use Illuminate\Support\Facades\Validator;
+use Session;
 
 class SettingsController extends Controller
 {

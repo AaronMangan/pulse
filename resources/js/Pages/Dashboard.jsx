@@ -52,6 +52,7 @@ export default function Dashboard(props) {
         <AuthenticatedLayout
             auth={props.auth}
             errors={props.errors}
+            flash={props.flash}
             // header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Dashboard</h2>}
             // footer={<small className="text-xs text-gray-500">Small Writing</small>}
         >
