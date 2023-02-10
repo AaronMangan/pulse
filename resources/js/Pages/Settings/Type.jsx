@@ -107,11 +107,11 @@ export default function History({className, types}) {
                                                 <Dropdown.Content>
                                                     <Dropdown.Link href="">View</Dropdown.Link>
                                                     <Dropdown.Link href="">Edit</Dropdown.Link>
-                                                    {/* <Dropdown.Link href={route('settings.discipline.archive', history)} method="post" as="button">
+                                                    <Dropdown.Link href={route('settings.discipline.archive', item)} method="post" as="button">
                                                         {
-                                                            discipline.status == 'active' ? 'Archive' : 'Restore'
+                                                            item.status == 'active' ? 'Archive' : 'Restore'
                                                         }
-                                                    </Dropdown.Link> */}
+                                                    </Dropdown.Link>
                                                     <Dropdown.Link href="" method="post" as="button">
                                                         Delete
                                                     </Dropdown.Link>
@@ -148,7 +148,7 @@ export default function History({className, types}) {
                             name="name"
                             value={data.name}
                             handleChange={(e) => setData('name', e.target.value)}
-                            className="block w-full mt-1"
+                            className="block w-full mt-1 capitalize"
                             isFocused
                             placeholder="e.g. Report"
                         />                                        
@@ -163,8 +163,7 @@ export default function History({className, types}) {
                             name="code"
                             value={data.code}
                             handleChange={(e) => setData('code', e.target.value)}
-                            className="block w-full mt-1"
-                            isFocused
+                            className="block w-full mt-1 uppercase"
                             placeholder="REP"
                         />                                        
                         <InputError message={errors.name} className="mt-2" />

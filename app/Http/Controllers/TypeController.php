@@ -36,7 +36,20 @@ class TypeController extends Controller
      */
     public function store(StoreTypeRequest $request)
     {
-        //
+        $validated = $request->safe()->only(['name', 'code']);
+ 
+        // Create the revision.
+        $created = Type::create([
+            'name' => ucwords($validated['name']),
+            'code' => strtoupper($validated['code']),
+        ]);
+
+        // Return the appropriate response.
+        if($created) {
+            return redirect()->back()->with('flash.success', 'Type created successfully');
+        } else {
+            return redirect()->back()->with('flash.error', 'Unable to create new Type');
+        }
     }
 
     /**
@@ -82,5 +95,20 @@ class TypeController extends Controller
     public function destroy(Type $type)
     {
         //
+    }
+
+    /**
+     * Archive a type.
+     *
+     * @param Request $request
+     * @param Type $type
+     * @return void
+     */
+    public function archiveType(Request $request, Type $type)
+    {
+        // Change the status to 'inactive'
+        $type->status = ($type->status == 'active') ? 'inactive' : 'active';
+        $type->save();
+        return redirect()->back()->with('flash_success', 'Status updated successfully');
     }
 }

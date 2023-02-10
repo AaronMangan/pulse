@@ -138,7 +138,7 @@ export default function Statuses({className, statuses}) {
                             // value={data.name}
                             ref={nameInput}
                             handleChange={(e) => setData('name', e.target.value)}
-                            className="block w-full mt-1"
+                            className="block w-full mt-1 capitalize"
                             isFocused
                             placeholder="A, B, 0, 1"
                         />                                        

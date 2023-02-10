@@ -55,20 +55,23 @@ Route::middleware(['auth', 'verified'])->group(function() {
  * Settings Routes.
  */
 Route::middleware(['auth', 'verified'])->group(function() {
+    // 
     Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
-    Route::post('/settings/revision', [\App\Http\Controllers\SettingsController::class, 'storeRevision'])->name('settings.revision.create');
-    Route::post('/settings/revision/archive/{revision}', [\App\Http\Controllers\SettingsController::class, 'archiveRevision'])->name('settings.revision.archive');
+
+    // 
+    Route::post('/settings/revision', [\App\Http\Controllers\RevisionController::class, 'store'])->name('settings.revision.create');
+    Route::post('/settings/revision/archive/{revision}', [\App\Http\Controllers\RevisionController::class, 'archive'])->name('settings.revision.archive');
     
     // 
-    Route::post('/settings/status/archive/{status}', [\App\Http\Controllers\SettingsController::class, 'archiveStatus'])->name('settings.status.archive');
-    Route::post('/settings/status', [\App\Http\Controllers\SettingsController::class, 'storeStatus'])->name('settings.status.create');
+    Route::post('/settings/status/archive/{status}', [\App\Http\Controllers\StatusController::class, 'archive'])->name('settings.status.archive');
+    Route::post('/settings/status', [\App\Http\Controllers\StatusController::class, 'store'])->name('settings.status.create');
     
     //
-    Route::post('/settings/discipline/archive/{discipline}', [\App\Http\Controllers\SettingsController::class, 'archiveType'])->name('settings.discipline.archive');
-    Route::post('/settings/discipline', [\App\Http\Controllers\SettingsController::class, 'storeDiscipline'])->name('settings.discipline.create');
+    Route::post('/settings/discipline/archive/{discipline}', [\App\Http\Controllers\DisciplineController::class, 'archive'])->name('settings.discipline.archive');
+    Route::post('/settings/discipline', [\App\Http\Controllers\DisciplineController::class, 'store'])->name('settings.discipline.create');
     
     // 
-    Route::post('/settings/type/archive/{type}', [\App\Http\Controllers\SettingsController::class, 'archiveType'])->name('settings.type.archive');
-    Route::post('/settings/type', [\App\Http\Controllers\SettingsController::class, 'storeType'])->name('settings.type.create');
+    Route::post('/settings/type/archive/{type}', [\App\Http\Controllers\TypeController::class, 'archiveType'])->name('settings.type.archive');
+    Route::post('/settings/type', [\App\Http\Controllers\TypeController::class, 'store'])->name('settings.type.create');
 });
 require __DIR__.'/auth.php';

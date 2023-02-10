@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Discipline;
 use Illuminate\Http\Request;
-use App\Models\Revision;
-use App\Http\Requests\StoreRevisionRequest;
+use App\Http\Requests\StoreDisciplineRequest;
 
-class RevisionController extends Controller
+class DisciplineController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,31 +34,32 @@ class RevisionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRevisionRequest $request)
+    public function store(StoreDisciplineRequest $request)
     {
         //
-        $validated = $request->safe()->only(['revision']);
+        $validated = $request->safe()->only(['name', 'code']);
 
         // Create the revision.
-        $created = Revision::create([
-            'name' => strtoupper($validated['revision']),
+        $created = Discipline::create([
+            'name' => ucwords($validated['name']),
+            'code' => strtoupper($validated['code']),
         ]);
 
         // Return the appropriate response.
         if($created) {
-            return redirect()->back()->with('flash.success', 'Revision created successfully');
+            return redirect()->back()->with('flash.success', 'Discipline created successfully');
         } else {
-            return redirect()->back()->with('flash.error', 'Unable to create new revision');
+            return redirect()->back()->with('flash.error', 'Unable to create new Discipline');
         }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Discipline  $discipline
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Discipline $discipline)
     {
         //
     }
@@ -66,10 +67,10 @@ class RevisionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Discipline  $discipline
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Discipline $discipline)
     {
         //
     }
@@ -78,10 +79,10 @@ class RevisionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Discipline  $discipline
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Discipline $discipline)
     {
         //
     }
@@ -89,26 +90,26 @@ class RevisionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Discipline  $discipline
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Discipline $discipline)
     {
         //
     }
 
     /**
-     * Archive the provided revision.
+     * Archive the Discipline
      *
      * @param Request $request
-     * @param Revision $revision
+     * @param Discipline $discipline
      * @return void
      */
-    public function archive(Request $request, Revision $revision)
+    public function archive(Request $request, Discipline $discipline)
     {
         // Change the status to 'inactive'
-        $revision->status = ($revision->status == 'active') ? 'inactive' : 'active';
-        $revision->save();
-        return redirect()->back();
+        $discipline->status = ($discipline->status == 'active') ? 'inactive' : 'active';
+        $discipline->save();
+        return redirect()->back()->with('flash_success', 'Status updated successfully');
     }
 }
