@@ -13,11 +13,14 @@ import FloatButton from '@/Components/FloatButton';
 import "react-datepicker/dist/react-datepicker.css";
 import TextArea from '@/Components/TextArea';
 import Dropdown from '@/Components/Dropdown';
+import ProjectSettings from '@/Components/ProjectSettings';
 
 export default function Projects(props) {
     const [createNewProject, setCreateNewProject] = useState(false);
+    const [editSettings, setSettings] = useState(false);
     const nameInput = useRef();
     const [startDate, setStartDate] = useState(new Date());
+    const [selectedProject, setSelectedProject] = useState(true);
     const {
         data,
         setData,
@@ -25,12 +28,18 @@ export default function Projects(props) {
         reset,
         post,
         errors,
+        project
     } = useForm({
         name: '',
         description: '',
         code: '',
         start: startDate,
     });
+
+    const showSettingsModal = (project) => {
+        setSettings(true);
+        setSelectedProject(project);
+    };
 
     const showNewProjectModal = () => {
         setCreateNewProject(true);
@@ -52,12 +61,18 @@ export default function Projects(props) {
 
         reset();
     };
+    const closeSettingsModal = () => {
+        setSettings(false);
+
+        reset();
+    };
 
     return (
         <>
         <AuthenticatedLayout
             auth={props.auth}
             errors={props.errors}
+            flash={props.flash}
         >
             <Head title="Projects" />
             <div className="w-full py-12 pl-24 pr-24">
@@ -114,6 +129,12 @@ export default function Projects(props) {
                                                         project.status == 'active' ? 'Archive' : 'Restore'
                                                     }
                                                 </Dropdown.Link>
+                                                <a
+                                                    onClick={() => {showSettingsModal(project)}}
+                                                    className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                                                >
+                                                    Settings
+                                                </a>
                                                 <Dropdown.Link href="" method="post" as="button">
                                                     Delete
                                                 </Dropdown.Link>
@@ -128,6 +149,7 @@ export default function Projects(props) {
                 <FloatButton 
                     action={showNewProjectModal}
                 />
+                {/* Create Project Modal */}
                 <Modal show={createNewProject} onClose={closeModal}>
                     <span className="float-right mx-4 mt-2 text-xl cursor-pointer text-grey-100 hover:text-sky-700" onClick={closeModal}>&times;</span>
                     <form onSubmit={createProject} className="w-full p-4 max-w-7xl">
@@ -209,6 +231,14 @@ export default function Projects(props) {
                             <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
                         </div>
                     </form>
+                </Modal>
+
+                {/* Project Settings Modal */}
+                <Modal id="settingsModal" show={editSettings} onClose={closeSettingsModal}>
+                    <span className="float-right mx-4 mt-2 text-xl cursor-pointer text-grey-100 hover:text-sky-700" onClick={closeSettingsModal}>&times;</span>
+                    <ProjectSettings 
+                        project={selectedProject}
+                    />
                 </Modal>
             </div>
         </AuthenticatedLayout>
