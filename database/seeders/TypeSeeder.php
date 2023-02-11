@@ -12,32 +12,32 @@ class TypeSeeder extends Seeder
         [
             'name' => 'Draft',
             'code' => 'DFT',
-            'description' => null,
+            'description' => 'Document is in a draft state and can not be used until it is approved \ issued.',
             'status' => 'active',
         ],
         [
-            'name' => '',
-            'code' => '',
-            'description' => null,
+            'name' => 'Issued For Approval',
+            'code' => 'IFA',
+            'description' => 'Document is currently undergoing a review & approval cycle.',
             'status' => 'active',
         ],
         [
-            'name' => '',
-            'code' => '',
-            'description' => null,
+            'name' => 'Issued For Use',
+            'code' => 'IFU',
+            'description' => 'Document has been release for use of its intended purpose.',
             'status' => 'active',
         ],
         [
-            'name' => '',
-            'code' => '',
-            'description' => null,
+            'name' => 'Information Only',
+            'code' => 'INF',
+            'description' => 'This document is for information purposes only, and may not be up-to-date or complete.',
             'status' => 'active',
         ],
         [
-            'name' => '',
-            'code' => '',
-            'description' => null,
-            'status' => '',
+            'name' => 'Deleted',
+            'code' => 'DEL',
+            'description' => 'Document has been deleted and can no longer be used.',
+            'status' => 'active',
         ],
     ];
     /**
@@ -47,6 +47,12 @@ class TypeSeeder extends Seeder
      */
     public function run()
     {
-        //
+        // Iterate through the types and add them
+        if(env('APP_ENV') == 'local') {
+            foreach($this->types as $type)
+            {
+                Type::create($type);
+            }
+        }
     }
 }

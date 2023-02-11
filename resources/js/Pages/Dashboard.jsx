@@ -7,7 +7,7 @@ import { Head } from '@inertiajs/react';
 export default function Dashboard(props) {
     const getChildren = () => {
         return (
-            <div className="grid grid-cols-1 gap-4 bg-gray-100 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+            <div className="grid grid-cols-1 gap-4 px-5 bg-gray-100 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
                 <GridItem 
                     title="Documents"
                     blurb="Manage your documents and find exactly what you need"

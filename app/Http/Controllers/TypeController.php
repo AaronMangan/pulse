@@ -106,11 +106,19 @@ class TypeController extends Controller
      * @param Type $type
      * @return void
      */
-    public function archiveType(Request $request, Type $type)
+    public function archive(UpdateTypeRequest $request, Type $type)
     {
         // Change the status to 'inactive'
         $type->status = ($type->status == 'active') ? 'inactive' : 'active';
         $type->save();
-        return redirect()->back()->with('flash_success', 'Status updated successfully');
+        
+        // Make toast
+        $request->toast(
+            'success',
+            ($type->status == 'active') ? "{$type->name} was restored successfully" : "{$type->name} was archived successfully"
+        );
+        
+        // Return the user to the settings index.
+        return redirect()->route('settings.index');
     }
 }

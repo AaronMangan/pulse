@@ -22,7 +22,7 @@ export default function History({className, types}) {
         reset,
         errors,
     } = useForm({
-        discipline: ''
+        type: ''
     });
 
     const confirmUserDeletion = () => {
@@ -107,7 +107,7 @@ export default function History({className, types}) {
                                                 <Dropdown.Content>
                                                     <Dropdown.Link href="">View</Dropdown.Link>
                                                     <Dropdown.Link href="">Edit</Dropdown.Link>
-                                                    <Dropdown.Link href={route('settings.discipline.archive', item)} method="post" as="button">
+                                                    <Dropdown.Link href={route('settings.type.archive', item)} method="post" as="button">
                                                         {
                                                             item.status == 'active' ? 'Archive' : 'Restore'
                                                         }
@@ -135,7 +135,7 @@ export default function History({className, types}) {
             <Modal show={confirmingUserDeletion} onClose={closeModal}>
                 <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeModal}>&times;</span>
                 <form onSubmit={deleteUser} className="p-6">
-                    <h2 className="text-lg font-medium font-bold text-gray-900">Create New Discipline</h2>
+                    <h2 className="text-lg font-medium font-bold text-gray-900">Create New Type</h2>
                     <hr className="mt-2 text-gray-300"></hr>
 
                     <div className="mt-6">

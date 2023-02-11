@@ -71,7 +71,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::post('/settings/discipline', [\App\Http\Controllers\DisciplineController::class, 'store'])->name('settings.discipline.create');
     
     // 
-    Route::post('/settings/type/archive/{type}', [\App\Http\Controllers\TypeController::class, 'archiveType'])->name('settings.type.archive');
+    Route::post('/settings/type/archive/{type}', [\App\Http\Controllers\TypeController::class, 'archive'])->name('settings.type.archive');
     Route::post('/settings/type', [\App\Http\Controllers\TypeController::class, 'store'])->name('settings.type.create');
 });
 require __DIR__.'/auth.php';
