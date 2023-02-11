@@ -48,6 +48,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::post('/projects/create', [ProjectController::class, 'store'])->name('projects.create');
+    Route::post('/projects/update/{id}', [ProjectController::class, 'update'])->name('projects.update');
     Route::post('/projects/archive/{project}', [ProjectController::class, 'archive'])->name('projects.archive');
 });
 

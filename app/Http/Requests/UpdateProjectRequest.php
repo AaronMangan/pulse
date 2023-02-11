@@ -13,7 +13,7 @@ class UpdateProjectRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return \Auth::check();
     }
 
     /**
@@ -24,7 +24,10 @@ class UpdateProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'required|max:255|string',
+            'description' => 'nullable|string',
+            'code' => 'required|max:50|string|unique:projects,code',
+            'start' => 'required|date',
         ];
     }
 }

@@ -48,6 +48,12 @@ export default function Projects(props) {
 
     const showNewProjectModal = () => {
         setCreateNewProject(true);
+        setSelectedProject({});
+    };
+
+    const showEditProjectModal = (project) => {
+        setCreateNewProject(true);
+        setSelectedProject(project);
     };
 
     const createProject = (e) => {
@@ -59,6 +65,11 @@ export default function Projects(props) {
             onError: () => nameInput.current.focus(),
             onFinish: () => reset(),
         });
+    };
+
+    const updateProject = (e) => {
+        e.preventDefault();
+        post(route('projects.update', selectedProject.id));
     };
 
     const updateProjectSettings = (e) => {
@@ -139,7 +150,12 @@ export default function Projects(props) {
                                             {/* Use href={route('project.edit')} when the routes have been added. */}
                                             <Dropdown.Content>
                                                 <Dropdown.Link href="">View</Dropdown.Link>
-                                                <Dropdown.Link href="">Edit</Dropdown.Link>
+                                                <a
+                                                    onClick={() => {showEditProjectModal(project)}}
+                                                    className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                                                >
+                                                    Edit
+                                                </a>
                                                 <Dropdown.Link href={route('projects.archive', project)}  method="post" as="button">
                                                     {
                                                         project.status == 'active' ? 'Archive' : 'Restore'
@@ -168,8 +184,14 @@ export default function Projects(props) {
                 {/* Create Project Modal */}
                 <Modal show={createNewProject} onClose={closeModal}>
                     <span className="float-right mx-4 mt-2 text-xl cursor-pointer text-grey-100 hover:text-sky-700" onClick={closeModal}>&times;</span>
-                    <form onSubmit={createProject} className="w-full p-4 max-w-7xl">
-                        <h2 className="text-lg font-medium font-bold text-gray-900">Create New Project</h2>
+                    <form onSubmit={selectedProject.id != null ? updateProject : createProject} className="w-full p-4 max-w-7xl">
+                        {
+                            selectedProject.id != null ? (
+                                <h2 className="text-lg font-medium font-bold text-gray-900">Update Project</h2>
+                            ) : (
+                                <h2 className="text-lg font-medium font-bold text-gray-900">Create New Project</h2>
+                            )
+                        }
 
                         <div className="w-full p-0 mt-6">
                             {/* Project Name */}
@@ -180,7 +202,7 @@ export default function Projects(props) {
                                 type="text"
                                 name="name"
                                 ref={nameInput}
-                                value={data.name}
+                                value={selectedProject.name}
                                 handleChange={(e) => setData('name', e.target.value)}
                                 className="block w-full mt-1"
                                 isFocused
@@ -198,7 +220,7 @@ export default function Projects(props) {
                                 id="code"
                                 type="text"
                                 name="code"
-                                value={data.code}
+                                value={selectedProject.code}
                                 handleChange={(e) => setData('code', e.target.value)}
                                 className="block w-full mt-1"
                                 placeholder="QBR1"
@@ -214,9 +236,9 @@ export default function Projects(props) {
                                 <InputLabel className="ml-2 font-bold flex-nowrap" for="start" value="Start Date" />
                                 <ReactDatePicker
                                     closeOnScroll={(e) => e.target === document}
-                                    selected={startDate}
+                                    selected={selectedProject.project_start ?? startDate}
                                     onChange={(date) => setStartDate(date)}
-                                    value={data.start}
+                                    value={selectedProject.project_start}
                                     name="start"
                                     id="start"
                                     dateFormat='d/M/Y'
@@ -232,7 +254,7 @@ export default function Projects(props) {
                             <TextArea 
                                 name="description"
                                 id="description"
-                                value={data.description}
+                                value={selectedProject.description}
                                 className="block p-2.5 w-full mt-1 text-gray-900 bg-gray-50 rounded-lg border border-gray-300"
                                 autoComplete
                                 handleChange={(e) => setData('description', e.target.value)}
@@ -241,11 +263,20 @@ export default function Projects(props) {
                             />
                             <InputError message={errors.description} className="mt-2" />
                         </div>
-
-                        <div className="flex float-right mt-6 mb-4">
-                            <PrimaryButton className="mr-3" processing={processing}>Create Project</PrimaryButton>
-                            <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
-                        </div>
+                        {
+                            selectedProject.id != null ? (
+                                <div className="flex float-right mt-6 mb-4">
+                                    <PrimaryButton className="mr-3" processing={processing}>Save</PrimaryButton>
+                                    <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
+                                </div>
+                            ) : (
+                                <div className="flex float-right mt-6 mb-4">
+                                    <PrimaryButton className="mr-3" processing={processing}>Create Project</PrimaryButton>
+                                    <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
+                                </div>
+                            )
+                        }
+                        
                     </form>
                 </Modal>
 

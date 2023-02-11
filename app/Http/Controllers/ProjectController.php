@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
@@ -93,7 +94,8 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+        $request->session()->flash('error', 'To Be Implemented');
+        return redirect()->route('projects.index');
     }
 
     /**
@@ -113,7 +115,7 @@ class ProjectController extends Controller
      * @param Project $project
      * @return \Illuminate\Http\Response
      */
-    public function archive(Project $project)
+    public function archive(Request $request, Project $project)
     {
         // Change the status to 'inactive'
         $project->status = ($project->status == 'active') ? 'inactive' : 'active';
