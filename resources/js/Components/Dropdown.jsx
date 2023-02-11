@@ -70,7 +70,7 @@ const Content = ({ align = 'right', width = '48', contentClasses = 'py-1 bg-whit
     );
 };
 
-const DropdownLink = ({ href, method, as, children, onClick = null }) => {
+const DropdownLink = ({ href, method, as, children, onClick }) => {
     return (
         <Link
             href={href}

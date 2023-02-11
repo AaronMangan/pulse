@@ -42,7 +42,6 @@ export default function History({className, types}) {
 
     const closeModal = () => {
         setConfirmingUserDeletion(false);
-
         reset();
     };
 

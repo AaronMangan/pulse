@@ -13,7 +13,8 @@ import FloatButton from '@/Components/FloatButton';
 import "react-datepicker/dist/react-datepicker.css";
 import TextArea from '@/Components/TextArea';
 import Dropdown from '@/Components/Dropdown';
-import ProjectSettings from '@/Components/ProjectSettings';
+import Toggle from 'react-toggle';
+import SmallText from '@/Components/SmallText';
 
 export default function Projects(props) {
     const [createNewProject, setCreateNewProject] = useState(false);
@@ -28,12 +29,16 @@ export default function Projects(props) {
         reset,
         post,
         errors,
-        project
     } = useForm({
         name: '',
         description: '',
         code: '',
         start: startDate,
+    });
+
+    const {projectSettings} = useForm({
+        manualNumbering: false,
+        enforceUploads: false,
     });
 
     const showSettingsModal = (project) => {
@@ -54,6 +59,17 @@ export default function Projects(props) {
             onError: () => nameInput.current.focus(),
             onFinish: () => reset(),
         });
+    };
+
+    const updateProjectSettings = (e) => {
+        e.preventDefault();
+
+        // post(route('projects.create'), {
+        //     preserveScroll: true,
+        //     onSuccess: () => closeModal(),
+        //     onError: () => nameInput.current.focus(),
+        //     onFinish: () => reset(),
+        // });
     };
 
     const closeModal = () => {
@@ -130,7 +146,7 @@ export default function Projects(props) {
                                                     }
                                                 </Dropdown.Link>
                                                 <a
-                                                    onClick={() => {showSettingsModal(project)}}
+                                                    onClick={showSettingsModal(project)}
                                                     className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                                                 >
                                                     Settings
@@ -235,10 +251,42 @@ export default function Projects(props) {
 
                 {/* Project Settings Modal */}
                 <Modal id="settingsModal" show={editSettings} onClose={closeSettingsModal}>
-                    <span className="float-right mx-4 mt-2 text-xl cursor-pointer text-grey-100 hover:text-sky-700" onClick={closeSettingsModal}>&times;</span>
-                    <ProjectSettings 
-                        project={selectedProject}
-                    />
+                    <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeSettingsModal}>&times;</span>
+                    <form onSubmit={updateProjectSettings} className="p-6">
+                        <h2 className="text-lg font-medium font-bold text-gray-900">Edit Project Settings</h2>
+                        <SmallText 
+                            value={"Project: " + selectedProject.name}
+                            id="labelForModal"
+                        />
+                        <hr className="mt-2 text-gray-300"></hr>
+
+                        <div className="flex justify-between mt-6">
+                            <InputLabel className="float-left font-bold">Manual Document Numbering:</InputLabel>
+                            <Toggle
+                                defaultChecked={false}
+                                className="flex align-right"
+                                onChange={(e) => setData('manualNumbering', e.target.value)}
+                            />
+                            <InputError message={errors.name} className="mt-2" />
+                        </div>
+                        
+                        <div className="flex justify-between mt-6">
+                            <InputLabel className="float-left font-bold">Enforce Uploads</InputLabel>
+                            <Toggle
+                                defaultChecked={false}
+                                className="flex align-right"
+                                onChange={(e) => setData('enforceUploads', e.target.value)}
+                            />
+                            <InputError message={errors.name} className="mt-2" />
+                        </div>
+
+                        <div className="flex justify-end mt-6">
+                            <PrimaryButton className="mr-3" processing={processing}>
+                                Update Settings
+                            </PrimaryButton>
+                            <SecondaryButton onClick={closeSettingsModal}>Cancel</SecondaryButton>
+                        </div>
+                    </form>
                 </Modal>
             </div>
         </AuthenticatedLayout>
