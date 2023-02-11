@@ -45,7 +45,7 @@ class TypeController extends Controller
         ]);
         
         // Notify the user of the outcome of making a new type.
-        $request->toast(
+        $request->session()->flash(
             ($created) ? 'success' : 'error',
             ($created) ? "Type {$created->name} was created successfully!" : ''
         );
@@ -113,7 +113,7 @@ class TypeController extends Controller
         $type->save();
         
         // Make toast
-        $request->toast(
+        $request->session()->flash(
             'success',
             ($type->status == 'active') ? "{$type->name} was restored successfully" : "{$type->name} was archived successfully"
         );

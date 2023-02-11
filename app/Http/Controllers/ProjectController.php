@@ -51,7 +51,15 @@ class ProjectController extends Controller
             'end' => null,
             'code' => $validated['code']
         ]);
-        return redirect()->back();
+
+        // Notify the user of the outcome of making a new type.
+        $request->session()->flash(
+            ($created) ? 'success' : 'error',
+            ($created) ? "Project {$created->name} was created successfully!" : 'An error occured, please try again.'
+        );
+
+        // Return to the settings index.
+        return redirect()->route('projects.index');
     }
 
     /**
@@ -110,6 +118,13 @@ class ProjectController extends Controller
         // Change the status to 'inactive'
         $project->status = ($project->status == 'active') ? 'inactive' : 'active';
         $project->save();
-        return redirect()->back();
+        
+        // Notify the user of the outcome of making a new type.
+        $request->session()->flash(
+            'success', 'Project was updated successfully'
+        );
+        
+        // Return to the settings index.
+        return redirect()->route('projects.index');
     }
 }

@@ -44,12 +44,14 @@ class RevisionController extends Controller
             'name' => strtoupper($validated['revision']),
         ]);
 
-        // Return the appropriate response.
-        if($created) {
-            return redirect()->back()->with('flash.success', 'Revision created successfully');
-        } else {
-            return redirect()->back()->with('flash.error', 'Unable to create new revision');
-        }
+        // Notify the user of the outcome of making a new type.
+        $request->session()->flash(
+            ($created) ? 'success' : 'error',
+            ($created) ? "Revision {$created->name} was created successfully!" : 'An error occured, please try again'
+        );
+
+        // Return to the settings index.
+        return redirect()->route('settings.index');
     }
 
     /**
@@ -109,6 +111,13 @@ class RevisionController extends Controller
         // Change the status to 'inactive'
         $revision->status = ($revision->status == 'active') ? 'inactive' : 'active';
         $revision->save();
-        return redirect()->back();
+        
+        // Notify the user of the outcome of making a new type.
+        $request->session()->flash(
+            'success', 'Revision was updated successfully'
+        );
+        
+        // Return to the settings index.
+        return redirect()->route('settings.index');
     }
 }

@@ -36,30 +36,4 @@ class SettingsController extends Controller
             'types' => $types ?? [],
         ]);
     }
-
-    /**
-     * Store the new revision.
-     *
-     * @param Request $request
-     * @return void
-     */
-    public function storeRevision(Request $request)
-    {
-        // Create the validator.
-        $validator = Validator::make($request->all(), [
-            'revision' => 'required|unique:revisions,name|max:10',
-        ]);
- 
-        // If validation fails.
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
- 
-        // Retrieve the validated input...
-        $validated = $validator->validated();
- 
-        
-    }
 }

@@ -21,7 +21,7 @@ export default function Projects(props) {
     const [editSettings, setSettings] = useState(false);
     const nameInput = useRef();
     const [startDate, setStartDate] = useState(new Date());
-    const [selectedProject, setSelectedProject] = useState(true);
+    const [selectedProject, setSelectedProject] = useState([]);
     const {
         data,
         setData,
@@ -146,7 +146,7 @@ export default function Projects(props) {
                                                     }
                                                 </Dropdown.Link>
                                                 <a
-                                                    onClick={showSettingsModal(project)}
+                                                    onClick={() => {showSettingsModal(project)}}
                                                     className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                                                 >
                                                     Settings

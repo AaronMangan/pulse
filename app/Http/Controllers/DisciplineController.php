@@ -117,6 +117,13 @@ class DisciplineController extends Controller
         // Change the status to 'inactive'
         $discipline->status = ($discipline->status == 'active') ? 'inactive' : 'active';
         $discipline->save();
-        return redirect()->back()->with('flash_success', 'Status updated successfully');
+        
+        // Notify the user of the outcome.
+        $request->session()->flash(
+            'success', 'Discipline was updated successfully'
+        );
+        
+        // Return to the settings index.
+        return redirect()->route('settings.index');
     }
 }

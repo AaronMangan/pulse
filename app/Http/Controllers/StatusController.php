@@ -25,7 +25,7 @@ class StatusController extends Controller
         ]);
 
         // Return the appropriate response.
-        $request->toast(
+        $request->session()->flash(
             ($created) ? 'success' : 'error',
             ($created) ? "Status {$created->name} was created successfully!" : ''
         );
@@ -46,6 +46,8 @@ class StatusController extends Controller
         // Change the status to 'inactive'
         $status->status = ($status->status == 'active') ? 'inactive' : 'active';
         $status->save();
-        return redirect()->back()->with('flash_success', 'Status updated successfully');
+
+        $request->session()->flash('success', 'Status was updated');
+        return redirect()->route('settings.index');
     }
 }
