@@ -4,6 +4,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TypeController;
+use App\Http\Controllers\DisciplineController;
+use App\Http\Controllers\StatusController;
+use App\Http\Controllers\RevisionController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\ProjectSettingsController;
 use Inertia\Inertia;
 
 /*
@@ -56,23 +62,38 @@ Route::middleware(['auth', 'verified'])->group(function() {
  * Settings Routes.
  */
 Route::middleware(['auth', 'verified'])->group(function() {
-    // 
-    Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
+    // Return the setup index. This shows types, revisions, etc.
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
 
-    // 
-    Route::post('/settings/revision', [\App\Http\Controllers\RevisionController::class, 'store'])->name('settings.revision.create');
-    Route::post('/settings/revision/archive/{revision}', [\App\Http\Controllers\RevisionController::class, 'archive'])->name('settings.revision.archive');
+    // Revisions CRUD Routes
+    Route::post('/settings/revision', [RevisionController::class, 'store'])->name('settings.revision.create');
+    Route::post('/settings/revision/archive/{revision}', [RevisionController::class, 'archive'])->name('settings.revision.archive');
     
-    // 
-    Route::post('/settings/status/archive/{status}', [\App\Http\Controllers\StatusController::class, 'archive'])->name('settings.status.archive');
-    Route::post('/settings/status', [\App\Http\Controllers\StatusController::class, 'store'])->name('settings.status.create');
+    // Statuses CRUD Routes.
+    Route::post('/settings/status/archive/{status}', [StatusController::class, 'archive'])->name('settings.status.archive');
+    Route::post('/settings/status', [StatusController::class, 'store'])->name('settings.status.create');
     
-    //
-    Route::post('/settings/discipline/archive/{discipline}', [\App\Http\Controllers\DisciplineController::class, 'archive'])->name('settings.discipline.archive');
-    Route::post('/settings/discipline', [\App\Http\Controllers\DisciplineController::class, 'store'])->name('settings.discipline.create');
+    // Disciplines CRUD Routes.
+    Route::post('/settings/discipline/archive/{discipline}', [DisciplineController::class, 'archive'])->name('settings.discipline.archive');
+    Route::post('/settings/discipline', [DisciplineController::class, 'store'])->name('settings.discipline.create');
     
-    // 
-    Route::post('/settings/type/archive/{type}', [\App\Http\Controllers\TypeController::class, 'archive'])->name('settings.type.archive');
-    Route::post('/settings/type', [\App\Http\Controllers\TypeController::class, 'store'])->name('settings.type.create');
+    // Types CRUD Routes,
+    Route::post('/settings/type/archive/{type}', [TypeController::class, 'archive'])->name('settings.type.archive');
+    Route::post('/settings/type', [TypeController::class, 'store'])->name('settings.type.create');
 });
+
+/**
+ * Individual Project Settings Routes.
+ */
+Route::middleware(['auth', 'verified'])->group(function(){
+    Route::get('/projects/{id}/settings', [ProjectSettingsController::class, 'index'])->name('projects.settings.get');
+    Route::post('/projects/{id}/settings', [ProjectSettingsController::class, 'store'])->name('projects.settings.save');
+});
+
+
+
+
+
+
+// Used by authentication.
 require __DIR__.'/auth.php';

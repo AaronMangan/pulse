@@ -20,8 +20,15 @@ export default function Projects(props) {
     const [createNewProject, setCreateNewProject] = useState(false);
     const [editSettings, setSettings] = useState(false);
     const nameInput = useRef();
+    const [manualNumbering, setManualNumbering] = useState(true);
+    const [enforceUploads, setEnforceUploads] = useState(true);
     const [startDate, setStartDate] = useState(new Date());
     const [selectedProject, setSelectedProject] = useState([]);
+    const [projectSettings, setProjectSettings] = useState({
+        manualNumbering: manualNumbering,
+        enforceUploads: enforceUploads,
+    })
+
     const {
         data,
         setData,
@@ -36,13 +43,19 @@ export default function Projects(props) {
         start: startDate,
     });
 
-    const {projectSettings} = useForm({
-        manualNumbering: false,
-        enforceUploads: false,
-    });
-
+    /**
+     * Use Axios to get the settings for the project.
+     */
+    const fetchSettings = (id) => {
+        axios.get(`http://localhost/projects/${id}/settings`)
+          .then(res => {
+            setProjectSettings(res.data[0].settings);
+        })
+    }
+    
     const showSettingsModal = (project) => {
         setSettings(true);
+        fetchSettings(project.id);
         setSelectedProject(project);
     };
 
@@ -75,12 +88,14 @@ export default function Projects(props) {
     const updateProjectSettings = (e) => {
         e.preventDefault();
 
-        // post(route('projects.create'), {
-        //     preserveScroll: true,
-        //     onSuccess: () => closeModal(),
-        //     onError: () => nameInput.current.focus(),
-        //     onFinish: () => reset(),
-        // });
+        axios.post(route('projects.settings.save', selectedProject.id), {
+            manualNumbering: projectSettings.manualNumbering,
+            enforceUploads: projectSettings.enforceUploads,
+        })
+        .then((response) => {
+            closeSettingsModal();
+        })
+        .catch((err) => console.log(err));
     };
 
     const closeModal = () => {
@@ -91,7 +106,7 @@ export default function Projects(props) {
     const closeSettingsModal = () => {
         setSettings(false);
 
-        reset();
+        // reset();
     };
 
     return (
@@ -281,9 +296,9 @@ export default function Projects(props) {
                 </Modal>
 
                 {/* Project Settings Modal */}
-                <Modal id="settingsModal" show={editSettings} onClose={closeSettingsModal}>
+                <Modal id="settingsModal" show={editSettings} onClose={closeSettingsModal} maxWidth='xl'>
                     <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeSettingsModal}>&times;</span>
-                    <form onSubmit={updateProjectSettings} className="p-6">
+                    <form className="p-6">
                         <h2 className="text-lg font-medium font-bold text-gray-900">Edit Project Settings</h2>
                         <SmallText 
                             value={"Project: " + selectedProject.name}
@@ -291,28 +306,44 @@ export default function Projects(props) {
                         />
                         <hr className="mt-2 text-gray-300"></hr>
 
+                        {/* Set Manual Numbering */}
                         <div className="flex justify-between mt-6">
                             <InputLabel className="float-left font-bold">Manual Document Numbering:</InputLabel>
                             <Toggle
-                                defaultChecked={false}
+                                id="manualNumbering"
+                                name="manualNumbering"
+                                defaultChecked={projectSettings.manualNumbering}
                                 className="flex align-right"
-                                onChange={(e) => setData('manualNumbering', e.target.value)}
+                                onChange={(e) => setManualNumbering('manualNumbering', e.target.value)}
                             />
                             <InputError message={errors.name} className="mt-2" />
                         </div>
-                        
+                        <div className='mb-4 leading-3 md:mr-16'>
+                            <small><SmallText
+                                value="Allow users to enter doucment numbers manually when adding documents. Pulse will still verify that the document number is available."
+                            /></small>
+                        </div>
+                        <hr className="text-gray-400"/>
+
+                        {/* Set Enforced Uploads */}
                         <div className="flex justify-between mt-6">
                             <InputLabel className="float-left font-bold">Enforce Uploads</InputLabel>
                             <Toggle
-                                defaultChecked={false}
+                                defaultChecked={projectSettings.enforceUploads}
                                 className="flex align-right"
-                                onChange={(e) => setData('enforceUploads', e.target.value)}
+                                onChange={(e) => setEnforceUploads('enforceUploads', e.target.value)}
                             />
                             <InputError message={errors.name} className="mt-2" />
                         </div>
+                        <div className='mb-4 mr-16 leading-3'>
+                            <small><SmallText
+                                value="Enforce uploading a file when creating a new document."
+                            /></small>
+                        </div>
+                        <hr className="text-gray-400"/>
 
                         <div className="flex justify-end mt-6">
-                            <PrimaryButton className="mr-3" processing={processing}>
+                            <PrimaryButton className="mr-3" onClick={updateProjectSettings}>
                                 Update Settings
                             </PrimaryButton>
                             <SecondaryButton onClick={closeSettingsModal}>Cancel</SecondaryButton>

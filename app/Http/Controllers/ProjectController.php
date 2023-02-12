@@ -94,8 +94,8 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        $request->session()->flash('error', 'To Be Implemented');
-        return redirect()->route('projects.index');
+        // $request->session()->flash('error', 'To Be Implemented');
+        // return redirect()->route('projects.index');
     }
 
     /**
