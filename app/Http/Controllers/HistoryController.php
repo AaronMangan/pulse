@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreHistoryRequest;
 use App\Http\Requests\UpdateHistoryRequest;
 use App\Models\History;
+use Inertia\Inertia;
 
 class HistoryController extends Controller
 {
@@ -15,7 +16,9 @@ class HistoryController extends Controller
      */
     public function index()
     {
-        //
+        // 
+        // dd(History::all());
+        return Inertia::render('History/History', ['history' => History::all()->toArray()]);
     }
 
     /**

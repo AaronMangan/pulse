@@ -29,7 +29,7 @@ export default function Dashboard(props) {
                 <GridItem 
                     title="History"
                     blurb="Review the history of your documents and more"
-                    href="#"
+                    href="history"
                     icon="history"
                 />
                 <GridItem 

@@ -10,6 +10,7 @@ use App\Http\Controllers\StatusController;
 use App\Http\Controllers\RevisionController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ProjectSettingsController;
+use App\Http\Controllers\HistoryController;
 use Inertia\Inertia;
 
 /*
@@ -90,8 +91,12 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::post('/projects/{id}/settings', [ProjectSettingsController::class, 'store'])->name('projects.settings.save');
 });
 
-
-
+/**
+ * History Routes
+ */
+Route::middleware(['auth', 'verified'])->group(function(){
+    Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
+});
 
 
 
