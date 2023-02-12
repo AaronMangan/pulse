@@ -53,6 +53,16 @@ class ProjectController extends Controller
             'code' => $validated['code']
         ]);
 
+        // Create the project settings model as well. This can be modified
+        // later to use pre-determined settings from the user.
+        \App\App\Models\ProjectSettings::create([
+            'project_id' => $created->id,
+            'settings' => [
+                'manualNumbering' => false,
+                'enforceUploads' => false,
+            ]
+        ]);
+
         // Notify the user of the outcome of making a new type.
         $request->session()->flash(
             ($created) ? 'success' : 'error',

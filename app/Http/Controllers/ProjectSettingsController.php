@@ -48,8 +48,7 @@ class ProjectSettingsController extends Controller
             ($saved) ? 'success' : 'error',
             ($saved) ? "Project settings were updated" : 'Unable to update project settings, please try again'
         );
-        // return redirect()->route('projects.index');
-        return response()->json(['status' => 'success']);
+        return redirect()->route('projects.index');
     }
 
     /**

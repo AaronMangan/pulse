@@ -12,31 +12,37 @@ export default function Dashboard(props) {
                     title="Documents"
                     blurb="Manage your documents and find exactly what you need"
                     href="#"
+                    icon="document"
                 />
                 <GridItem 
                     title="Transmittals"
                     blurb="Send and receive documents to other parties"
                     href="#"
+                    icon='plane'
                 />
                 <GridItem 
                     title="Projects"
                     blurb="Send and receive documents to other parties"
                     href="projects"
+                    icon="project"
                 />
                 <GridItem 
                     title="History"
                     blurb="Review the history of your documents and more"
                     href="#"
+                    icon="history"
                 />
                 <GridItem 
                     title="Reports"
                     blurb="Generate reports to help discover how you use your documents"
                     href="#"
+                    icon="reports"
                 />
                 <GridItem 
                     title="Settings"
                     blurb="Modify your settings to get them just the way you need them"
                     href="settings"
+                    icon="settings"
                 />
                 <GridItem 
                     title="Logout"
@@ -44,6 +50,7 @@ export default function Dashboard(props) {
                     href={route('logout')}
                     as="button"
                     method="post"
+                    icon="logout"
                 />
             </div>
         );

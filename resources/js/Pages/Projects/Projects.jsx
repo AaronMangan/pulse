@@ -20,8 +20,8 @@ export default function Projects(props) {
     const [createNewProject, setCreateNewProject] = useState(false);
     const [editSettings, setSettings] = useState(false);
     const nameInput = useRef();
-    const [manualNumbering, setManualNumbering] = useState(true);
-    const [enforceUploads, setEnforceUploads] = useState(true);
+    const [manualNumbering, setManualNumbering] = useState(false);
+    const [enforceUploads, setEnforceUploads] = useState(false);
     const [startDate, setStartDate] = useState(new Date());
     const [selectedProject, setSelectedProject] = useState([]);
     const [projectSettings, setProjectSettings] = useState({
@@ -47,16 +47,16 @@ export default function Projects(props) {
      * Use Axios to get the settings for the project.
      */
     const fetchSettings = (id) => {
-        axios.get(`http://localhost/projects/${id}/settings`)
+        axios.get(`http://localhost:8001/projects/${id}/settings`)
           .then(res => {
             setProjectSettings(res.data[0].settings);
         })
     }
     
     const showSettingsModal = (project) => {
-        setSettings(true);
         fetchSettings(project.id);
         setSelectedProject(project);
+        setSettings(true);
     };
 
     const showNewProjectModal = () => {
@@ -105,8 +105,7 @@ export default function Projects(props) {
     };
     const closeSettingsModal = () => {
         setSettings(false);
-
-        // reset();
+        reset();
     };
 
     return (
@@ -298,7 +297,7 @@ export default function Projects(props) {
                 {/* Project Settings Modal */}
                 <Modal id="settingsModal" show={editSettings} onClose={closeSettingsModal} maxWidth='xl'>
                     <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeSettingsModal}>&times;</span>
-                    <form className="p-6">
+                    <form onSubmit={updateProjectSettings} className="p-6">
                         <h2 className="text-lg font-medium font-bold text-gray-900">Edit Project Settings</h2>
                         <SmallText 
                             value={"Project: " + selectedProject.name}
@@ -320,7 +319,7 @@ export default function Projects(props) {
                         </div>
                         <div className='mb-4 leading-3 md:mr-16'>
                             <small><SmallText
-                                value="Allow users to enter doucment numbers manually when adding documents. Pulse will still verify that the document number is available."
+                                value="Allow users to enter document numbers manually when adding documents. Pulse will still verify that the document number is available."
                             /></small>
                         </div>
                         <hr className="text-gray-400"/>
@@ -343,7 +342,7 @@ export default function Projects(props) {
                         <hr className="text-gray-400"/>
 
                         <div className="flex justify-end mt-6">
-                            <PrimaryButton className="mr-3" onClick={updateProjectSettings}>
+                            <PrimaryButton className="mr-3" processing={processing}>
                                 Update Settings
                             </PrimaryButton>
                             <SecondaryButton onClick={closeSettingsModal}>Cancel</SecondaryButton>
