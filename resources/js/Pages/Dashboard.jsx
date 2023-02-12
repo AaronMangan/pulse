@@ -34,13 +34,13 @@ export default function Dashboard(props) {
                 />
                 <GridItem 
                     title="Reports"
-                    blurb="Generate reports to help discover how you use your documents"
+                    blurb="Discover how you use your documents"
                     href="#"
                     icon="reports"
                 />
                 <GridItem 
                     title="Settings"
-                    blurb="Modify your settings to get them just the way you need them"
+                    blurb="Modify your settings"
                     href="settings"
                     icon="settings"
                 />
