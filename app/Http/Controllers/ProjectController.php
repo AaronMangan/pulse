@@ -55,7 +55,7 @@ class ProjectController extends Controller
 
         // Create the project settings model as well. This can be modified
         // later to use pre-determined settings from the user.
-        \App\App\Models\ProjectSettings::create([
+        \App\Models\ProjectSettings::create([
             'project_id' => $created->id,
             'settings' => [
                 'manualNumbering' => false,

@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Project;
-
+use App\Models\History;
 class ProjectObserver
 {
     /**
@@ -14,7 +14,20 @@ class ProjectObserver
      */
     public function created(Project $project)
     {
-        //
+        $user = \Auth::user();
+        $name = $user->name ?? 'system';
+        
+        // Add the history event.
+        History::create([
+            'model' => Project::class,
+            'model_id' => $project->id,
+            'user_id' => \Auth::user()->id,
+            'event' => 'created',
+            'level' => 'user',
+            'old' => json_encode([]),
+            'new' => json_encode($project->toArray()),
+            'description' => "New project {$project->name} created by: {$name}",
+        ]);
     }
 
     /**
@@ -26,6 +39,20 @@ class ProjectObserver
     public function updated(Project $project)
     {
         //
+        $user = \Auth::user();
+        $name = $user->name ?? 'system';
+        
+        // Add the history event.
+        History::create([
+            'model' => Project::class,
+            'model_id' => $project->id,
+            'user_id' => \Auth::user()->id,
+            'event' => 'updated',
+            'level' => 'user',
+            'old' => json_encode([]),
+            'new' => json_encode($project->toArray()),
+            'description' => "Project {$project->name} updated by: {$name}",
+        ]);
     }
 
     /**

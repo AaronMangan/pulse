@@ -8,6 +8,8 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Event;
 use App\Models\Status;
 use App\Observers\StatusObserver;
+use App\Models\Project;
+use App\Observers\ProjectObserver;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -29,6 +31,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $observers = [
         Status::class => [StatusObserver::class],
+        Project::class => [ProjectObserver::class],
     ];
 
     /**

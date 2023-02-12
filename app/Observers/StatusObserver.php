@@ -39,7 +39,20 @@ class StatusObserver
      */
     public function updated(Status $status)
     {
-        //
+        $user = \Auth::user();
+        $name = $user->name ?? 'system';
+        
+        // Add the history event.
+        History::create([
+            'model' => Status::class,
+            'model_id' => $status->id,
+            'user_id' => \Auth::user()->id,
+            'event' => 'updated',
+            'level' => 'user',
+            'old' => json_encode([]),
+            'new' => json_encode($status->toArray()),
+            'description' => "Status {$status->code} updated by: {$name}",
+        ]);
     }
 
     /**
