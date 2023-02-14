@@ -3,10 +3,11 @@
 namespace App\Observers;
 
 use App\Models\Status;
-use App\Models\History;
+use App\Observers\Traits\WritesEvents;
 
 class StatusObserver
 {
+    use WritesEvents;
     /**
      * Handle the Status "created" event.
      *
@@ -15,20 +16,7 @@ class StatusObserver
      */
     public function created(Status $status)
     {
-        $user = \Auth::user();
-        $name = $user->name ?? 'system';
-        
-        // Add the history event.
-        History::create([
-            'model' => Status::class,
-            'model_id' => $status->id,
-            'user_id' => \Auth::user()->id,
-            'event' => 'created',
-            'level' => 'user',
-            'old' => json_encode([]),
-            'new' => json_encode($status->toArray()),
-            'description' => "New status {$status->code} created by: {$name}",
-        ]);
+        $this->write($status, 'created', 'user');
     }
 
     /**
@@ -39,20 +27,7 @@ class StatusObserver
      */
     public function updated(Status $status)
     {
-        $user = \Auth::user();
-        $name = $user->name ?? 'system';
-        
-        // Add the history event.
-        History::create([
-            'model' => Status::class,
-            'model_id' => $status->id,
-            'user_id' => \Auth::user()->id,
-            'event' => 'updated',
-            'level' => 'user',
-            'old' => json_encode([]),
-            'new' => json_encode($status->toArray()),
-            'description' => "Status {$status->code} updated by: {$name}",
-        ]);
+        $this->write($status, 'updated', 'user');
     }
 
     /**
@@ -63,7 +38,7 @@ class StatusObserver
      */
     public function deleted(Status $status)
     {
-        //
+        $this->write($status, 'deleted', 'user');
     }
 
     /**
@@ -74,7 +49,7 @@ class StatusObserver
      */
     public function restored(Status $status)
     {
-        //
+        $this->write($status, 'restored', 'user');
     }
 
     /**
@@ -85,6 +60,6 @@ class StatusObserver
      */
     public function forceDeleted(Status $status)
     {
-        //
+        $this->write($status, 'force deleted', 'user');
     }
 }

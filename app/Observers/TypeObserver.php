@@ -3,9 +3,12 @@
 namespace App\Observers;
 
 use App\Models\Type;
+use App\Observers\Traits\WritesEvents;
 
 class TypeObserver
 {
+    use WritesEvents;
+
     /**
      * Handle the Type "created" event.
      *
@@ -14,7 +17,7 @@ class TypeObserver
      */
     public function created(Type $type)
     {
-        //
+        $this->write($type, 'created', 'user');
     }
 
     /**
@@ -25,7 +28,7 @@ class TypeObserver
      */
     public function updated(Type $type)
     {
-        //
+        $this->write($type, 'updated', 'user');
     }
 
     /**
@@ -36,7 +39,7 @@ class TypeObserver
      */
     public function deleted(Type $type)
     {
-        //
+        $this->write($type, 'deleted', 'user');
     }
 
     /**
@@ -47,7 +50,7 @@ class TypeObserver
      */
     public function restored(Type $type)
     {
-        //
+        $this->write($type, 'restored', 'user');
     }
 
     /**
@@ -58,6 +61,6 @@ class TypeObserver
      */
     public function forceDeleted(Type $type)
     {
-        //
+        $this->write($type, 'force deleted', 'user');
     }
 }

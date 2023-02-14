@@ -3,9 +3,11 @@
 namespace App\Observers;
 
 use App\Models\Revision;
+use App\Observers\Traits\WritesEvents;
 
 class RevisionObserver
 {
+    use WritesEvents;
     /**
      * Handle the Revision "created" event.
      *
@@ -14,7 +16,7 @@ class RevisionObserver
      */
     public function created(Revision $revision)
     {
-        //
+        $this->write($revision, 'created', 'user');
     }
 
     /**
@@ -25,7 +27,7 @@ class RevisionObserver
      */
     public function updated(Revision $revision)
     {
-        //
+        $this->write($revision, 'updated', 'user');
     }
 
     /**
@@ -36,7 +38,7 @@ class RevisionObserver
      */
     public function deleted(Revision $revision)
     {
-        //
+        $this->write($revision, 'deleted', 'user');
     }
 
     /**
@@ -47,7 +49,7 @@ class RevisionObserver
      */
     public function restored(Revision $revision)
     {
-        //
+        $this->write($revision, 'restored', 'user');
     }
 
     /**
@@ -58,6 +60,6 @@ class RevisionObserver
      */
     public function forceDeleted(Revision $revision)
     {
-        //
+        $this->write($revision, 'force deleted', 'user');
     }
 }

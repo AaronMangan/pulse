@@ -3,9 +3,10 @@
 namespace App\Observers;
 
 use App\Models\Discipline;
-
+use App\Observers\Traits\WritesEvents;
 class DisciplineObserver
 {
+    use WritesEvents;
     /**
      * Handle the Discipline "created" event.
      *
@@ -14,7 +15,7 @@ class DisciplineObserver
      */
     public function created(Discipline $discipline)
     {
-        //
+        $this->write($discipline, 'created', 'user');
     }
 
     /**
@@ -25,7 +26,7 @@ class DisciplineObserver
      */
     public function updated(Discipline $discipline)
     {
-        //
+        $this->write($discipline, 'updated', 'user');
     }
 
     /**
@@ -36,7 +37,7 @@ class DisciplineObserver
      */
     public function deleted(Discipline $discipline)
     {
-        //
+        $this->write($discipline, 'deleted', 'user');
     }
 
     /**
@@ -47,7 +48,7 @@ class DisciplineObserver
      */
     public function restored(Discipline $discipline)
     {
-        //
+        $this->write($discipline, 'restored', 'user');
     }
 
     /**
@@ -58,6 +59,6 @@ class DisciplineObserver
      */
     public function forceDeleted(Discipline $discipline)
     {
-        //
+        $this->write($discipline, 'force_deleted', 'user');
     }
 }
