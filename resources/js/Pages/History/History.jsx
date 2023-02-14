@@ -11,6 +11,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 export default function History(props) {
     const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
+    const [selectedItem, setSelectedItem] = useState([]);
     const passwordInput = useRef();
     const hasHistory = props.history.length ? true : false;
     const {
@@ -24,7 +25,8 @@ export default function History(props) {
         revision: ''
     });
 
-    const confirmUserDeletion = () => {
+    const confirmUserDeletion = (item) => {
+        setSelectedItem(item);
         setConfirmingUserDeletion(true);
     };
 
@@ -53,7 +55,7 @@ export default function History(props) {
         >
         <Head title="History" />
         <div className="w-full py-12 pl-24 pr-24">
-            <div className="inline-block min-w-full mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div className="inline-block min-w-full mx-auto max-w-7xl sm:px-6 lg:px-8 md:w-full">
                 {
                     hasHistory ? (
                         <div>
@@ -76,34 +78,39 @@ export default function History(props) {
                                             <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{item.description}</td>
                                             <td className="px-6 py-4 text-sm font-light text-center text-gray-900 whitespace-nowrap">
                                                 <PrimaryButton
-                                                    className=''
-                                                    onClick={confirmUserDeletion}
+                                                    className='mr-3'
+                                                    onClick={() => {confirmUserDeletion(item)}}
                                                 >View</PrimaryButton>
-                                                    <Modal show={confirmingUserDeletion} onClose={closeModal} data={item}>
-                                                        <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeModal}>&times;</span>
-                                                        <div>                                                        
-                                                            <dl className="max-w-full p-6 text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
-                                                                <div className="flex flex-col pb-3">
-                                                                    <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Actioned By</dt>
-                                                                    <dd className="text-lg font-semibold">System</dd>
-                                                                </div>
-                                                                <div className="flex flex-col py-3">
-                                                                    <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Home address</dt>
-                                                                    <dd className="text-lg font-semibold">92 Miles Drive, Newark, NJ 07103, California, USA</dd>
-                                                                </div>
-                                                                <div className="flex flex-col pt-3">
-                                                                    <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Phone number</dt>
-                                                                    <dd className="text-lg font-semibold">+00 123 456 789 / +12 345 678</dd>
-                                                                </div>
-                                                            </dl>
-                                                        </div>
-                                                        <SecondaryButton className="float-right m-4" onClick={closeModal}>Close</SecondaryButton>
-                                                    </Modal>
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
+                            
+                            <Modal show={confirmingUserDeletion} onClose={closeModal}>
+                                <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeModal}>&times;</span>
+                                <div>                                                        
+                                    <dl className="max-w-full p-6 text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+                                        <div className="flex flex-col pb-3">
+                                            <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Actioned By</dt>
+                                            <dd className="text-lg font-semibold capitalize">{selectedItem.level}</dd>
+                                        </div>
+                                        <div className="flex flex-col py-3">
+                                            <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Object</dt>
+                                            <dd className="text-lg font-semibold">{selectedItem.model.replace('App\\Models\\', '')}</dd>
+                                        </div>
+                                        <div className="flex flex-col py-3">
+                                            <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Event</dt>
+                                            <dd className="text-lg font-semibold capitalize">{selectedItem.event}</dd>
+                                        </div>
+                                        <div className="flex flex-col pt-3">
+                                            <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Description</dt>
+                                            <dd className="text-lg font-semibold">{selectedItem.description}</dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                                <SecondaryButton className="float-right m-4" onClick={closeModal}>Close</SecondaryButton>
+                            </Modal>
                         </div>
                     ) : (
                         <NoData
