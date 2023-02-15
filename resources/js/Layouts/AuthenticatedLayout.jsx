@@ -1,18 +1,43 @@
 import { useState } from 'react';
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import Dropdown from '@/Components/Dropdown';
-import NavLink from '@/Components/NavLink';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link } from '@inertiajs/react';
 import NavBar from '@/Layouts/NavBar';
+import { ToastContainer, toast } from 'react-toastify';
 
-export default function Authenticated({ auth, header, children, footer }) {
+export default function Authenticated({ auth, header, children, footer, flash }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
-
+    const showToastMessage = (msg, type) => {
+        if (type == 'success') {
+            toast.success(msg, {
+                position: toast.POSITION.TOP_RIGHT
+            });
+        }
+        else if (type == 'error') {
+            toast.error(msg, {
+                position: toast.POSITION.TOP_RIGHT
+            });
+        }
+        else {
+            toast.info(msg, {
+                position: toast.POSITION.TOP_RIGHT
+            });
+        }
+    };
     return (
         <div className="min-h-screen bg-gray-100">
             <NavBar />
-
+            {/* Flash Messages */}
+            {flash.success && (
+                // Show any flashed message to the session
+                showToastMessage(flash.success, 'success')
+            )}
+            {flash.info && (
+                // Show any flashed message to the session
+                showToastMessage(flash.info, 'info')
+            )}
+            {flash.error && (
+                // Show any flashed message to the session
+                showToastMessage(flash.error, 'error')
+            )}
+            
             {header && (
                 <header className="bg-white shadow">
                     <div className="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">{header}</div>

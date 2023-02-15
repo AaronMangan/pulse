@@ -1,6 +1,6 @@
 export default function GridBox({ children }) {
     return (
-        <div>
+        <div className="">
             {children}
         </div>
     );

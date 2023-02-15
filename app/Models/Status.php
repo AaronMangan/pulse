@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Status extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name', 'code', 'status', 'description',
+    ];
+
+    protected $visible = [
+        'id', 'name', 'code', 'status', 'description', 'created_at', 'updated_at'
+    ];
 }
