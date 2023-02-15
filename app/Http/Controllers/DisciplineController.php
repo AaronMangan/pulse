@@ -51,7 +51,7 @@ class DisciplineController extends Controller
         ]);
 
         // Make some toast!
-        $request->toast(
+        $request->session()->flash(
             ($created) ? 'success' : 'error',
             ($created) ? 'Discipline was created successfully!' : self::CREATE_DISCIPLINE_ERROR
         );

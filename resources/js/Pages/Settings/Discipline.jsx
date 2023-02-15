@@ -149,7 +149,7 @@ export default function History({className, disciplines}) {
                             className="block w-full mt-1 capitalize"
                             isFocused
                             placeholder="Mechanical"
-                        />                                        
+                        />
                         <InputError message={errors.name} className="mt-2" />
                     </div>
 
@@ -163,7 +163,7 @@ export default function History({className, disciplines}) {
                             handleChange={(e) => setData('code', e.target.value)}
                             className="block w-full mt-1 uppercase"
                             placeholder="MECH"
-                        />                                        
+                        />
                         <InputError message={errors.name} className="mt-2" />
                     </div>
 
