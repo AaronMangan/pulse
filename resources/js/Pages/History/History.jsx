@@ -54,7 +54,7 @@ export default function History(props) {
             // header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Profile</h2>}
         >
         <Head title="History" />
-        <div className="w-full py-12 pl-24 pr-24">
+        <div className="w-full py-12 pl-1/5 pr-1/5">
             <div className="inline-block min-w-full mx-auto max-w-7xl sm:px-6 lg:px-8 md:w-full">
                 {
                     hasHistory ? (
@@ -97,7 +97,7 @@ export default function History(props) {
                                         </div>
                                         <div className="flex flex-col py-3">
                                             <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Object</dt>
-                                            <dd className="text-lg font-semibold">{selectedItem.model.replace('App\\Models\\', '')}</dd>
+                                            <dd className="text-lg font-semibold">Buddy</dd>
                                         </div>
                                         <div className="flex flex-col py-3">
                                             <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Event</dt>
