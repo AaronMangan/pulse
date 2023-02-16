@@ -77,6 +77,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
     // Disciplines CRUD Routes.
     Route::post('/settings/discipline/archive/{discipline}', [DisciplineController::class, 'archive'])->name('settings.discipline.archive');
     Route::post('/settings/discipline', [DisciplineController::class, 'store'])->name('settings.discipline.create');
+    Route::post('/settings/discipline/delete/{discipline}', [DisciplineController::class, 'destroy'])->name('settings.discipline.delete');
     
     // Types CRUD Routes,
     Route::post('/settings/type/archive/{type}', [TypeController::class, 'archive'])->name('settings.type.archive');

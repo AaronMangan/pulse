@@ -145,12 +145,11 @@ export default function Statuses({className, statuses}) {
                             id="name"
                             type="text"
                             name="name"
-                            // value={data.name}
                             ref={nameInput}
                             handleChange={(e) => setData('name', e.target.value)}
                             className="block w-full mt-1 capitalize"
                             isFocused
-                            placeholder="A, B, 0, 1"
+                            placeholder="Draft"
                         />                                        
                         <InputError message={errors.name} className="mt-2" />
                     </div>
@@ -165,7 +164,7 @@ export default function Statuses({className, statuses}) {
                             // value={data.code}
                             handleChange={(e) => setData('code', e.target.value)}
                             className="block w-full mt-1 uppercase"
-                            placeholder="DFT, SUP, OBS"
+                            placeholder="DFT"
                         />                                        
                         <InputError message={errors.code} className="mt-2" />
                     </div>

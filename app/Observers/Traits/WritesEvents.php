@@ -12,6 +12,7 @@ trait WritesEvents
         $user = \Auth::user();
         $date = date('d-m-Y @ H:i:s', time());
         $text = ($level == 'user') ? "{$user->name} on {$date}" : "system on {$date}";
+        $what = $model->code ?? $model->name ?? '';
         History::create([
             'model' => $model::class,
             'model_id' => $model->id,
@@ -20,7 +21,7 @@ trait WritesEvents
             'level' => $level,
             'old' => json_encode([]),
             'new' => json_encode($model->toArray()),
-            'description' => str_replace('App\\Models\\', '', $model::class) . " {$model->id} was {$event} by {$text}",
+            'description' => str_replace('App\\Models\\', '', $model::class) . " {$model->id} ({$what}) was {$event} by {$text}",
         ]);
     }
 }

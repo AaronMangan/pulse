@@ -100,9 +100,15 @@ class DisciplineController extends Controller
      * @param  \App\Models\Discipline  $discipline
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Discipline $discipline)
+    public function destroy(Request $request, Discipline $discipline)
     {
-        //
+        // Delete the discipline.
+        $deleted = $discipline->delete();
+
+        $request->session()->flash(
+            ($deleted) ? 'success' : 'error',
+            ($deleted) ? 'Discipline deleted successfully!' : self::CREATE_DISCIPLINE_ERROR,
+        );
     }
 
     /**
