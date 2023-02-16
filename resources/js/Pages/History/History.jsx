@@ -89,7 +89,7 @@ export default function History(props) {
                             
                             <Modal show={confirmingUserDeletion} onClose={closeModal}>
                                 <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeModal}>&times;</span>
-                                <div>                                                        
+                                <div>
                                     <dl className="max-w-full p-6 text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
                                         <div className="flex flex-col pb-3">
                                             <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Actioned By</dt>

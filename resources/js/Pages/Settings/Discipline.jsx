@@ -9,9 +9,12 @@ import { useRef, useState } from 'react';
 import { useForm } from '@inertiajs/react';
 import Dropdown from '@/Components/Dropdown';
 import NoData from '@/Components/NoData';
+import SmallText from '@/Components/SmallText';
 
 export default function History({className, disciplines}) {
     const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
+    const [showingViewModal, setShowViewModal] = useState(false);
+    const [selectedItem, setSelectedItem] = useState([]);
     const passwordInput = useRef();
     const hasData = disciplines.length > 0 ? true : false;
     const {
@@ -24,6 +27,16 @@ export default function History({className, disciplines}) {
     } = useForm({
         discipline: ''
     });
+
+    const showViewModal = (item) => {
+        setShowViewModal(true);
+        setSelectedItem(item);
+    };
+
+    const closeViewModal = () => {
+        setShowViewModal(false);
+        reset();
+    };
 
     const confirmUserDeletion = () => {
         setConfirmingUserDeletion(true);
@@ -105,7 +118,6 @@ export default function History({className, disciplines}) {
                                                 </Dropdown.Trigger>
 
                                                 <Dropdown.Content>
-                                                    <Dropdown.Link href="">View</Dropdown.Link>
                                                     <Dropdown.Link href="">Edit</Dropdown.Link>
                                                     <Dropdown.Link href={route('settings.discipline.archive', item)} method="post" as="button">
                                                         {
