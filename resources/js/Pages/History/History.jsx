@@ -114,8 +114,8 @@ export default function History(props) {
                         </div>
                     ) : (
                         <NoData
-                            title="No Revisions"
-                            blurb="To add a revision, click the 'Add Revision' button."
+                            title="No History"
+                            blurb="Nothing has happened yet! What are you waiting for?"
                         />
                     )
                 }

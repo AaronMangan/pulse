@@ -1,11 +1,16 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
+import { useState } from 'react';
 import Revisions from './Revisions';
 import Statuses from './Statuses';
 import Discipline from './Discipline';
 import Type from './Type';
 
 export default function Settings(props) {
+    const[refresh, setRefresh] = useState(false);
+    const stateChanger = (updated) => {
+        updated ? window.location.reload() : null;
+    }
     return (
         <AuthenticatedLayout
             auth={props.auth}
@@ -16,29 +21,27 @@ export default function Settings(props) {
             <div className="py-12">
                 <div className="mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
                     <div className="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
-                        {/* Element Here */}
+                        {/* Show Types */}
                         <Type types={props.types}/>
                     </div>
 
                     <div className="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
-                        {/* Element Here */}
-                        <Discipline disciplines={props.disciplines}/>
+                        {/* Show Disciplines */}
+                        <Discipline
+                            disciplines={props.disciplines}
+                            stateChanger={stateChanger}
+                        />
                     </div>
 
                     <div className="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
-                        {/* Element Here */}
-                        <Revisions revisions={props.revisions}/>
-                    </div>
-
-                    <div className="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
-                        {/* Element Here */}
+                        {/* Show Statuses */}
                         <Statuses statuses={props.statuses}/>
                     </div>
-                    {/* This will be moved to the History page later. */}
-                    {/* 
+
                     <div className="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
-                        <History history={props.history}/>
-                    </div> */}
+                        {/* Show Revisions */}
+                        <Revisions revisions={props.revisions}/>
+                    </div>
                 </div>
             </div>
         </AuthenticatedLayout>
