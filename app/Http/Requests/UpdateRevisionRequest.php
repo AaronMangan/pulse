@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRevisionRequest extends FormRequest
+class UpdateRevisionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class StoreRevisionRequest extends FormRequest
     public function rules()
     {
         return [
-            'revision' => 'required|alpha_dash|unique:revisions,name|max:10',
+            'name' => 'required|max:10'
         ];
     }
 }

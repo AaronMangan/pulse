@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Revision;
 use App\Http\Requests\StoreRevisionRequest;
+use App\Http\Requests\UpdateRevisionRequest;
 
 class RevisionController extends Controller
 {
@@ -83,9 +84,15 @@ class RevisionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRevisionRequest $request, Revision $revision)
     {
-        //
+        $validated = $request->safe()->only(['name']);
+        $updated = $revision->updateOrFail($validated);
+
+        return response()->json([
+            'status' => ($updated) ? 'success' : 'error',
+            'message' => ($updated) ? 'Revision was updated successfully!' : 'An error occurred, please contact your administrator'
+        ]);
     }
 
     /**
@@ -94,9 +101,17 @@ class RevisionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Revision $revision)
     {
-        //
+        // Delete revision
+        $deleted = $revision->delete();
+
+        $request->session()->flash(
+            ($deleted) ? 'success' : 'error',
+            ($deleted) ? 'Revision was deleted successfully!' : 'An error occurred, please contact your administrator'
+        );
+
+        return redirect()->route('settings.index');
     }
 
     /**

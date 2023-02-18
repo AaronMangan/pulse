@@ -62,6 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
 
 /**
  * Settings Routes.
+ * TODO: Let's split these into their own groups eventually. We can then make finer-grain permissions.
  */
 Route::middleware(['auth', 'verified'])->group(function() {
     // Return the setup index. This shows types, revisions, etc.
@@ -70,7 +71,9 @@ Route::middleware(['auth', 'verified'])->group(function() {
     // Revisions CRUD Routes
     Route::post('/settings/revision', [RevisionController::class, 'store'])->name('settings.revision.create');
     Route::post('/settings/revision/archive/{revision}', [RevisionController::class, 'archive'])->name('settings.revision.archive');
-    
+    Route::post('/settings/revision/update/{revision}', [RevisionController::class, 'update'])->name('settings.revision.update');
+    Route::delete('/settings/revision/delete/{revision}', [RevisionController::class, 'destroy'])->name('settings.revision.delete');
+
     // Statuses CRUD Routes.
     Route::post('/settings/status/archive/{status}', [StatusController::class, 'archive'])->name('settings.status.archive');
     Route::post('/settings/status', [StatusController::class, 'store'])->name('settings.status.create');

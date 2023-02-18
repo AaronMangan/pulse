@@ -16,9 +16,9 @@ class HistoryController extends Controller
      */
     public function index()
     {
-        // 
-        // dd(History::all());
-        return Inertia::render('History/History', ['history' => History::all()->toArray()]);
+        // Return the history index.
+        // return Inertia::render('History/History', ['history' => History::all()->sortDesc('created_at')->toArray()]);
+        return Inertia::render('History/History', ['history' => History::orderByDesc('created_at')->get()->toArray()]);
     }
 
     /**
