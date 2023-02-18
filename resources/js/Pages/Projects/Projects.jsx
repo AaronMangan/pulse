@@ -15,6 +15,7 @@ import TextArea from '@/Components/TextArea';
 import Dropdown from '@/Components/Dropdown';
 import Toggle from 'react-toggle';
 import SmallText from '@/Components/SmallText';
+import NoData from '@/Components/NoData';
 
 export default function Projects(props) {
     const [createNewProject, setCreateNewProject] = useState(false);
@@ -80,6 +81,21 @@ export default function Projects(props) {
         });
     };
 
+    // Delete the project.
+    const deleteProject = (project) => {
+        // e.preventDefault();
+        let ok = confirm('Do you want to delete this project?');
+
+        if(ok){
+            post(route('projects.delete', project), {
+                preserveScroll: true,
+                onSuccess: () => closeModal(),
+                onError: () => nameInput.current.focus(),
+                onFinish: () => reset(),
+            });
+        }
+    };
+
     const updateProject = (e) => {
         e.preventDefault();
         post(route('projects.update', selectedProject.id));
@@ -116,34 +132,40 @@ export default function Projects(props) {
             flash={props.flash}
         >
             <Head title="Projects" />
-            <div className="w-full py-12 pl-24 pr-24">
-                <div className="inline-block min-w-full mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <table className="min-w-full rounded-md">
+            <div className="w-full">
+                <div className="visible lg:invisible">
+                    <NoData
+                        title="Not Allowed"
+                        blurb="Unable to view this page on this device"
+                    />
+                </div>
+                <div className="invisible inline-block min-w-full mx-auto lg:visible md:px-2 max-w-7xl sm:py-1 lg:px-8">
+                    <table className="min-w-full rounded xs:table-fixed md:table-auto">
                         <thead className="bg-gray-600 border-b">
                             <tr>
                                 <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Id</th>
                                 <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Name</th>
                                 <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Code</th>
                                 <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Start Date</th>
-                                <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">End Date</th>
-                                <th scope="col" className="px-6 py-4 text-sm text-white font-large">Actions</th> 
+                                <th scope="col" className="invisible px-6 py-4 text-sm text-left text-white lg:visible font-large">End Date</th>
+                                <th scope="col" className="invisible px-6 py-4 text-sm text-left text-white lg:visible font-large">Actions</th> 
                             </tr>
                         </thead>
                         <tbody>
                             {props.projects.map(project => (
                                 <tr key={project.id} className={project.status == 'active' ? 'bg-white border-b' : 'bg-gray-200 border-b'}>
                                     <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">{project.id}</td>
-                                    <td className="px-6 py-4 text-sm font-light font-bold text-gray-900 whitespace-nowrap">{project.name}</td>
-                                    <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{project.code}</td>
-                                    <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{project.start}</td>
-                                    <td className="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap">{project.end}</td>
-                                    <td className="px-6 py-4 text-sm font-light text-center text-gray-900 whitespace-nowrap">
+                                    <td className="px-6 py-4 text-sm font-light font-bold text-gray-900">{project.name}</td>
+                                    <td className="px-6 py-4 text-sm font-light text-gray-900">{project.code}</td>
+                                    <td className="px-6 py-4 text-sm font-light text-gray-900">{project.start}</td>
+                                    <td className="invisible px-6 py-4 text-sm font-light text-gray-900 lg:visible">{project.end}</td>
+                                    <td className="invisible px-6 py-4 text-sm font-light text-center text-gray-900 lg:visible">
                                         <Dropdown>
                                             <Dropdown.Trigger>
                                                 <span className="inline-flex rounded-md">
                                                     <button
                                                         type="button"
-                                                        className="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-white transition duration-150 ease-in-out bg-gray-600 border border-transparent rounded-md hover:text-sky-200 focus:outline-none"
+                                                        className="items-center hidden px-3 py-2 text-sm font-medium leading-4 text-white transition duration-150 ease-in-out bg-gray-600 border border-transparent rounded-md md:inline-flex hover:text-sky-200 focus:outline-none"
                                                     >Actions
                                                         <svg
                                                             className="ml-2 -mr-0.5 h-4 w-4"
@@ -181,9 +203,15 @@ export default function Projects(props) {
                                                 >
                                                     Settings
                                                 </a>
-                                                <Dropdown.Link href="" method="post" as="button">
+                                                <a
+                                                    onClick={() => {deleteProject(project)}}
+                                                    className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                                                >
                                                     Delete
-                                                </Dropdown.Link>
+                                                </a>
+                                                {/* <Dropdown.Link href="" method="post" as="button">
+                                                    Delete
+                                                </Dropdown.Link> */}
                                             </Dropdown.Content>
                                         </Dropdown>
                                     </td>
@@ -245,7 +273,7 @@ export default function Projects(props) {
                         </div>
 
                         {/* Project Start */}
-                        <div class="grid grid-flow-col auto-cols-max justify-between pt-4">
+                        <div className="grid justify-between grid-flow-col pt-4 auto-cols-max">
                             <div>
                                 <InputLabel className="ml-2 font-bold flex-nowrap" for="start" value="Start Date" />
                                 <ReactDatePicker

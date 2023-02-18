@@ -24,7 +24,7 @@ class StoreRevisionRequest extends FormRequest
     public function rules()
     {
         return [
-            'revision' => 'required|unique:revisions,name|max:10',
+            'revision' => 'required|alpha_dash|unique:revisions,name|max:10',
         ];
     }
 }

@@ -9,26 +9,21 @@ import { useRef, useState } from 'react';
 import { useForm } from '@inertiajs/react';
 import Dropdown from '@/Components/Dropdown';
 import NoData from '@/Components/NoData';
+import SmallText from '@/Components/SmallText';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export default function Statuses({className, statuses}) {
-    const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
+    const [showingStatusModal, setShowingStatusModal] = useState(false);
+    const [selectedItem, setSelectedItem] = useState([]);
     const nameInput = useRef();
     const hasData = statuses.length > 0 ? true : false;
-    const {
-        data,
-        setData,
-        post,
-        processing,
-        reset,
-        errors,
-    } = useForm({
+    const { data, setData, post, processing, reset, errors } = useForm({
         status: 'active',
-        name: '',
-        code: '',
     });
 
-    const confirmUserDeletion = () => {
-        setConfirmingUserDeletion(true);
+    const showStatusModal = () => {
+        setShowingStatusModal(true);
     };
 
     const createStatus = (e) => {
@@ -36,18 +31,71 @@ export default function Statuses({className, statuses}) {
 
         post(route('settings.status.create'), {
             preserveScroll: true,
-            onSuccess: () => closeModal(),
+            onSuccess: () => closeStatusModal(),
             onError: () => nameInput.current.focus(),
             onFinish: () => reset(),
         });
     };
 
-    const closeModal = () => {
-        setConfirmingUserDeletion(false);
-
+    const closeStatusModal = (reload = false) => {
+        setShowingStatusModal(false);
         reset();
+        if(reload) {
+            window.location.reload();
+        }
     };
 
+    const editStatus = (e, status) => {
+        e.preventDefault();
+        setSelectedItem(status);
+        showStatusModal();
+    };
+
+    /**
+     * Chcek for changes in the fields the user can access.
+     * @returns bool True if the data has changed, false if not.
+     */
+    const hasChanges = () => {
+        let newName = data.name ?? selectedItem.name;
+        let newCode = data.code ?? selectedItem.code;
+        return (newName !== selectedItem.name || newCode !== selectedItem.code);
+    };
+
+    /**
+     * 
+     * @param {*} e 
+     * @returns 
+     */
+    const updateStatus = (e) => {
+        e.preventDefault();
+        if(!hasChanges()) {
+            toast.info('No changes were made to save');
+            return;
+        }
+        axios.post(route('settings.status.update', selectedItem.id), {
+            name: data.name ?? selectedItem.name,
+            code: data.code ?? selectedItem.code
+        }).then((response) => {
+            // Response Handling...
+            if(typeof response.data != 'undefined' && response.data.status && response.data.status == 'success') {
+                // Handle success
+                toast.success(response.data.message ?? 'Status updated successfully!');
+            }
+            else {
+                // Handle application failure (as opposed to request failure)
+                toast.error(response.data.message ?? 'An error occurred');
+            }
+        }).catch((errors) => {
+            // Error handling...
+            console.log('An error occurred when trying to updated the status. Please contact your administrator and show them the error below:');
+            console.error(errors);
+        });
+        closeStatusModal(hasChanges());
+    };
+    
+    /**
+     * Render and return the HTML.
+     */
     return (
         <section className={`space-y-6 ${className}`}>
             <header>
@@ -106,14 +154,13 @@ export default function Statuses({className, statuses}) {
                                             </Dropdown.Trigger>
 
                                             <Dropdown.Content>
-                                                <Dropdown.Link href="">View</Dropdown.Link>
-                                                <Dropdown.Link href="">Edit</Dropdown.Link>
+                                                <Dropdown.Link onClick={(e) => {editStatus(e, status)}}>Edit</Dropdown.Link>
                                                 <Dropdown.Link href={route('settings.status.archive', {status})} method="post" as="button">
                                                     {
                                                         status.status == 'active' ? 'Archive' : 'Restore'
                                                     }
                                                 </Dropdown.Link>
-                                                <Dropdown.Link href="" method="post" as="button">
+                                                <Dropdown.Link href={route('settings.status.delete', status.id)} method="delete" as="button">
                                                     Delete
                                                 </Dropdown.Link>
                                             </Dropdown.Content>
@@ -130,12 +177,19 @@ export default function Statuses({className, statuses}) {
                     blurb="To add a status, click the 'Add Status' button."
                 />
             )}
-            <PrimaryButton onClick={confirmUserDeletion}>Add Status</PrimaryButton>
+            <PrimaryButton onClick={showStatusModal}>Add Status</PrimaryButton>
 
-            <Modal show={confirmingUserDeletion} onClose={closeModal}>
-                <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeModal}>&times;</span>
-                <form onSubmit={createStatus} className="p-6">
-                    <h2 className="text-lg font-medium font-bold text-gray-900">Create New Status</h2>
+            <Modal show={showingStatusModal} onClose={closeStatusModal}>
+                <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeStatusModal}>&times;</span>
+                <form onSubmit={ selectedItem.id ? updateStatus : createStatus } className="p-6">
+                    <h2 className="text-lg font-medium font-bold text-gray-900">{
+                        selectedItem.id
+                            ? 'Update Status'
+                            : 'Create New Status'
+                    }</h2>
+                    <SmallText
+                        value={selectedItem.id ? 'Click Save when finished to save your changes' : 'Create a new status to apply to documents, click Save when you are done'}
+                    />
                     <hr className="mt-2 text-gray-300"></hr>
 
                     {/* Name */}
@@ -145,12 +199,12 @@ export default function Statuses({className, statuses}) {
                             id="name"
                             type="text"
                             name="name"
-                            // value={data.name}
                             ref={nameInput}
+                            value={data.name ?? selectedItem.name ?? ''}
                             handleChange={(e) => setData('name', e.target.value)}
                             className="block w-full mt-1 capitalize"
                             isFocused
-                            placeholder="A, B, 0, 1"
+                            placeholder="Draft"
                         />                                        
                         <InputError message={errors.name} className="mt-2" />
                     </div>
@@ -162,20 +216,27 @@ export default function Statuses({className, statuses}) {
                             id="code"
                             type="text"
                             name="code"
-                            // value={data.code}
+                            value={data.code ?? selectedItem.code ?? ''}
                             handleChange={(e) => setData('code', e.target.value)}
                             className="block w-full mt-1 uppercase"
-                            placeholder="DFT, SUP, OBS"
+                            placeholder="DFT"
                         />                                        
                         <InputError message={errors.code} className="mt-2" />
                     </div>
 
-                    <div className="flex justify-end mt-6">
-                        <PrimaryButton className="mr-3" processing={processing}>
-                            Create Status
-                        </PrimaryButton>
-                        <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
-                    </div>
+                    { hasChanges() ? (
+                            <div className="flex justify-end mt-6">
+                                <PrimaryButton className="mr-3" processing={processing}>
+                                    Save
+                                </PrimaryButton>
+                                <SecondaryButton onClick={closeStatusModal}>Cancel</SecondaryButton>
+                            </div>
+                        ):(
+                            <div className="flex justify-end mt-6">
+                                <SecondaryButton onClick={closeStatusModal}>Cancel</SecondaryButton>
+                            </div>
+                        )
+                    }
                 </form>
             </Modal>
         </section>

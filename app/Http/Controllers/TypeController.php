@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTypeRequest;
 use App\Http\Requests\UpdateTypeRequest;
 use App\Models\Type;
+use Illuminate\Http\Request;
 
 class TypeController extends Controller
 {
@@ -85,7 +86,17 @@ class TypeController extends Controller
      */
     public function update(UpdateTypeRequest $request, Type $type)
     {
-        //
+        // Get validated data
+        $validated = $request->safe()->only(['name', 'code']);
+
+        $updated = $type->update($validated);
+
+        return response()->json([
+            'status' => ($updated) ? 'success' : 'fail',
+            'message' => ($updated) 
+                ? 'Type was updated successfully!'
+                : 'An error occurred, please contact your administrator '
+        ]);
     }
 
     /**
@@ -94,9 +105,19 @@ class TypeController extends Controller
      * @param  \App\Models\Type  $type
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Type $type)
+    public function destroy(Request $request, Type $type)
     {
-        //
+        // Delete the type
+        $deleted = $type->delete();
+
+        // Make some toast.
+        $request->session()->flash(
+            ($deleted) ? 'success' : 'fail',
+            ($deleted) ? 'Type deleted successfully' : 'An error occurred, please contact your administrator'
+        );
+
+        // Return the response
+        return redirect()->route('settings.index');
     }
 
     /**
@@ -106,7 +127,7 @@ class TypeController extends Controller
      * @param Type $type
      * @return void
      */
-    public function archive(UpdateTypeRequest $request, Type $type)
+    public function archive(Request $request, Type $type)
     {
         // Change the status to 'inactive'
         $type->status = ($type->status == 'active') ? 'inactive' : 'active';

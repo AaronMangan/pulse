@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useRef, useState } from 'react';
 
 export default forwardRef(function TextInput(
-    { type = 'text', name, id, value, className, autoComplete, required, isFocused, handleChange, placeholder },
+    { type = 'text', name, id, value, className, autoComplete, readOnly, required, isFocused, handleChange, placeholder },
     ref
 ) {
     const input = ref ? ref : useRef();
@@ -26,6 +26,7 @@ export default forwardRef(function TextInput(
                 ref={input}
                 autoComplete={autoComplete}
                 required={required}
+                readOnly={readOnly}
                 onChange={(e) => handleChange(e)}
                 placeholder={placeholder}
             />

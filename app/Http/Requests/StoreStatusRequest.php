@@ -25,8 +25,7 @@ class StoreStatusRequest extends FormRequest
     {
         return [
             'name' => 'required|unique:statuses,name|max:255',
-            // 'code' => 'required|unique:statuses,code|max:10',
-            'code' => 'required|max:10',
+            'code' => 'required|max:10|unique:statuses,code',
         ];
     }
 }
