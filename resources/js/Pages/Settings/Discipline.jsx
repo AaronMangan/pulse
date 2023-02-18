@@ -11,6 +11,7 @@ import Dropdown from '@/Components/Dropdown';
 import NoData from '@/Components/NoData';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import SmallText from '@/Components/SmallText';
 
 export default function History({className, disciplines, stateChanger}) {
     const [creatingDiscipline, setCreatingDiscipline] = useState(false);
@@ -182,7 +183,10 @@ export default function History({className, disciplines, stateChanger}) {
             <Modal show={creatingDiscipline} onClose={closeModal}>
                 <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeModal}>&times;</span>
                 <form onSubmit={selectedItem.id ? updateDiscipline : createDiscipline} className="p-6">
-                    <h2 className="text-lg font-medium font-bold text-gray-900">Create New Discipline</h2>
+                    <h2 className="text-lg font-medium font-bold text-gray-900">{ selectedItem.id ? "Update Discipline" : "Create New Discipline" }</h2>
+                    <SmallText
+                        value={selectedItem.id ? 'Update the selected discipline' : 'Create a new discipline to apply to documents'}
+                    />
                     <hr className="mt-2 text-gray-300"></hr>
 
                     <div className="mt-6">
@@ -215,15 +219,9 @@ export default function History({className, disciplines, stateChanger}) {
                     </div>
 
                     <div className="flex justify-end mt-6">
-                        {selectedItem.id ? (
                             <PrimaryButton className="mr-3" processing={processing}>
                                 Save
                             </PrimaryButton>
-                        ) : (
-                            <PrimaryButton className="mr-3" processing={processing}>
-                                Create Discipline
-                            </PrimaryButton>
-                        )}
                         <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
                     </div>
                 </form>
