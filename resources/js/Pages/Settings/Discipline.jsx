@@ -9,40 +9,30 @@ import { useRef, useState } from 'react';
 import { useForm } from '@inertiajs/react';
 import Dropdown from '@/Components/Dropdown';
 import NoData from '@/Components/NoData';
-import SmallText from '@/Components/SmallText';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
-export default function History({className, disciplines}) {
-    const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
-    const [showingViewModal, setShowViewModal] = useState(false);
+export default function History({className, disciplines, stateChanger}) {
+    const [creatingDiscipline, setCreatingDiscipline] = useState(false);
     const [selectedItem, setSelectedItem] = useState([]);
     const passwordInput = useRef();
     const hasData = disciplines.length > 0 ? true : false;
-    const {
-        data,
-        setData,
-        post,
-        processing,
-        reset,
-        errors,
-    } = useForm({
-        discipline: ''
-    });
+    const { data, setData, post, processing, reset, errors } = useForm({});
 
-    const showViewModal = (item) => {
-        setShowViewModal(true);
-        setSelectedItem(item);
-    };
-
-    const closeViewModal = () => {
-        setShowViewModal(false);
+    /**
+     * Shows the create discipline modal.
+     * @param {*} e 
+     */
+    const createDisciplineModal = (e) => {
+        setCreatingDiscipline(true);
         reset();
     };
 
-    const confirmUserDeletion = () => {
-        setConfirmingUserDeletion(true);
-    };
-
-    const deleteUser = (e) => {
+    /**
+     * Saves the new discipline.
+     * @param {*} e 
+     */
+    const createDiscipline = (e) => {
         e.preventDefault();
 
         post(route('settings.discipline.create'), {
@@ -53,12 +43,57 @@ export default function History({className, disciplines}) {
         });
     };
 
-    const closeModal = () => {
-        setConfirmingUserDeletion(false);
+    /**
+     * Updates an existing discipline.
+     * @param {*} e 
+     */
+    const updateDiscipline = (e) => {
+        e.preventDefault();
 
-        reset();
+        // Make a post call with axios to update the discipline.
+        axios.post(route('settings.discipline.update', selectedItem.id), {
+            name: data.name ?? selectedItem.name,
+            code: data.code ?? selectedItem.code,
+        })
+        .then((response) => {
+            if(response.data.status && response.data.status === 'success') {
+                toast.success(response.data.message);
+            }
+            else if (response.data.status && response.data.status === 'fail') {
+                toast.error(response.data.message);
+            }
+            closeModal();
+        })
+        .catch((err) => {
+            toast.error('An internal error has occured, please contact your administrator');
+        });
     };
 
+    /**
+     * Closes the modal and optionally reload the window.
+     * TODO: Implement a way to refresh the component without reloading the window.
+     * 
+     * @param {boolean} reload If true, the window will reload when the modal is closed.
+     */
+    const closeModal = () => {
+        setCreatingDiscipline(false);
+        window.location.reload();
+    };
+
+    /**
+     * Show the modal to edit the Discipline.
+     * @param {*} e Events
+     * @param {*} item The currently selected discipline.
+     */
+    const editDiscipline = (e, item) => {
+        e.preventDefault();
+        setSelectedItem(item);
+        createDisciplineModal(e);
+    };
+
+    /**
+     * Render
+     */
     return (
         <section className={`space-y-6 ${className}`}>
             <header>
@@ -118,7 +153,7 @@ export default function History({className, disciplines}) {
                                                 </Dropdown.Trigger>
 
                                                 <Dropdown.Content>
-                                                    <Dropdown.Link href="">Edit</Dropdown.Link>
+                                                    <Dropdown.Link onClick={(e) => {editDiscipline(e, item);}}>Edit</Dropdown.Link>
                                                     <Dropdown.Link href={route('settings.discipline.archive', item)} method="post" as="button">
                                                         {
                                                             item.status == 'active' ? 'Archive' : 'Restore'
@@ -142,11 +177,11 @@ export default function History({className, disciplines}) {
                     />
                 )
             }
-            <PrimaryButton onClick={confirmUserDeletion}>Add Discipline</PrimaryButton>
+            <PrimaryButton onClick={createDisciplineModal}>Add Discipline</PrimaryButton>
 
-            <Modal show={confirmingUserDeletion} onClose={closeModal}>
+            <Modal show={creatingDiscipline} onClose={closeModal}>
                 <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeModal}>&times;</span>
-                <form onSubmit={deleteUser} className="p-6">
+                <form onSubmit={selectedItem.id ? updateDiscipline : createDiscipline} className="p-6">
                     <h2 className="text-lg font-medium font-bold text-gray-900">Create New Discipline</h2>
                     <hr className="mt-2 text-gray-300"></hr>
 
@@ -156,7 +191,7 @@ export default function History({className, disciplines}) {
                             id="name"
                             type="text"
                             name="name"
-                            value={data.name}
+                            value={data.name ?? selectedItem.name ?? ''}
                             handleChange={(e) => setData('name', e.target.value)}
                             className="block w-full mt-1 capitalize"
                             isFocused
@@ -171,7 +206,7 @@ export default function History({className, disciplines}) {
                             id="code"
                             type="text"
                             name="code"
-                            value={data.code}
+                            value={data.code ?? selectedItem.code ?? ''}
                             handleChange={(e) => setData('code', e.target.value)}
                             className="block w-full mt-1 uppercase"
                             placeholder="MECH"
@@ -180,9 +215,15 @@ export default function History({className, disciplines}) {
                     </div>
 
                     <div className="flex justify-end mt-6">
-                        <PrimaryButton className="mr-3" processing={processing}>
-                            Create Discipline
-                        </PrimaryButton>
+                        {selectedItem.id ? (
+                            <PrimaryButton className="mr-3" processing={processing}>
+                                Save
+                            </PrimaryButton>
+                        ) : (
+                            <PrimaryButton className="mr-3" processing={processing}>
+                                Create Discipline
+                            </PrimaryButton>
+                        )}
                         <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
                     </div>
                 </form>

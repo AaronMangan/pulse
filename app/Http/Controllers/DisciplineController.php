@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Discipline;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreDisciplineRequest;
+use App\Http\Requests\UpdateDisciplineRequest;
 
 class DisciplineController extends Controller
 {
@@ -89,9 +90,25 @@ class DisciplineController extends Controller
      * @param  \App\Models\Discipline  $discipline
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Discipline $discipline)
+    public function update(UpdateDisciplineRequest $request, Discipline $discipline)
     {
-        //
+        // Get the validated properties.
+        $validated = $request->safe()->only(['name', 'code']);
+        
+        // Update the model accordingly.
+        $wasUpdated = $discipline->updateOrFail($validated);
+
+        // $request->session()->flash(
+        //     ($wasUpdated) ? 'success' : 'error',
+        //     ($wasUpdated) ? 'Discipline was updated successfully!' : self::CREATE_DISCIPLINE_ERROR
+        // );
+
+        // Return to the settings index.
+        // return redirect()->route('settings.index');
+        return response()->json([
+            'status' => ($wasUpdated) ? 'success' : 'fail',
+            'message' => ($wasUpdated) ? 'Discipline was updated successfully' : self::CREATE_DISCIPLINE_ERROR
+        ]);
     }
 
     /**
@@ -109,6 +126,9 @@ class DisciplineController extends Controller
             ($deleted) ? 'success' : 'error',
             ($deleted) ? 'Discipline deleted successfully!' : self::CREATE_DISCIPLINE_ERROR,
         );
+
+        // Return to the settings index.
+        return redirect()->route('settings.index');
     }
 
     /**
