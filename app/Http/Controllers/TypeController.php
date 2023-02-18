@@ -127,7 +127,7 @@ class TypeController extends Controller
      * @param Type $type
      * @return void
      */
-    public function archive(UpdateTypeRequest $request, Type $type)
+    public function archive(Request $request, Type $type)
     {
         // Change the status to 'inactive'
         $type->status = ($type->status == 'active') ? 'inactive' : 'active';
