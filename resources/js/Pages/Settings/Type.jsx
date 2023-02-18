@@ -39,11 +39,11 @@ export default function History({className, types}) {
         .then((response) => {
             if(response.data.status && response.data.status === 'success') {
                 toast.success(response.data.message);
+                closeModal(true);
             }
             else if (response.data.status && response.data.status === 'fail') {
                 toast.error(response.data.message);
             }
-            closeModal();
         })
         .catch((err) => {
             toast.error('An internal error has occured, please contact your administrator');
@@ -72,10 +72,14 @@ export default function History({className, types}) {
         });
     };
 
-    const closeModal = () => {
+    const closeModal = (refreshRequired) => {
         setCreatingTypeModal(false);
         setSelectedItem([]);
         reset();
+
+        if(refreshRequired) {
+            window.location.reload();
+        }
     };
 
     return (
@@ -137,14 +141,13 @@ export default function History({className, types}) {
                                                 </Dropdown.Trigger>
 
                                                 <Dropdown.Content>
-                                                    <Dropdown.Link href="">View</Dropdown.Link>
                                                     <Dropdown.Link onClick={(e) => {editType(e, item);}}>Edit</Dropdown.Link>
                                                     <Dropdown.Link href={route('settings.type.archive', item)} method="post" as="button">
                                                         {
                                                             item.status == 'active' ? 'Archive' : 'Restore'
                                                         }
                                                     </Dropdown.Link>
-                                                    <Dropdown.Link href="" method="post" as="button">
+                                                    <Dropdown.Link href={route('settings.type.delete', item)} method="delete" as="button">
                                                         Delete
                                                     </Dropdown.Link>
                                                 </Dropdown.Content>
@@ -171,7 +174,7 @@ export default function History({className, types}) {
                     <SmallText 
                         value={
                             selectedItem.id
-                                ? 'Update existing Type details'
+                                ? 'Update existing type details'
                                 : 'Create a new type to apply to documents'
                         }
                     />

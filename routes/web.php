@@ -85,6 +85,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::post('/settings/type/archive/{type}', [TypeController::class, 'archive'])->name('settings.type.archive');
     Route::post('/settings/type', [TypeController::class, 'store'])->name('settings.type.create');
     Route::post('/settings/type/update/{type}', [TypeController::class, 'update'])->name('settings.type.update');
+    Route::delete('/settings/type/delete/{type}', [TypeController::class, 'destroy'])->name('settings.type.delete');
 });
 
 /**

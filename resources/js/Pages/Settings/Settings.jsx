@@ -15,13 +15,13 @@ export default function Settings(props) {
         >
             <Head title="Settings" />
             <div className="py-12">
-                <div className="visible lg:invisible">
+                <div className="visible lg:invisible lg:hidden">
                     <NoData
                         title="Not Allowed"
                         blurb="Unable to view this page on this device"
                     />
                 </div>
-                <div className="invisible mx-auto space-y-6 lg:visible max-w-7xl sm:px-6 lg:px-8">
+                <div className="invisible mx-auto space-y-6 sm:hidden lg:grid lg:visible max-w-7xl sm:px-6 lg:px-8">
                     <div className="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
                         {/* Show Types */}
                         <Type types={props.types}/>
