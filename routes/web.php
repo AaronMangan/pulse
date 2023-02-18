@@ -84,6 +84,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
     // Types CRUD Routes,
     Route::post('/settings/type/archive/{type}', [TypeController::class, 'archive'])->name('settings.type.archive');
     Route::post('/settings/type', [TypeController::class, 'store'])->name('settings.type.create');
+    Route::post('/settings/type/update/{type}', [TypeController::class, 'update'])->name('settings.type.update');
 });
 
 /**

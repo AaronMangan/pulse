@@ -85,7 +85,17 @@ class TypeController extends Controller
      */
     public function update(UpdateTypeRequest $request, Type $type)
     {
-        //
+        // Get validated data
+        $validated = $request->safe()->only(['name', 'code']);
+
+        $updated = $type->update($validated);
+
+        return response()->json([
+            'status' => ($updated) ? 'success' : 'fail',
+            'message' => ($updated) 
+                ? 'Type was updated successfully!'
+                : 'An error occurred, please contact your administrator '
+        ]);
     }
 
     /**

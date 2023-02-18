@@ -9,9 +9,13 @@ import { useRef, useState } from 'react';
 import { useForm } from '@inertiajs/react';
 import Dropdown from '@/Components/Dropdown';
 import NoData from '@/Components/NoData';
+import SmallText from '@/Components/SmallText';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 export default function History({className, types}) {
-    const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
+    const [creatingTypeModal, setCreatingTypeModal] = useState(false);
+    const [selectedItem, setSelectedItem] = useState([]);
     const passwordInput = useRef();
     const hasData = types.length > 0 ? true : false;
     const {
@@ -25,11 +29,39 @@ export default function History({className, types}) {
         type: ''
     });
 
-    const confirmUserDeletion = () => {
-        setConfirmingUserDeletion(true);
+    const updateType = (e) => {
+        e.preventDefault();
+
+        axios.post(route('settings.type.update', selectedItem.id), {
+            name: data.name ?? selectedItem.name,
+            code: data.code ?? selectedItem.code,
+        })
+        .then((response) => {
+            if(response.data.status && response.data.status === 'success') {
+                toast.success(response.data.message);
+            }
+            else if (response.data.status && response.data.status === 'fail') {
+                toast.error(response.data.message);
+            }
+            closeModal();
+        })
+        .catch((err) => {
+            toast.error('An internal error has occured, please contact your administrator');
+        });
     };
 
-    const deleteUser = (e) => {
+    const editType = (e, item) => {
+        e.preventDefault();
+        setSelectedItem(item);
+        createTypeModal();
+    };
+
+    const createTypeModal = () => {
+        setCreatingTypeModal(true);
+        reset();
+    };
+
+    const createType = (e) => {
         e.preventDefault();
 
         post(route('settings.type.create'), {
@@ -41,7 +73,8 @@ export default function History({className, types}) {
     };
 
     const closeModal = () => {
-        setConfirmingUserDeletion(false);
+        setCreatingTypeModal(false);
+        setSelectedItem([]);
         reset();
     };
 
@@ -105,7 +138,7 @@ export default function History({className, types}) {
 
                                                 <Dropdown.Content>
                                                     <Dropdown.Link href="">View</Dropdown.Link>
-                                                    <Dropdown.Link href="">Edit</Dropdown.Link>
+                                                    <Dropdown.Link onClick={(e) => {editType(e, item);}}>Edit</Dropdown.Link>
                                                     <Dropdown.Link href={route('settings.type.archive', item)} method="post" as="button">
                                                         {
                                                             item.status == 'active' ? 'Archive' : 'Restore'
@@ -129,12 +162,19 @@ export default function History({className, types}) {
                     />
                 )
             }
-            <PrimaryButton onClick={confirmUserDeletion}>Add Types</PrimaryButton>
+            <PrimaryButton onClick={createTypeModal}>Add Type</PrimaryButton>
 
-            <Modal show={confirmingUserDeletion} onClose={closeModal}>
+            <Modal show={creatingTypeModal} onClose={closeModal}>
                 <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeModal}>&times;</span>
-                <form onSubmit={deleteUser} className="p-6">
-                    <h2 className="text-lg font-medium font-bold text-gray-900">Create New Type</h2>
+                <form onSubmit={selectedItem.id ? updateType : createType} className="p-6">
+                    <h2 className="text-lg font-medium font-bold text-gray-900">{ selectedItem.id ? 'Update Type' : 'Create New Type' }</h2>
+                    <SmallText 
+                        value={
+                            selectedItem.id
+                                ? 'Update existing Type details'
+                                : 'Create a new type to apply to documents'
+                        }
+                    />
                     <hr className="mt-2 text-gray-300"></hr>
 
                     <div className="mt-6">
@@ -143,7 +183,7 @@ export default function History({className, types}) {
                             id="name"
                             type="text"
                             name="name"
-                            value={data.name}
+                            value={data.name ?? selectedItem.name ?? ''}
                             handleChange={(e) => setData('name', e.target.value)}
                             className="block w-full mt-1 capitalize"
                             isFocused
@@ -158,7 +198,7 @@ export default function History({className, types}) {
                             id="code"
                             type="text"
                             name="code"
-                            value={data.code}
+                            value={data.code ?? selectedItem.code ?? ''}
                             handleChange={(e) => setData('code', e.target.value)}
                             className="block w-full mt-1 uppercase"
                             placeholder="REP"
@@ -168,7 +208,7 @@ export default function History({className, types}) {
 
                     <div className="flex justify-end mt-6">
                         <PrimaryButton className="mr-3" processing={processing}>
-                            Create Type
+                            Save
                         </PrimaryButton>
                         <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
                     </div>
