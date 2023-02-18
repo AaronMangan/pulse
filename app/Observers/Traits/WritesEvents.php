@@ -12,7 +12,7 @@ trait WritesEvents
         $user = \Auth::user();
         $date = date('d-m-Y @ H:i:s', time());
         $text = ($level == 'user') ? "{$user->name} on {$date}" : "system on {$date}";
-        $what = $model->code ?? $model->name ?? '';
+        $what = $model->code ?? $model->name ?? $model->revision ?? '';
         History::create([
             'model' => $model::class,
             'model_id' => $model->id,

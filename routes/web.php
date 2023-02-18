@@ -57,6 +57,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::post('/projects/create', [ProjectController::class, 'store'])->name('projects.create');
     Route::post('/projects/update/{id}', [ProjectController::class, 'update'])->name('projects.update');
     Route::post('/projects/archive/{project}', [ProjectController::class, 'archive'])->name('projects.archive');
+    Route::post('projects/delete/{project}', [ProjectController::class, 'destroy'])->name('projects.delete');
 });
 
 /**

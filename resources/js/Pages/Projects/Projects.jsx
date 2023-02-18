@@ -81,6 +81,21 @@ export default function Projects(props) {
         });
     };
 
+    // Delete the project.
+    const deleteProject = (project) => {
+        // e.preventDefault();
+        let ok = confirm('Do you want to delete this project?');
+
+        if(ok){
+            post(route('projects.delete', project), {
+                preserveScroll: true,
+                onSuccess: () => closeModal(),
+                onError: () => nameInput.current.focus(),
+                onFinish: () => reset(),
+            });
+        }
+    };
+
     const updateProject = (e) => {
         e.preventDefault();
         post(route('projects.update', selectedProject.id));
@@ -188,9 +203,15 @@ export default function Projects(props) {
                                                 >
                                                     Settings
                                                 </a>
-                                                <Dropdown.Link href="" method="post" as="button">
+                                                <a
+                                                    onClick={() => {deleteProject(project)}}
+                                                    className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                                                >
                                                     Delete
-                                                </Dropdown.Link>
+                                                </a>
+                                                {/* <Dropdown.Link href="" method="post" as="button">
+                                                    Delete
+                                                </Dropdown.Link> */}
                                             </Dropdown.Content>
                                         </Dropdown>
                                     </td>

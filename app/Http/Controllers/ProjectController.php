@@ -114,9 +114,20 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Project $project)
+    public function destroy(Request $request, Project $project)
     {
-        //
+        // Keep the name.
+        $name = $project->name;
+
+        // Delete the project. In future this will check permissions.
+        $deleted = ($project->settings()->delete() && $project->delete());
+
+        $request->session()->flash(
+            ($deleted) ? 'success' : 'fail',
+            ($deleted) ? "Project: {$name} was deleted successfully" : "An error occurred, please try again or contact your administrator"
+        );
+
+        return redirect()->route('projects.index');
     }
 
     /**

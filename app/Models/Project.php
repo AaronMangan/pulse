@@ -17,4 +17,9 @@ class Project extends Model
         'start' => 'datetime:d-m-Y',
         'end' => 'datetime:d-m-Y',
     ];
+
+    public function settings()
+    {
+        return $this->hasOne(\App\Models\ProjectSettings::class);
+    }
 }
