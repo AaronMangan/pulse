@@ -1,16 +1,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Revisions from './Revisions';
 import Statuses from './Statuses';
 import Discipline from './Discipline';
 import Type from './Type';
 
 export default function Settings(props) {
-    const[refresh, setRefresh] = useState(false);
-    const stateChanger = (updated) => {
-        updated ? window.location.reload() : null;
-    }
     return (
         <AuthenticatedLayout
             auth={props.auth}
@@ -29,7 +25,6 @@ export default function Settings(props) {
                         {/* Show Disciplines */}
                         <Discipline
                             disciplines={props.disciplines}
-                            stateChanger={stateChanger}
                         />
                     </div>
 

@@ -9,34 +9,29 @@ import { useRef, useState } from 'react';
 import { useForm } from '@inertiajs/react';
 import Dropdown from '@/Components/Dropdown';
 import NoData from '@/Components/NoData';
-import SmallText from '@/Components/SmallText';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
 export default function History({className, disciplines, stateChanger}) {
     const [creatingDiscipline, setCreatingDiscipline] = useState(false);
     const [selectedItem, setSelectedItem] = useState([]);
-    // const {updated, setUpdated} = useState([]);
-    // const [reload, setReload] = useState(false);
     const passwordInput = useRef();
     const hasData = disciplines.length > 0 ? true : false;
-    const {
-        data,
-        setData,
-        post,
-        processing,
-        reset,
-        errors,
-    } = useForm({
+    const { data, setData, post, processing, reset, errors } = useForm({});
 
-    });
-
+    /**
+     * Shows the create discipline modal.
+     * @param {*} e 
+     */
     const createDisciplineModal = (e) => {
-        // e.preventDefault();
         setCreatingDiscipline(true);
         reset();
     };
 
+    /**
+     * Saves the new discipline.
+     * @param {*} e 
+     */
     const createDiscipline = (e) => {
         e.preventDefault();
 
@@ -48,8 +43,14 @@ export default function History({className, disciplines, stateChanger}) {
         });
     };
 
+    /**
+     * Updates an existing discipline.
+     * @param {*} e 
+     */
     const updateDiscipline = (e) => {
         e.preventDefault();
+
+        // Make a post call with axios to update the discipline.
         axios.post(route('settings.discipline.update', selectedItem.id), {
             name: data.name ?? selectedItem.name,
             code: data.code ?? selectedItem.code,
@@ -61,24 +62,38 @@ export default function History({className, disciplines, stateChanger}) {
             else if (response.data.status && response.data.status === 'fail') {
                 toast.error(response.data.message);
             }
-            closeModal(true);
+            closeModal();
         })
         .catch((err) => {
             toast.error('An internal error has occured, please contact your administrator');
         });
     };
 
-    const closeModal = (reload) => {
-        stateChanger('yes');
+    /**
+     * Closes the modal and optionally reload the window.
+     * TODO: Implement a way to refresh the component without reloading the window.
+     * 
+     * @param {boolean} reload If true, the window will reload when the modal is closed.
+     */
+    const closeModal = () => {
         setCreatingDiscipline(false);
+        window.location.reload();
     };
 
+    /**
+     * Show the modal to edit the Discipline.
+     * @param {*} e Events
+     * @param {*} item The currently selected discipline.
+     */
     const editDiscipline = (e, item) => {
         e.preventDefault();
         setSelectedItem(item);
         createDisciplineModal(e);
     };
 
+    /**
+     * Render
+     */
     return (
         <section className={`space-y-6 ${className}`}>
             <header>
