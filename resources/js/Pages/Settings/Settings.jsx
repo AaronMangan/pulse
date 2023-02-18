@@ -1,10 +1,10 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { useState, useEffect } from 'react';
 import Revisions from './Revisions';
 import Statuses from './Statuses';
 import Discipline from './Discipline';
 import Type from './Type';
+import NoData from '@/Components/NoData';
 
 export default function Settings(props) {
     return (
@@ -15,7 +15,13 @@ export default function Settings(props) {
         >
             <Head title="Settings" />
             <div className="py-12">
-                <div className="mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
+                <div className="visible lg:invisible">
+                    <NoData
+                        title="Not Allowed"
+                        blurb="Unable to view this page on this device"
+                    />
+                </div>
+                <div className="invisible mx-auto space-y-6 lg:visible max-w-7xl sm:px-6 lg:px-8">
                     <div className="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
                         {/* Show Types */}
                         <Type types={props.types}/>
