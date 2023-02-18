@@ -41,7 +41,7 @@ export default function Settings(props) {
 
                     <div className="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
                         {/* Show Revisions */}
-                        <Revisions revisions={props.revisions}/>
+                        <Revisions revisions={props.revisions} flash={props.flash}/>
                     </div>
                 </div>
             </div>

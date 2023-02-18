@@ -75,14 +75,16 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::delete('/settings/revision/delete/{revision}', [RevisionController::class, 'destroy'])->name('settings.revision.delete');
 
     // Statuses CRUD Routes.
-    Route::post('/settings/status/archive/{status}', [StatusController::class, 'archive'])->name('settings.status.archive');
     Route::post('/settings/status', [StatusController::class, 'store'])->name('settings.status.create');
+    Route::post('/settings/status/archive/{status}', [StatusController::class, 'archive'])->name('settings.status.archive');
+    Route::post('/settings/status/update/{status}', [StatusController::class, 'update'])->name('settings.status.update');
+    Route::delete('/settings/status/delete/{status}', [StatusController::class, 'destroy'])->name('settings.status.delete');
     
     // Disciplines CRUD Routes.
     Route::post('/settings/discipline/archive/{discipline}', [DisciplineController::class, 'archive'])->name('settings.discipline.archive');
     Route::post('/settings/discipline', [DisciplineController::class, 'store'])->name('settings.discipline.create');
     Route::post('/settings/discipline/update/{discipline}', [DisciplineController::class, 'update'])->name('settings.discipline.update');
-    Route::post('/settings/discipline/delete/{discipline}', [DisciplineController::class, 'destroy'])->name('settings.discipline.delete');
+    Route::delete('/settings/discipline/delete/{discipline}', [DisciplineController::class, 'destroy'])->name('settings.discipline.delete');
     
     // Types CRUD Routes,
     Route::post('/settings/type/archive/{type}', [TypeController::class, 'archive'])->name('settings.type.archive');

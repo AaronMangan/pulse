@@ -129,7 +129,6 @@ export default function Revisions({className, revisions}) {
                                         </Dropdown.Trigger>
 
                                         <Dropdown.Content>
-                                            <Dropdown.Link href="">View</Dropdown.Link>
                                             <Dropdown.Link onClick={(e) => {editRevision(e, revision)}}>Edit</Dropdown.Link>
                                             <Dropdown.Link href={route('settings.revision.archive', revision)} method="post" as="button">
                                                 {

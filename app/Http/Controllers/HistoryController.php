@@ -10,6 +10,11 @@ use Inertia\Inertia;
 class HistoryController extends Controller
 {
     /**
+     * The columns displaye to the user in the index.
+     */
+    const INDEX_COLUMNS = ['id', 'model', 'event', 'description', 'created_at'];
+    
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -17,8 +22,7 @@ class HistoryController extends Controller
     public function index()
     {
         // Return the history index.
-        // return Inertia::render('History/History', ['history' => History::all()->sortDesc('created_at')->toArray()]);
-        return Inertia::render('History/History', ['history' => History::orderByDesc('created_at')->get()->toArray()]);
+        return Inertia::render('History/History', ['history' => History::orderByDesc('created_at')->get(self::INDEX_COLUMNS)->toArray()]);
     }
 
     /**

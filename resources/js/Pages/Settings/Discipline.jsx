@@ -160,7 +160,7 @@ export default function History({className, disciplines, stateChanger}) {
                                                             item.status == 'active' ? 'Archive' : 'Restore'
                                                         }
                                                     </Dropdown.Link>
-                                                    <Dropdown.Link href={route('settings.discipline.delete', item)} method="post" as="button">
+                                                    <Dropdown.Link href={route('settings.discipline.delete', item)} method="delete" as="button">
                                                         Delete
                                                     </Dropdown.Link>
                                                 </Dropdown.Content>
