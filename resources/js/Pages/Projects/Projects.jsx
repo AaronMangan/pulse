@@ -133,7 +133,7 @@ export default function Projects(props) {
         >
             <Head title="Projects" />
             <div className="w-full">
-                <div className="visible lg:invisible">
+                <div className="visible lg:invisible lg:hidden">
                     <NoData
                         title="Not Allowed"
                         blurb="Unable to view this page on this device"
