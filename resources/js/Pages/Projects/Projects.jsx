@@ -48,9 +48,10 @@ export default function Projects(props) {
      * Use Axios to get the settings for the project.
      */
     const fetchSettings = (id) => {
-        axios.get(`http://localhost:8001/projects/${id}/settings`)
+        axios.get(route('projects.settings.get', id))
           .then(res => {
-            setProjectSettings(res.data[0].settings);
+            setManualNumbering(res.data[0].settings.manualNumbering);
+            setEnforceUploads(res.data[0].settings.enforceUploads)
         })
     }
     
@@ -105,8 +106,8 @@ export default function Projects(props) {
         e.preventDefault();
 
         axios.post(route('projects.settings.save', selectedProject.id), {
-            manualNumbering: projectSettings.manualNumbering,
-            enforceUploads: projectSettings.enforceUploads,
+            manualNumbering: manualNumbering ?? false,
+            enforceUploads: enforceUploads ?? false,
         })
         .then((response) => {
             closeSettingsModal();
@@ -339,9 +340,9 @@ export default function Projects(props) {
                             <Toggle
                                 id="manualNumbering"
                                 name="manualNumbering"
-                                defaultChecked={projectSettings.manualNumbering}
                                 className="flex align-right"
-                                onChange={(e) => setManualNumbering('manualNumbering', e.target.value)}
+                                checked={manualNumbering}
+                                onChange={(e) => setManualNumbering((e.target.value == 'on') ? true : false)}
                             />
                             <InputError message={errors.name} className="mt-2" />
                         </div>
@@ -356,9 +357,9 @@ export default function Projects(props) {
                         <div className="flex justify-between mt-6">
                             <InputLabel className="float-left font-bold">Enforce Uploads</InputLabel>
                             <Toggle
-                                defaultChecked={projectSettings.enforceUploads}
+                                checked={enforceUploads}
                                 className="flex align-right"
-                                onChange={(e) => setEnforceUploads('enforceUploads', e.target.value)}
+                                onChange={(e) => setEnforceUploads((e.target.value == 'on') ? true : false)}
                             />
                             <InputError message={errors.name} className="mt-2" />
                         </div>
