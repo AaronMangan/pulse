@@ -14,37 +14,42 @@ export default function Dashboard(props) {
                             blurb="Manage your documents and find exactly what you need"
                             href="#"
                             icon="document"
-                            className=""
+                            className="invisible hidden md:visible md:block"
                         />
                         <GridItem 
                             title="Transmittals"
                             blurb="Send and receive documents to other parties"
                             href="#"
                             icon='plane'
+                            className="invisible hidden md:visible md:block"
                         />
                         <GridItem 
                             title="Projects"
                             blurb="Manage your projects"
                             href="projects"
                             icon="project"
+                            className="invisible hidden md:visible md:block"
                         />
                         <GridItem 
                             title="History"
                             blurb="Review the history of your documents and more"
                             href="history"
                             icon="history"
+                            className="invisible hidden md:visible md:block"
                         />
                         <GridItem 
                             title="Reports"
                             blurb="Discover how you use your documents"
                             href="#"
                             icon="reports"
+                            className="invisible hidden md:visible md:block"
                         />
                         <GridItem 
                             title="Settings"
                             blurb="Modify your settings"
                             href="settings"
                             icon="settings"
+                            className="invisible hidden md:visible md:block"
                         />
                         <GridItem 
                             title="Profile"

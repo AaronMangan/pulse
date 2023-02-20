@@ -35,7 +35,7 @@ export default function GridBox({ title, blurb, href, as = 'button', method, ico
     };
     return (
         <Link className="" href={href} as={as} method={method}>
-            <div className={`w-full h-full rounded-md max-h-25` + className}>
+            <div className={`w-full h-full rounded-md max-h-25 ` + className}>
                 <div className="h-full max-w-sm p-6 bg-white rounded-lg shadow dark:bg-gray-800">
                     <div className='flex justify-center w-full'>
                         {getIcon(icon)}
