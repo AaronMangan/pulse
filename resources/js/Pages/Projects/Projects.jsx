@@ -27,6 +27,7 @@ export default function Projects(props) {
     const [numberFormat, setNumberFormat] = useState('');
     const [startDate, setStartDate] = useState(new Date());
     const [selectedProject, setSelectedProject] = useState([]);
+    const [showViewModal, setShowViewModal] = useState(false);
     const [projectSettings, setProjectSettings] = useState({
         manualNumbering: manualNumbering,
         enforceUploads: enforceUploads,
@@ -68,6 +69,13 @@ export default function Projects(props) {
     const showNewProjectModal = () => {
         setCreateNewProject(true);
         setSelectedProject({});
+    };
+
+    const showViewProjectModal = (e, project) => {
+        e.preventDefault();
+        setSelectedProject(project);
+        fetchSettings(project.id);
+        setShowViewModal(true);
     };
 
     const showEditProjectModal = (project) => {
@@ -126,12 +134,16 @@ export default function Projects(props) {
 
     const closeModal = () => {
         setCreateNewProject(false);
-
         reset();
     };
+
     const closeSettingsModal = () => {
         setSettings(false);
         reset();
+    };
+    
+    const closeViewModal = () => {
+        setShowViewModal(false);
     };
 
     return (
@@ -195,7 +207,7 @@ export default function Projects(props) {
 
                                             {/* Use href={route('project.edit')} when the routes have been added. */}
                                             <Dropdown.Content>
-                                                <Dropdown.Link href="">View</Dropdown.Link>
+                                                <Dropdown.Link onClick={(e) => {showViewProjectModal(e, project)}}>View</Dropdown.Link>
                                                 <a
                                                     onClick={() => {showEditProjectModal(project)}}
                                                     className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
@@ -407,6 +419,63 @@ export default function Projects(props) {
                             <SecondaryButton onClick={closeSettingsModal}>Cancel</SecondaryButton>
                         </div>
                     </form>
+                </Modal>
+
+                {/* View Project Details */}
+                <Modal show={showViewModal} onClose={closeViewModal} maxWidth='2xl' className="overflow-y-auto">
+                    <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeViewModal}>&times;</span>
+                    <div>
+                        <div className="p-4 mx-3">
+                            <h2 className="text-lg font-medium font-bold text-gray-900">{`Project Details: ` + selectedProject.name}</h2>
+                            <SmallText 
+                                value="View the details of this project"
+                            />
+                        </div>
+
+                        {/* Project Details */}
+                        <dl className="max-w-full p-6 pt-2 mx-3 overflow-y-auto text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+                            <div className="flex flex-col pb-3">
+                                <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Code</dt>
+                                <dd className="text-lg font-semibold capitalize">{selectedProject.code}</dd>
+                            </div>
+                            <div className="flex flex-col py-3">
+                                <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Name</dt>
+                                <dd className="text-lg font-semibold capitalize">{selectedProject.name}</dd>
+                            </div>
+                            <div className="flex flex-col py-3">
+                                <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Start Date</dt>
+                                <dd className="text-lg font-semibold capitalize">{selectedProject.start}</dd>
+                            </div>
+                            <div className="flex flex-col pt-3">
+                                <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">End Date</dt>
+                                <dd className="text-lg font-semibold capitalize">{
+                                    selectedProject.end ? selectedProject.end : <SmallText value="Project has no end date set" className="text-xs italic"/>
+                                }</dd>
+                            </div>
+                            <div className="flex flex-col pt-3">
+                                <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Description</dt>
+                                <dd className="text-lg font-semibold capitalize">{selectedProject.description}</dd>
+                            </div>
+                        </dl>
+
+                        {/* Project Settings */}
+                        <dl className="max-w-full p-6 pt-2 mx-3 text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+                            <div className="flex flex-col pb-3">
+                                <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Settings</dt>
+                                <dd className="text-lg font-semibold capitalize">{
+                                    projectSettings ? (
+                                        <div className="inline-block">
+                                            <span className="font-bold text-gray-600">Manual Document Numbering: </span><span className='font-light'>{manualNumbering ? 'Yes' : 'No'}</span>
+                                        </div>
+                                    ) : (
+                                        <span>Settings</span>
+                                    )
+                                }</dd>
+                            </div>
+                        </dl>
+                    </div>
+                    <SecondaryButton className="float-right m-4 ml-0" onClick={closeViewModal}>Close</SecondaryButton>
+                    <PrimaryButton href="#" className="float-right m-4 ml-0">End Project</PrimaryButton>
                 </Modal>
             </div>
         </AuthenticatedLayout>
