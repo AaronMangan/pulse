@@ -16,6 +16,7 @@ import Dropdown from '@/Components/Dropdown';
 import Toggle from 'react-toggle';
 import SmallText from '@/Components/SmallText';
 import NoData from '@/Components/NoData';
+import { toast } from 'react-toastify';
 
 export default function Projects(props) {
     const [createNewProject, setCreateNewProject] = useState(false);
@@ -29,7 +30,7 @@ export default function Projects(props) {
     const [projectSettings, setProjectSettings] = useState({
         manualNumbering: manualNumbering,
         enforceUploads: enforceUploads,
-        numberFormat: numberFormat ?? '[project_code]-[type_code]-[discipline_code]-[id]'
+        numberFormat: numberFormat
     })
 
     const {
@@ -54,7 +55,7 @@ export default function Projects(props) {
           .then(res => {
             setManualNumbering(res.data[0].settings.manualNumbering);
             setEnforceUploads(res.data[0].settings.enforceUploads)
-            setNumberFormat(res.data[0].settings.numberFormat ?? '[project_code]-[type_code]-[discipline_code]-[id]');
+            setNumberFormat(res.data[0].settings.numberFormat ?? '[project]-[type]-[discipline]-[id]');
         })
     }
     
@@ -115,8 +116,12 @@ export default function Projects(props) {
         })
         .then((response) => {
             closeSettingsModal();
+            toast.success('Project settings updated successfully!');
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+            console.log(err);
+            toast.error('An error occurred, please contact your administrator for assistance');
+        });
     };
 
     const closeModal = () => {
@@ -303,7 +308,6 @@ export default function Projects(props) {
                                 id="description"
                                 value={selectedProject.description}
                                 className="block p-2.5 w-full mt-1 text-gray-900 bg-gray-50 rounded-lg border border-gray-300"
-                                autoComplete
                                 handleChange={(e) => setData('description', e.target.value)}
                                 rows="6"
                                 placeholder="Describe the new project..."
@@ -346,7 +350,7 @@ export default function Projects(props) {
                                 name="manualNumbering"
                                 className="flex align-right"
                                 checked={manualNumbering}
-                                onChange={(e) => setManualNumbering((e.target.value == 'on') ? true : false)}
+                                onChange={(e) => setManualNumbering((!manualNumbering) ? true : false)}
                             />
                             <InputError message={errors.name} className="mt-2" />
                         </div>
@@ -363,7 +367,7 @@ export default function Projects(props) {
                             <Toggle
                                 checked={enforceUploads}
                                 className="flex align-right"
-                                onChange={(e) => setEnforceUploads((e.target.value == 'on') ? true : false)}
+                                onChange={(e) => setEnforceUploads((!enforceUploads) ? true : false)}
                             />
                             <InputError message={errors.name} className="mt-2" />
                         </div>

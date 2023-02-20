@@ -44,10 +44,7 @@ class ProjectSettingsController extends Controller
         
         $projectSettings->settings = $validated;
         $saved = $projectSettings->save();
-        $request->session()->flash(
-            ($saved) ? 'success' : 'error',
-            ($saved) ? "Project settings were updated" : 'Unable to update project settings, please try again'
-        );
+
         return redirect()->route('projects.index');
     }
 
