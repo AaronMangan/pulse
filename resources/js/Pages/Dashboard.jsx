@@ -14,6 +14,7 @@ export default function Dashboard(props) {
                             blurb="Manage your documents and find exactly what you need"
                             href="#"
                             icon="document"
+                            className=""
                         />
                         <GridItem 
                             title="Transmittals"
