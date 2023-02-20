@@ -39,7 +39,7 @@ class ProjectSettingsController extends Controller
     public function store(StoreProjectSettingsRequest $request, $id)
     {
         //
-        $validated = $request->safe()->only(['manualNumbering', 'enforceUploads']);
+        $validated = $request->safe()->only(['manualNumbering', 'enforceUploads', 'numberFormat']);
         $projectSettings = ProjectSettings::findOrFail($id);
         
         $projectSettings->settings = $validated;

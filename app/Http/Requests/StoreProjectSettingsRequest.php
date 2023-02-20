@@ -25,7 +25,8 @@ class StoreProjectSettingsRequest extends FormRequest
     {
         return [
             'manualNumbering' => 'boolean|required',
-            'enforceUploads' => 'boolean|required'
+            'enforceUploads' => 'boolean|required',
+            'numberFormat' => 'string|nullable'
         ];
     }
 }

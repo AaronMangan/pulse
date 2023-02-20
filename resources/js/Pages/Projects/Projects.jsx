@@ -23,11 +23,13 @@ export default function Projects(props) {
     const nameInput = useRef();
     const [manualNumbering, setManualNumbering] = useState(false);
     const [enforceUploads, setEnforceUploads] = useState(false);
+    const [numberFormat, setNumberFormat] = useState('');
     const [startDate, setStartDate] = useState(new Date());
     const [selectedProject, setSelectedProject] = useState([]);
     const [projectSettings, setProjectSettings] = useState({
         manualNumbering: manualNumbering,
         enforceUploads: enforceUploads,
+        numberFormat: numberFormat ?? '[project_code]-[type_code]-[discipline_code]-[id]'
     })
 
     const {
@@ -52,6 +54,7 @@ export default function Projects(props) {
           .then(res => {
             setManualNumbering(res.data[0].settings.manualNumbering);
             setEnforceUploads(res.data[0].settings.enforceUploads)
+            setNumberFormat(res.data[0].settings.numberFormat ?? '[project_code]-[type_code]-[discipline_code]-[id]');
         })
     }
     
@@ -108,6 +111,7 @@ export default function Projects(props) {
         axios.post(route('projects.settings.save', selectedProject.id), {
             manualNumbering: manualNumbering ?? false,
             enforceUploads: enforceUploads ?? false,
+            numberFormat: numberFormat ?? null,
         })
         .then((response) => {
             closeSettingsModal();
@@ -366,6 +370,28 @@ export default function Projects(props) {
                         <div className='mb-4 mr-16 leading-3'>
                             <small><SmallText
                                 value="Enforce uploading a file when creating a new document."
+                            /></small>
+                        </div>
+                        <hr className="text-gray-400"/>
+
+                        {/* Set Document Numbering Format */}
+                        <div className="w-full p-0 mt-6">
+                            <InputLabel className="font-bold" for="numberFormat" value="Document Number Format" />
+                            <TextInput
+                                id="numberFormat"
+                                type="text"
+                                name="numberFormat"
+                                value={numberFormat}
+                                handleChange={(e) => setNumberFormat(e.target.value)}
+                                className="block w-full mt-1 text-xs"
+                                isFocused
+                                placeholder="Set the document number here."
+                            />
+                            <InputError message={errors.name} className="mt-2" />
+                        </div>
+                        <div className='mt-2 mb-4 mr-16 leading-3'>
+                            <small><SmallText
+                                value="Document numbers will use this format for this project."
                             /></small>
                         </div>
                         <hr className="text-gray-400"/>
