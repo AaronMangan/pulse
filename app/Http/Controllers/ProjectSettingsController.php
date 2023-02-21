@@ -16,8 +16,19 @@ class ProjectSettingsController extends Controller
      */
     public function index(Request $request, int $id)
     {
+        $settings = ProjectSettings::where('project_id', $id)->first(['id', 'settings']) ?? null;
+        if(!is_null($settings)){
+            $settings = $settings->toArray();
+        }
+        if(!isset($settings['settings'])) {
+            $settings = [
+                'manualNumbering' => false,
+                'enforceUploads' => false,
+                'numberFormat' => '[project]-[type]-[discipline]-[id]',
+            ];
+        }
         // Fetch the Project.
-        return response()->json(ProjectSettings::where('project_id', $id)->get() ?? []);
+        return response()->json($settings);
     }
 
     /**

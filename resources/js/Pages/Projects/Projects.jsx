@@ -54,9 +54,9 @@ export default function Projects(props) {
     const fetchSettings = (id) => {
         axios.get(route('projects.settings.get', id))
           .then(res => {
-            setManualNumbering(res.data[0].settings.manualNumbering);
-            setEnforceUploads(res.data[0].settings.enforceUploads)
-            setNumberFormat(res.data[0].settings.numberFormat ?? '[project]-[type]-[discipline]-[id]');
+            setManualNumbering(res.data.settings.manualNumbering);
+            setEnforceUploads(res.data.settings.enforceUploads)
+            setNumberFormat(res.data.settings.numberFormat ?? '[project]-[type]-[discipline]-[id]');
         })
     }
     
@@ -139,6 +139,9 @@ export default function Projects(props) {
 
     const closeSettingsModal = () => {
         setSettings(false);
+        setManualNumbering(false);
+        setEnforceUploads(false);
+        setNumberFormat('');
         reset();
     };
     
