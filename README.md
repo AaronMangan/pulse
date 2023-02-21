@@ -49,7 +49,13 @@ then,
 `cd pulse && valet link`
 
 ### Docker
+
+There are two options for using docker: Laradock and Laravel Sail. Both have slightly different installation requirement, however both require Docker to be installed.
+
     ##### Laradock
+    
+    First, decide if you want to install Laradock globally or per project.
+    
     #### Laravel Sail
 
 ## First Time Setup
