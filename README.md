@@ -24,6 +24,8 @@ Pulse can be setup locally using Homebrew:
 
 > **Note:** Check out the Composer docs if you want to install it globally (recommended). You should also secure your MySQL installation.
 
+`git clone https://github.com/AaronMangan/pulse.git`
+
 `composer install`
 
 `php artisan key:generate`
@@ -35,6 +37,16 @@ Then, in a separate terminal run:
 `php artisan serve`
 
 #### Valet
+
+If you don't have Laravel Valet installed, go to https://laravel.com/docs/10.x/valet
+
+Once installed, clone the repo with:
+
+`git clone https://github.com/AaronMangan/pulse.git`
+
+then,
+
+`cd pulse && valet link`
 
 ### Docker
     ##### Laradock
