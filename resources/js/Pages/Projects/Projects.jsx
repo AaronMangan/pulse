@@ -16,6 +16,7 @@ import Dropdown from '@/Components/Dropdown';
 import Toggle from 'react-toggle';
 import SmallText from '@/Components/SmallText';
 import NoData from '@/Components/NoData';
+import { toast } from 'react-toastify';
 
 export default function Projects(props) {
     const [createNewProject, setCreateNewProject] = useState(false);
@@ -23,11 +24,14 @@ export default function Projects(props) {
     const nameInput = useRef();
     const [manualNumbering, setManualNumbering] = useState(false);
     const [enforceUploads, setEnforceUploads] = useState(false);
+    const [numberFormat, setNumberFormat] = useState('');
     const [startDate, setStartDate] = useState(new Date());
     const [selectedProject, setSelectedProject] = useState([]);
+    const [showViewModal, setShowViewModal] = useState(false);
     const [projectSettings, setProjectSettings] = useState({
         manualNumbering: manualNumbering,
         enforceUploads: enforceUploads,
+        numberFormat: numberFormat
     })
 
     const {
@@ -48,9 +52,11 @@ export default function Projects(props) {
      * Use Axios to get the settings for the project.
      */
     const fetchSettings = (id) => {
-        axios.get(`http://localhost:8001/projects/${id}/settings`)
+        axios.get(route('projects.settings.get', id))
           .then(res => {
-            setProjectSettings(res.data[0].settings);
+            setManualNumbering(res.data.settings.manualNumbering);
+            setEnforceUploads(res.data.settings.enforceUploads)
+            setNumberFormat(res.data.settings.numberFormat ?? '[project]-[type]-[discipline]-[id]');
         })
     }
     
@@ -63,6 +69,13 @@ export default function Projects(props) {
     const showNewProjectModal = () => {
         setCreateNewProject(true);
         setSelectedProject({});
+    };
+
+    const showViewProjectModal = (e, project) => {
+        e.preventDefault();
+        setSelectedProject(project);
+        fetchSettings(project.id);
+        setShowViewModal(true);
     };
 
     const showEditProjectModal = (project) => {
@@ -105,23 +118,35 @@ export default function Projects(props) {
         e.preventDefault();
 
         axios.post(route('projects.settings.save', selectedProject.id), {
-            manualNumbering: projectSettings.manualNumbering,
-            enforceUploads: projectSettings.enforceUploads,
+            manualNumbering: manualNumbering ?? false,
+            enforceUploads: enforceUploads ?? false,
+            numberFormat: numberFormat ?? null,
         })
         .then((response) => {
             closeSettingsModal();
+            toast.success('Project settings updated successfully!');
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+            console.log(err);
+            toast.error('An error occurred, please contact your administrator for assistance');
+        });
     };
 
     const closeModal = () => {
         setCreateNewProject(false);
-
         reset();
     };
+
     const closeSettingsModal = () => {
         setSettings(false);
+        setManualNumbering(false);
+        setEnforceUploads(false);
+        setNumberFormat('');
         reset();
+    };
+    
+    const closeViewModal = () => {
+        setShowViewModal(false);
     };
 
     return (
@@ -133,7 +158,7 @@ export default function Projects(props) {
         >
             <Head title="Projects" />
             <div className="w-full">
-                <div className="visible lg:invisible">
+                <div className="visible lg:invisible lg:hidden">
                     <NoData
                         title="Not Allowed"
                         blurb="Unable to view this page on this device"
@@ -185,7 +210,7 @@ export default function Projects(props) {
 
                                             {/* Use href={route('project.edit')} when the routes have been added. */}
                                             <Dropdown.Content>
-                                                <Dropdown.Link href="">View</Dropdown.Link>
+                                                <Dropdown.Link onClick={(e) => {showViewProjectModal(e, project)}}>View</Dropdown.Link>
                                                 <a
                                                     onClick={() => {showEditProjectModal(project)}}
                                                     className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
@@ -298,7 +323,6 @@ export default function Projects(props) {
                                 id="description"
                                 value={selectedProject.description}
                                 className="block p-2.5 w-full mt-1 text-gray-900 bg-gray-50 rounded-lg border border-gray-300"
-                                autoComplete
                                 handleChange={(e) => setData('description', e.target.value)}
                                 rows="6"
                                 placeholder="Describe the new project..."
@@ -339,9 +363,9 @@ export default function Projects(props) {
                             <Toggle
                                 id="manualNumbering"
                                 name="manualNumbering"
-                                defaultChecked={projectSettings.manualNumbering}
                                 className="flex align-right"
-                                onChange={(e) => setManualNumbering('manualNumbering', e.target.value)}
+                                checked={manualNumbering}
+                                onChange={(e) => setManualNumbering((!manualNumbering) ? true : false)}
                             />
                             <InputError message={errors.name} className="mt-2" />
                         </div>
@@ -356,15 +380,37 @@ export default function Projects(props) {
                         <div className="flex justify-between mt-6">
                             <InputLabel className="float-left font-bold">Enforce Uploads</InputLabel>
                             <Toggle
-                                defaultChecked={projectSettings.enforceUploads}
+                                checked={enforceUploads}
                                 className="flex align-right"
-                                onChange={(e) => setEnforceUploads('enforceUploads', e.target.value)}
+                                onChange={(e) => setEnforceUploads((!enforceUploads) ? true : false)}
                             />
                             <InputError message={errors.name} className="mt-2" />
                         </div>
                         <div className='mb-4 mr-16 leading-3'>
                             <small><SmallText
                                 value="Enforce uploading a file when creating a new document."
+                            /></small>
+                        </div>
+                        <hr className="text-gray-400"/>
+
+                        {/* Set Document Numbering Format */}
+                        <div className="w-full p-0 mt-6">
+                            <InputLabel className="font-bold" for="numberFormat" value="Document Number Format" />
+                            <TextInput
+                                id="numberFormat"
+                                type="text"
+                                name="numberFormat"
+                                value={numberFormat}
+                                handleChange={(e) => setNumberFormat(e.target.value)}
+                                className="block w-full mt-1 text-xs"
+                                isFocused
+                                placeholder="Set the document number here."
+                            />
+                            <InputError message={errors.name} className="mt-2" />
+                        </div>
+                        <div className='mt-2 mb-4 mr-16 leading-3'>
+                            <small><SmallText
+                                value="Document numbers will use this format for this project."
                             /></small>
                         </div>
                         <hr className="text-gray-400"/>
@@ -376,6 +422,63 @@ export default function Projects(props) {
                             <SecondaryButton onClick={closeSettingsModal}>Cancel</SecondaryButton>
                         </div>
                     </form>
+                </Modal>
+
+                {/* View Project Details */}
+                <Modal show={showViewModal} onClose={closeViewModal} maxWidth='2xl' className="overflow-y-auto">
+                    <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeViewModal}>&times;</span>
+                    <div>
+                        <div className="p-4 mx-3">
+                            <h2 className="text-lg font-medium font-bold text-gray-900">{`Project Details: ` + selectedProject.name}</h2>
+                            <SmallText 
+                                value="View the details of this project"
+                            />
+                        </div>
+
+                        {/* Project Details */}
+                        <dl className="max-w-full p-6 pt-2 mx-3 overflow-y-auto text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+                            <div className="flex flex-col pb-3">
+                                <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Code</dt>
+                                <dd className="text-lg font-semibold capitalize">{selectedProject.code}</dd>
+                            </div>
+                            <div className="flex flex-col py-3">
+                                <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Name</dt>
+                                <dd className="text-lg font-semibold capitalize">{selectedProject.name}</dd>
+                            </div>
+                            <div className="flex flex-col py-3">
+                                <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Start Date</dt>
+                                <dd className="text-lg font-semibold capitalize">{selectedProject.start}</dd>
+                            </div>
+                            <div className="flex flex-col pt-3">
+                                <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">End Date</dt>
+                                <dd className="text-lg font-semibold capitalize">{
+                                    selectedProject.end ? selectedProject.end : <SmallText value="Project has no end date set" className="text-xs italic"/>
+                                }</dd>
+                            </div>
+                            <div className="flex flex-col pt-3">
+                                <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Description</dt>
+                                <dd className="text-lg font-semibold capitalize">{selectedProject.description}</dd>
+                            </div>
+                        </dl>
+
+                        {/* Project Settings */}
+                        <dl className="max-w-full p-6 pt-2 mx-3 text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+                            <div className="flex flex-col pb-3">
+                                <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Settings</dt>
+                                <dd className="text-lg font-semibold capitalize">{
+                                    projectSettings ? (
+                                        <div className="inline-block">
+                                            <span className="font-bold text-gray-600">Manual Document Numbering: </span><span className='font-light'>{manualNumbering ? 'Yes' : 'No'}</span>
+                                        </div>
+                                    ) : (
+                                        <span>Settings</span>
+                                    )
+                                }</dd>
+                            </div>
+                        </dl>
+                    </div>
+                    <SecondaryButton className="float-right m-4 ml-0" onClick={closeViewModal}>Close</SecondaryButton>
+                    <PrimaryButton href="#" className="float-right m-4 ml-0">End Project</PrimaryButton>
                 </Modal>
             </div>
         </AuthenticatedLayout>

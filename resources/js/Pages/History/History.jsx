@@ -43,7 +43,6 @@ export default function History(props) {
 
     const closeModal = () => {
         setConfirmingUserDeletion(false);
-
         reset();
     };
 
@@ -55,7 +54,13 @@ export default function History(props) {
         >
         <Head title="History" />
         <div className="w-full py-12 pl-1/5 pr-1/5">
-            <div className="inline-block min-w-full mx-auto max-w-7xl sm:px-6 lg:px-8 md:w-full">
+            <div className="visible lg:invisible lg:hidden">
+                <NoData
+                    title="Not Allowed"
+                    blurb="Unable to view this page on this device"
+                />
+            </div>
+            <div className="invisible inline-block min-w-full mx-auto lg:visible max-w-7xl sm:px-6 lg:px-8 md:w-full">
                 {
                     hasHistory ? (
                         <div>
