@@ -92,6 +92,7 @@ export default function History(props) {
                                 </tbody>
                             </table>
                             
+                            {/* View History Item Modal */}
                             <Modal show={confirmingUserDeletion} onClose={closeModal}>
                                 <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeModal}>&times;</span>
                                 <div>
@@ -102,11 +103,15 @@ export default function History(props) {
                                         </div>
                                         <div className="flex flex-col py-3">
                                             <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Object</dt>
-                                            <dd className="text-lg font-semibold">Buddy</dd>
+                                            <dd className="text-lg font-semibold">{selectedItem.model ? selectedItem.model.replace('App\\Models\\', '') : 'Unknown'}</dd>
                                         </div>
                                         <div className="flex flex-col py-3">
                                             <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Event</dt>
                                             <dd className="text-lg font-semibold capitalize">{selectedItem.event}</dd>
+                                        </div>
+                                        <div className="flex flex-col py-3">
+                                            <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">When</dt>
+                                            <dd className="text-lg font-semibold capitalize">{new Date(selectedItem.created_at).toLocaleDateString("en-AU")}</dd>
                                         </div>
                                         <div className="flex flex-col pt-3">
                                             <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Description</dt>
