@@ -10,7 +10,7 @@ use Inertia\Inertia;
 class HistoryController extends Controller
 {
     /**
-     * The columns displaye to the user in the index.
+     * The columns displayed to the user in the index.
      */
     const INDEX_COLUMNS = ['id', 'model', 'event', 'description', 'created_at'];
     

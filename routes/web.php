@@ -11,6 +11,7 @@ use App\Http\Controllers\RevisionController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ProjectSettingsController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\AdminViewController;
 use Inertia\Inertia;
 
 /*
@@ -108,6 +109,9 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
 });
 
+Route::middleware(['auth', 'verified', /* 'admin' */])->group(function(){
+    Route::get('/admin', [AdminViewController::class, 'index'])->name('admin.index');
+});
 
 
 // Used by authentication.
