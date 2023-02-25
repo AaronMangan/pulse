@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules;
@@ -13,7 +13,7 @@ class CreateUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::check();
+        return \Auth::check();
     }
 
     /**
@@ -24,9 +24,9 @@ class CreateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'name' => 'string|max:255|required|unique:users,name',
+            'email' => 'email|required|unique:users,email',
+            'isAdmin' => 'boolean|nullable'
         ];
     }
 }

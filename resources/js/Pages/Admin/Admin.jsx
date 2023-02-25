@@ -20,11 +20,6 @@ export default function Admin(props) {
     const hasData = props.users.length ? true : false;
     const [createNewUser, setCreateNewUser] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
-    
-    // Create a new User.
-    const createUser = () => {
-
-    };
 
     // Close the modal.
     const closeModal = () => {
@@ -35,13 +30,12 @@ export default function Admin(props) {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
-        password: '',
-        password_confirmation: '',
+        isAdmin: false,
     });
 
     useEffect(() => {
         return () => {
-            reset('password', 'password_confirmation');
+            reset('name', 'email', 'isAdmin');
         };
     }, []);
 
@@ -64,18 +58,20 @@ export default function Admin(props) {
                 text: "Should this user be elevated to adminstrator?",
                 icon: 'info',
                 showCancelButton: true,
-                // confirmButtonColor: '#3085d6',
+                confirmButtonColor: '#202226',
                 // cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes'
               }).then((result) => {
                 if (result.isConfirmed) {
                   setIsAdmin(true);
+                  setData('isAdmin', true);
                 }
             })
         }
         else
         {
             setIsAdmin(false);
+            setData('isAdmin', false);
         }
     };
 
@@ -166,8 +162,8 @@ export default function Admin(props) {
                                 className="flex align-right"
                                 onChange={(e) => confirmMakingUserAdmin(e.target.value)}
                             />
-                            <InputError message={errors.name} className="mt-2" />
                         </div>
+                        <InputError message={errors.isAdmin} className="mt-2" />
 
                         <div className="flex items-center justify-end mt-4">
                             <PrimaryButton className="ml-4" processing={processing}>
