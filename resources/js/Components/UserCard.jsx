@@ -1,10 +1,11 @@
 import { UserCircleIcon } from "./Icons/UserCircleIcon";
 import SmallText from "./SmallText";
 import Dropdown from "./Dropdown";
+import FloatButton from "./FloatButton";
 
 export default function UserCard({ user }) {
     return (
-        <div className="mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
+        <div className="p-2 mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
             <div className="p-2 bg-white shadow sm:p-8 sm:rounded-lg">
                 <div className="flex inline-block p-0 m-0 d-flex">
                     {/* Icon & Heading */}
@@ -14,7 +15,7 @@ export default function UserCard({ user }) {
                     </div>
 
                     {/* User Details */}
-                    <div className="grid w-2/4 w-full grid-cols-2 gap-2 px-2 pl-6 pr-12 bg-white">
+                    <div className="grid w-3/4 w-full grid-cols-2 gap-2 px-2 pl-6 pr-12 bg-white">
                         <div className="w-full">
                             <SmallText value="Email: " className="font-bold"/>
                             <SmallText value={user.email} className="font-thin"/>
@@ -65,7 +66,7 @@ export default function UserCard({ user }) {
                                     // onClick={() => {showEditProjectModal(project)}}
                                     className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                                 >
-                                    Edit
+                                    Edit User
                                 </a>
                                 {/* <Dropdown.Link href={route('projects.archive', project)}  method="post" as="button">
                                     {
@@ -73,20 +74,20 @@ export default function UserCard({ user }) {
                                     }
                                 </Dropdown.Link> */}
                                 <a
-                                    // onClick={() => {showSettingsModal(project)}}
-                                    className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
-                                >
-                                    Settings
-                                </a>
-                                <a
                                     // onClick={() => {deleteProject(project)}}
                                     className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                                 >
-                                    Delete
+                                    Disable User
                                 </a>
+                                <Dropdown.Link href={route('admin.user.login', user)}  method="post" as="button">
+                                    Login As User
+                                </Dropdown.Link>
                             </Dropdown.Content>
                         </Dropdown>
                     </div>
+                    <FloatButton
+                        action={() => {alert('coming soon')}}
+                    />
                 </div>
             </div>
         </div>
