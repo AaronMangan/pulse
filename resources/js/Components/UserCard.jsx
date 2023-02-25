@@ -1,7 +1,6 @@
 import { UserCircleIcon } from "./Icons/UserCircleIcon";
 import SmallText from "./SmallText";
 import Dropdown from "./Dropdown";
-import FloatButton from "./FloatButton";
 
 export default function UserCard({ user }) {
     return (
@@ -85,11 +84,10 @@ export default function UserCard({ user }) {
                             </Dropdown.Content>
                         </Dropdown>
                     </div>
-                    <FloatButton
-                        action={() => {alert('coming soon')}}
-                    />
                 </div>
             </div>
+
+            {/* Create / Edit User Modal */}
         </div>
     );
 }
