@@ -234,9 +234,6 @@ export default function Projects(props) {
                                                 >
                                                     Delete
                                                 </a>
-                                                {/* <Dropdown.Link href="" method="post" as="button">
-                                                    Delete
-                                                </Dropdown.Link> */}
                                             </Dropdown.Content>
                                         </Dropdown>
                                     </td>

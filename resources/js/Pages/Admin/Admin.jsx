@@ -11,11 +11,16 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 import SmallText from '@/Components/SmallText';
+import SecondaryButton from '@/Components/SecondaryButton';
+import Toggle from 'react-toggle';
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import Swal from 'sweetalert2';
 
 export default function Admin(props) {
     const hasData = props.users.length ? true : false;
     const [createNewUser, setCreateNewUser] = useState(false);
-
+    const [isAdmin, setIsAdmin] = useState(false);
+    
     // Create a new User.
     const createUser = () => {
 
@@ -44,10 +49,40 @@ export default function Admin(props) {
         setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
     };
 
+    const adminInfo = () => {
+        Swal.fire(
+            'Administration Rights',
+            'Granting a user administration rights allows them to configure pulse and maintain objects in the platform',
+            'info'
+        )
+    }
+
+    const confirmMakingUserAdmin = (value) => {
+        if(!isAdmin) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Should this user be elevated to adminstrator?",
+                icon: 'info',
+                showCancelButton: true,
+                // confirmButtonColor: '#3085d6',
+                // cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  setIsAdmin(true);
+                }
+            })
+        }
+        else
+        {
+            setIsAdmin(false);
+        }
+    };
+
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('register'));
+        post(route('admin.user.create'));
     };
 
     return (
@@ -78,17 +113,19 @@ export default function Admin(props) {
 
             <Modal show={createNewUser} onClose={closeModal}>
                 <span className="float-right mx-4 mt-2 text-xl cursor-pointer text-grey-100 hover:text-sky-700" onClick={closeModal}>&times;</span>
-                <div className='p-4'>
-                    <div className='pb-4'>
+                <div className='p-6'>
+                    <div className='mb-2'>
                         <h2 className="text-lg font-medium font-bold text-gray-900">Create New User</h2>
                         <SmallText
                             value='Create a new Pulse user. The new user will need to confirm their account before logging in'
+                            className='mb-2'
                         />
+                        <hr className='mt-2 mb-2' />
                     </div>
                     <form onSubmit={submit}>
                         <div>
-                            <InputLabel forInput="name" value="Name" />
-
+                            {/* User Name */}
+                            <InputLabel  className="font-bold" forInput="name" value="Name" />
                             <TextInput
                                 id="name"
                                 name="name"
@@ -103,8 +140,9 @@ export default function Admin(props) {
                             <InputError message={errors.name} className="mt-2" />
                         </div>
 
+                        {/* Email */}
                         <div className="mt-4">
-                            <InputLabel forInput="email" value="Email" />
+                            <InputLabel className="font-bold" forInput="email" value="Email" />
 
                             <TextInput
                                 id="email"
@@ -120,50 +158,27 @@ export default function Admin(props) {
                             <InputError message={errors.email} className="mt-2" />
                         </div>
 
-                        <div className="mt-4">
-                            <InputLabel forInput="password" value="Password" />
-
-                            <TextInput
-                                id="password"
-                                type="password"
-                                name="password"
-                                value={data.password}
-                                className="block w-full mt-1"
-                                autoComplete="new-password"
-                                handleChange={onHandleChange}
-                                required
+                        {/* User is Admin */}
+                        <div className="flex justify-between mt-4">
+                            <InputLabel className="float-left font-bold text-gray-500">Administrator<InformationCircleIcon className="float-right w-5 h-5 ml-1 text-gray-300 cursor-pointer stroke-2 hover:stroke-1" onClick={(e) => {adminInfo()}} /></InputLabel>
+                            <Toggle
+                                checked={isAdmin}
+                                className="flex align-right"
+                                onChange={(e) => confirmMakingUserAdmin(e.target.value)}
                             />
-
-                            <InputError message={errors.password} className="mt-2" />
-                        </div>
-
-                        <div className="mt-4">
-                            <InputLabel forInput="password_confirmation" value="Confirm Password" />
-
-                            <TextInput
-                                id="password_confirmation"
-                                type="password"
-                                name="password_confirmation"
-                                value={data.password_confirmation}
-                                className="block w-full mt-1"
-                                handleChange={onHandleChange}
-                                required
-                            />
-
-                            <InputError message={errors.password_confirmation} className="mt-2" />
+                            <InputError message={errors.name} className="mt-2" />
                         </div>
 
                         <div className="flex items-center justify-end mt-4">
-                            <Link
-                                href={route('login')}
-                                className="text-sm text-gray-600 underline rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            >
-                                Already registered?
-                            </Link>
-
                             <PrimaryButton className="ml-4" processing={processing}>
-                                Register
+                                Create User
                             </PrimaryButton>
+                            <SecondaryButton
+                                onClick={(e) => {closeModal()}}
+                                className="ml-2"
+                            >
+                                Close
+                            </SecondaryButton>
                         </div>
                     </form>
                 </div>

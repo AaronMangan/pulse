@@ -35,7 +35,7 @@ class UserManagementController extends Controller
     public function store(CreateUserRequest $request)
     {
         //
-
+        dd($request->all());
     }
 
     /**
