@@ -10,6 +10,8 @@ use App\Http\Requests\User\UpdateUserRequest;
 use Illuminate\Auth\Events\Registered;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewUserMail;
  
 class UserManagementController extends Controller
 {
@@ -36,6 +38,9 @@ class UserManagementController extends Controller
     {
         //
         dd($request->all());
+        
+        // Use ->send to send it immediately, or ->queue to add it to the queue.
+        // Mail::to('azza.mangan@gmail.com')->send(new NewUserMail());
     }
 
     /**
