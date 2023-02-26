@@ -39,11 +39,11 @@ class UserManagementController extends Controller
         //
         $validated = $request->safe()->only(['name', 'email', 'isAdmin']);
         
-        // User::create($validated);
+        $user = User::create($validated);
         
         // Use ->send to send it immediately, or ->queue to add it to the queue.
         // Mail::to('azza.mangan@gmail.com')->send(new NewUserMail());
-        Mail::to('azza.mangan@gmail.com')->queue(new NewUserMail());
+        Mail::to('azza.mangan@gmail.com')->queue(new NewUserMail($user ?? []));
     }
 
     /**

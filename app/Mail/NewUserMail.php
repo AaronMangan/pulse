@@ -8,15 +8,23 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use App\Models\User;
 
 class NewUserMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
+     * The new user that was created.
+     *
+     * @var object
+     */
+    protected $user;
+
+    /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(User $user)
     {
         //
     }
@@ -27,7 +35,7 @@ class NewUserMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New User',
+            subject: 'New User Mail',
         );
     }
 
@@ -37,7 +45,7 @@ class NewUserMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'new-user-mail',
+            markdown: 'mail.new-user-mail',
         );
     }
 
