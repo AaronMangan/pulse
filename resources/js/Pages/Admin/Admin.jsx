@@ -31,6 +31,8 @@ export default function Admin(props) {
         name: '',
         email: '',
         isAdmin: false,
+        password: '',
+        password_confirmation: '',
     });
 
     useEffect(() => {
@@ -79,6 +81,7 @@ export default function Admin(props) {
         e.preventDefault();
 
         post(route('admin.user.create'));
+        closeModal();
     };
 
     return (
@@ -131,14 +134,12 @@ export default function Admin(props) {
                                 handleChange={onHandleChange}
                                 required
                             />
-
                             <InputError message={errors.name} className="mt-2" />
                         </div>
 
                         {/* Email */}
                         <div className="mt-4">
                             <InputLabel className="font-bold" forInput="email" value="Email" />
-
                             <TextInput
                                 id="email"
                                 type="email"
@@ -149,8 +150,38 @@ export default function Admin(props) {
                                 handleChange={onHandleChange}
                                 required
                             />
-
                             <InputError message={errors.email} className="mt-2" />
+                        </div>
+
+                        {/* Password */}
+                        <div className="mt-4">
+                            <InputLabel forInput="password" value="Password" />
+                            <TextInput
+                                id="password"
+                                type="password"
+                                name="password"
+                                value={data.password}
+                                className="block w-full mt-1"
+                                autoComplete="new-password"
+                                handleChange={onHandleChange}
+                                required
+                            />
+                            <InputError message={errors.password} className="mt-2" />
+                        </div>
+
+                        {/* Password Confirmation */}
+                        <div className="mt-4">
+                            <InputLabel forInput="password_confirmation" value="Confirm Password" />
+                            <TextInput
+                                id="password_confirmation"
+                                type="password"
+                                name="password_confirmation"
+                                value={data.password_confirmation}
+                                className="block w-full mt-1"
+                                handleChange={onHandleChange}
+                                required
+                            />
+                            <InputError message={errors.password_confirmation} className="mt-2" />
                         </div>
 
                         {/* User is Admin */}

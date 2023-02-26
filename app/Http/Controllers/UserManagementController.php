@@ -37,13 +37,16 @@ class UserManagementController extends Controller
     public function store(CreateUserRequest $request)
     {
         //
-        $validated = $request->safe()->only(['name', 'email', 'isAdmin']);
+        $validated = $request->safe()->only(['name', 'email', 'isAdmin', 'password', 'password_confirmation']);
         
         $user = User::create($validated);
         
-        // Use ->send to send it immediately, or ->queue to add it to the queue.
-        // Mail::to('azza.mangan@gmail.com')->send(new NewUserMail());
-        Mail::to('azza.mangan@gmail.com')->queue(new NewUserMail($user ?? []));
+        if(isset($user->id) && isset($user->email)) {
+            // Add notifications.
+            $request->session()->flash('success', 'User was created successfully, and will receive a verification email');
+            // Mail::to($user->email)->queue(new NewUserMail($user ?? []));
+        }
+        return redirect()->route('admin.index');
     }
 
     /**
