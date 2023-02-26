@@ -10,7 +10,7 @@ export default function Dashboard(props) {
             <div className="grid grid-cols-1 gap-4 px-2 pr-12 bg-gray-100 max-w-screen md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
                 <GridItem 
                     title="Documents"
-                    blurb="Manage your documents and find exactly what you need"
+                    blurb="Manage your documents"
                     href="#"
                     icon="document"
                     className="invisible hidden md:visible md:block"
@@ -57,12 +57,12 @@ export default function Dashboard(props) {
                     icon="user"
                 />
                 <GridItem 
-                    title="Logout"
-                    blurb="Logout of Pulse"
-                    href={route('logout')}
+                    title="Admin"
+                    blurb="Perform Administration Tasks like creating Users"
+                    href={route('admin.index')}
                     as="button"
-                    method="post"
-                    icon="logout"
+                    method="get"
+                    icon="admin"
                 />
             </div>
         );
