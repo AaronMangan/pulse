@@ -20,16 +20,16 @@ export default function UserCard({ user }) {
                             <SmallText value={user.email} className="font-thin"/>
                         </div>
                         <div className="w-full">
-                            <SmallText value="Email: " className="font-bold"/>
-                            <SmallText value={user.email} className="font-thin"/>
+                            <SmallText value="Last Login: " className="font-bold"/>
+                            <SmallText value={new Date(user.created_at).toLocaleDateString("en-AU")} className="font-thin"/>
                         </div>
                         <div className="w-full">
-                            <SmallText value="Email: " className="font-bold"/>
-                            <SmallText value={user.email} className="font-thin"/>
+                            <SmallText value="User Level: " className="font-bold"/>
+                            <SmallText value={user.isAdmin ? 'Admin' : 'User'} className="font-thin"/>
                         </div>
                         <div className="w-full">
-                            <SmallText value="Email: " className="font-bold"/>
-                            <SmallText value={user.email} className="font-thin"/>
+                            <SmallText value="Verified: " className="font-bold"/>
+                            <SmallText value='Yes' className="font-thin"/>
                         </div>
                     </div>
 

@@ -87,7 +87,6 @@ export default function Admin(props) {
             flash={props.flash}
         >
             <Head title="Admin" />
-
             <div className="py-12">
                 {
                     hasData ? (
