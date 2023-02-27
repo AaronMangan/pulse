@@ -20,7 +20,8 @@ export default function Admin(props) {
     const hasData = props.users.length ? true : false;
     const [createNewUser, setCreateNewUser] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
-
+    const [selectedUser, setSelectedUser] = useState(false);
+    
     // Close the modal.
     const closeModal = () => {
         setCreateNewUser(false);
@@ -90,7 +91,7 @@ export default function Admin(props) {
             flash={props.flash}
         >
             <Head title="Admin" />
-            <div className="py-12">
+            <div className="w-full py-6 rounded-md">
                 {
                     hasData ? (
                         <>
