@@ -109,6 +109,7 @@ export default function Admin(props) {
                 action={() => {setCreateNewUser(true)}}
             />
 
+            {/* Create a User Modal & Edit User Modal*/}
             <Modal show={createNewUser} onClose={closeModal}>
                 <span className="float-right mx-4 mt-2 text-xl cursor-pointer text-grey-100 hover:text-sky-700" onClick={closeModal}>&times;</span>
                 <div className='p-6'>
