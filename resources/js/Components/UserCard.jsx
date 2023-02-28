@@ -2,7 +2,10 @@ import { UserCircleIcon } from "./Icons/UserCircleIcon";
 import SmallText from "./SmallText";
 import Dropdown from "./Dropdown";
 
-export default function UserCard({ user }) {
+export default function UserCard({ user, callback }) {
+    const selectedUserCallback = (user) => {
+        callback(user);
+    };
     return (
         <div className="w-full px-24 py-2">
             <div className="p-6 bg-white rounded-lg shadow">
@@ -64,7 +67,7 @@ export default function UserCard({ user }) {
                             <Dropdown.Content>
                                 {/* <Dropdown.Link onClick={(e) => {showViewProjectModal(e, project)}}>View</Dropdown.Link> */}
                                 <a
-                                    // onClick={() => {showEditProjectModal(project)}}
+                                    onClick={() => {selectedUserCallback(user)}}
                                     className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                                 >
                                     Edit User

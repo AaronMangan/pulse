@@ -21,7 +21,16 @@ export default function Admin(props) {
     const [createNewUser, setCreateNewUser] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [selectedUser, setSelectedUser] = useState(false);
+    const [editCurrentUser, setEditCurrentUser] = useState('');
     
+    const showEditUserCallback = (user) => {
+        setSelectedUser(user);
+        data.name = user.name;
+        data.email = user.email;
+        data.isAdmin = (user.isAdmin) ? true : false;
+        setCreateNewUser(true);
+    };
+
     // Close the modal.
     const closeModal = () => {
         setCreateNewUser(false);
@@ -96,7 +105,7 @@ export default function Admin(props) {
                     hasData ? (
                         <>
                             {props.users.map(user => (
-                                <UserCard key={user.id} user={user} />
+                                <UserCard key={user.id} user={user} callback={showEditUserCallback}/>
                             ))}
                         </>
                     ) : (
@@ -115,16 +124,20 @@ export default function Admin(props) {
                 <span className="float-right mx-4 mt-2 text-xl cursor-pointer text-grey-100 hover:text-sky-700" onClick={closeModal}>&times;</span>
                 <div className='p-6'>
                     <div className='mb-2'>
-                        <h2 className="text-lg font-medium font-bold text-gray-900">Create New User</h2>
+                        <h2 className="text-lg font-medium font-bold text-gray-900">
+                            {
+                                selectedUser.id ? 'Edit User' : 'Create New User'
+                            }
+                        </h2>
                         <SmallText
-                            value='Create a new Pulse user. The new user will need to confirm their account before logging in'
+                            value={selectedUser.id ? 'Edit details for an existing user' : 'Create a new Pulse user. The new user will need to confirm their account before logging in'}
                             className='mb-2'
                         />
                         <hr className='mt-2 mb-2' />
                     </div>
                     <form onSubmit={submit}>
+                        {/* User Name */}
                         <div>
-                            {/* User Name */}
                             <InputLabel  className="font-bold" forInput="name" value="Name" />
                             <TextInput
                                 id="name"
@@ -154,43 +167,53 @@ export default function Admin(props) {
                             />
                             <InputError message={errors.email} className="mt-2" />
                         </div>
-
-                        {/* Password */}
-                        <div className="mt-4">
-                            <InputLabel forInput="password" value="Password" />
-                            <TextInput
-                                id="password"
-                                type="password"
-                                name="password"
-                                value={data.password}
-                                className="block w-full mt-1"
-                                autoComplete="new-password"
-                                handleChange={onHandleChange}
-                                required
-                            />
-                            <InputError message={errors.password} className="mt-2" />
-                        </div>
-
-                        {/* Password Confirmation */}
-                        <div className="mt-4">
-                            <InputLabel forInput="password_confirmation" value="Confirm Password" />
-                            <TextInput
-                                id="password_confirmation"
-                                type="password"
-                                name="password_confirmation"
-                                value={data.password_confirmation}
-                                className="block w-full mt-1"
-                                handleChange={onHandleChange}
-                                required
-                            />
-                            <InputError message={errors.password_confirmation} className="mt-2" />
-                        </div>
+                        {
+                            selectedUser ? (
+                                <div className='mt-4'>
+                                    <SmallText className="mt-4" value="You cannot edit a password for a user" />
+                                </div>
+                            ) : (
+                                <div className="mt-4">
+                                    <InputLabel forInput="password" value="Password" />
+                                    <TextInput
+                                        id="password"
+                                        type="password"
+                                        name="password"
+                                        value={data.password}
+                                        className="block w-full mt-1"
+                                        autoComplete="new-password"
+                                        handleChange={onHandleChange}
+                                        required
+                                    />
+                                    <InputError message={errors.password} className="mt-2" />
+                                </div>
+                            )
+                        }
+                        {
+                            selectedUser ? (
+                                ''
+                            ) : (
+                                <div className="mt-4">
+                                    <InputLabel forInput="password_confirmation" value="Confirm Password" />
+                                    <TextInput
+                                        id="password_confirmation"
+                                        type="password"
+                                        name="password_confirmation"
+                                        value={data.password_confirmation}
+                                        className="block w-full mt-1"
+                                        handleChange={onHandleChange}
+                                        required
+                                    />
+                                    <InputError message={errors.password_confirmation} className="mt-2" />
+                                </div>
+                            )
+                        }
 
                         {/* User is Admin */}
                         <div className="flex justify-between mt-4">
                             <InputLabel className="float-left font-bold text-gray-500">Administrator<InformationCircleIcon className="float-right w-5 h-5 ml-1 text-gray-300 cursor-pointer stroke-2 hover:stroke-1" onClick={(e) => {adminInfo()}} /></InputLabel>
                             <Toggle
-                                checked={isAdmin}
+                                checked={selectedUser ? data.isAdmin : isAdmin}
                                 className="flex align-right"
                                 onChange={(e) => confirmMakingUserAdmin(e.target.value)}
                             />
@@ -199,7 +222,7 @@ export default function Admin(props) {
 
                         <div className="flex items-center justify-end mt-4">
                             <PrimaryButton className="ml-4" processing={processing}>
-                                Create User
+                                Save
                             </PrimaryButton>
                             <SecondaryButton
                                 onClick={(e) => {closeModal()}}
