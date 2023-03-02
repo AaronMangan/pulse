@@ -94,6 +94,12 @@ export default function Admin(props) {
         closeModal();
     };
 
+    const updateUser = (e) => {
+        e.preventDefault();
+        post(route('admin.user.update', selectedUser.id));
+        closeModal();
+    };
+    
     return (
         <AuthenticatedLayout
             auth={props.auth}
@@ -135,7 +141,7 @@ export default function Admin(props) {
                         />
                         <hr className='mt-2 mb-2' />
                     </div>
-                    <form onSubmit={submit}>
+                    <form onSubmit={selectedUser ? updateUser : submit}>
                         {/* User Name */}
                         <div>
                             <InputLabel  className="font-bold" forInput="name" value="Name" />

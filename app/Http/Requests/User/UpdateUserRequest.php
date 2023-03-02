@@ -22,8 +22,8 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string|max:255|required|alpha_dash|unique:users,name',
-            'email' => 'email|required|unique:users,email',
+            'name' => 'string|max:255|required',
+            'email' => 'email|required',
             'isAdmin' => 'boolean|nullable'
         ];
     }
