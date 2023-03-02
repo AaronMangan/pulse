@@ -71,7 +71,7 @@ class UserManagementController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         //
-        $data = $request->safe()->only(['name', 'email']);
+        $data = $request->safe()->only(['name', 'email', 'isAdmin']);
         $updated = $user->update($data);
 
         $request->session()->flash(
