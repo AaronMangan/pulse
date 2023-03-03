@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Http\Requests\User\CreateUserRequest;
-use App\Http\Requests\User\UpdateUserRequest;
-use Illuminate\Auth\Events\Registered;
-use App\Providers\RouteServiceProvider;
+use App\Mail\NewUserMail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\NewUserMail;
- 
+use Illuminate\Auth\Events\Registered;
+use App\Providers\RouteServiceProvider;
+use App\Http\Requests\User\CreateUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
+use App\Http\Requests\User\ToggleUserStatusRequest;
+
 class UserManagementController extends Controller
 {
     /**
@@ -38,10 +39,10 @@ class UserManagementController extends Controller
     {
         //
         $validated = $request->safe()->only(['name', 'email', 'isAdmin', 'password', 'password_confirmation']);
-        
+
         $user = User::create($validated);
-        
-        if(isset($user->id) && isset($user->email)) {
+
+        if (isset($user->id) && isset($user->email)) {
             // Add notifications.
             $request->session()->flash('success', 'User was created successfully, and will receive a verification email');
             // Mail::to($user->email)->queue(new NewUserMail($user ?? []));
@@ -102,14 +103,33 @@ class UserManagementController extends Controller
         $as = $user->find($request->id);
 
         // If the admin can log in as the specified user.
-        if(Auth::user()->id != $as->id)
-        {
+        if (Auth::user()->id != $as->id) {
             Auth::login($as);
             return redirect(RouteServiceProvider::HOME);
-        }
-        else
-        {
+        } else {
             $request->session()->flash('error', 'You are already logged in!');
         }
+    }
+
+    /**
+     * Toggles the user status
+     *
+     * @param Request $request
+     * @param User $user
+     * @return void
+     */
+    public function toggleUserStatus(Request $request, User $user)
+    {
+        //
+        if (!isset($user->id)) {
+            $request->session()->flash('error', 'User was not found');
+            return redirect()->route('admin.index');
+        }
+
+        $user->status = ($user->status == 'active') ? 'inactive' : 'active';
+        $user->save();
+
+        $request->session()->flash('success', 'User was updated successfully!');
+        return redirect()->route('admin.index');
     }
 }

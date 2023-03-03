@@ -22,7 +22,7 @@ export default function Admin(props) {
     const [isAdmin, setIsAdmin] = useState(false);
     const [selectedUser, setSelectedUser] = useState(false);
     const [editCurrentUser, setEditCurrentUser] = useState('');
-    
+
     const showEditUserCallback = (user) => {
         setSelectedUser(user);
         data.name = user.name;
@@ -99,7 +99,7 @@ export default function Admin(props) {
         post(route('admin.user.update', selectedUser.id));
         closeModal();
     };
-    
+
     return (
         <AuthenticatedLayout
             auth={props.auth}
@@ -119,7 +119,7 @@ export default function Admin(props) {
                     )
                 }
             </div>
-            
+
             {/* Create a User Button */}
             <FloatButton
                 action={() => {setCreateNewUser(true)}}

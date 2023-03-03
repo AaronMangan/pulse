@@ -25,15 +25,21 @@ export default function UserCard({ user, callback }) {
                             </div>
                             <div className="w-full">
                                 <SmallText value="Last Login: " className="font-bold"/>
-                                <SmallText value={new Date(user.created_at).toLocaleDateString("en-AU")} className="font-thin"/>
+                                <SmallText value={
+                                    user.last_login !== null ? new Date(user.last_login).toLocaleDateString("en-AU") : 'N/A'
+                                } className="font-thin"/>
                             </div>
                             <div className="w-full">
                                 <SmallText value="User Level: " className="font-bold"/>
                                 <SmallText value={user.isAdmin ? 'Admin' : 'User'} className="font-thin"/>
                             </div>
                             <div className="w-full">
-                                <SmallText value="Verified: " className="font-bold"/>
-                                <SmallText value='Yes' className="font-thin"/>
+                                <SmallText value="Status: " className="font-bold"/>
+                                {
+                                    user.status == 'active' ?
+                                        <SmallText value='Active' className="font-thin bg-green-100 text-green-800 text-xs font-small px-1.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"/> :
+                                        <SmallText value='Inactive' className="font-thin bg-red-100 text-red-800 text-xs font-small px-1.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"/>
+                                }
                             </div>
                         </div>
                     </div>
@@ -62,10 +68,7 @@ export default function UserCard({ user, callback }) {
                                     </button>
                                 </span>
                             </Dropdown.Trigger>
-
-                            {/* Use href={route('project.edit')} when the routes have been added. */}
                             <Dropdown.Content>
-                                {/* <Dropdown.Link onClick={(e) => {showViewProjectModal(e, project)}}>View</Dropdown.Link> */}
                                 <a
                                     onClick={() => {selectedUserCallback(user)}}
                                     className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
@@ -77,12 +80,9 @@ export default function UserCard({ user, callback }) {
                                         project.status == 'active' ? 'Archive' : 'Restore'
                                     }
                                 </Dropdown.Link> */}
-                                <a
-                                    // onClick={() => {deleteProject(project)}}
-                                    className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
-                                >
-                                    Disable User
-                                </a>
+                                <Dropdown.Link href={route('admin.user.toggle', user.id)}  method="post" as="button">
+                                    { user.status == 'active' ? 'Disable User' : 'Activate User' }
+                                </Dropdown.Link>
                                 <Dropdown.Link href={route('admin.user.login', user)}  method="post" as="button">
                                     Login As User
                                 </Dropdown.Link>
