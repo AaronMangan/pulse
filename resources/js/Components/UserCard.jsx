@@ -1,6 +1,7 @@
 import { UserCircleIcon } from "./Icons/UserCircleIcon";
 import SmallText from "./SmallText";
 import Dropdown from "./Dropdown";
+import Badge from "./Badge";
 
 export default function UserCard({ user, callback }) {
     const selectedUserCallback = (user) => {
@@ -31,14 +32,24 @@ export default function UserCard({ user, callback }) {
                             </div>
                             <div className="w-full">
                                 <SmallText value="User Level: " className="font-bold"/>
-                                <SmallText value={user.isAdmin ? 'Admin' : 'User'} className="font-thin"/>
+                                {
+                                    user.isAdmin ?
+                                        (
+                                            <Badge value='Admin' type='custom' custom='purple' />
+                                        ) : (
+                                            <Badge value='User' type='default' />
+                                        )
+                                }
                             </div>
                             <div className="w-full">
                                 <SmallText value="Status: " className="font-bold"/>
                                 {
                                     user.status == 'active' ?
-                                        <SmallText value='Active' className="font-thin bg-green-100 text-green-800 text-xs font-small px-1.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"/> :
-                                        <SmallText value='Inactive' className="font-thin bg-red-100 text-red-800 text-xs font-small px-1.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"/>
+                                    (
+                                        <Badge value='Active' type='success' />
+                                    ) : (
+                                        <Badge value='Inactive' type='danger' />
+                                    )
                                 }
                             </div>
                         </div>

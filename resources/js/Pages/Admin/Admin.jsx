@@ -23,20 +23,29 @@ export default function Admin(props) {
     const [selectedUser, setSelectedUser] = useState(false);
     const [editCurrentUser, setEditCurrentUser] = useState('');
 
+    /**
+     * Shows the Create User modal.
+     * @param {Object} user
+     */
     const showEditUserCallback = (user) => {
         setSelectedUser(user);
         data.name = user.name;
         data.email = user.email;
         data.isAdmin = (user.isAdmin) ? true : false;
         setCreateNewUser(true);
-    };
-
-    // Close the modal.
-    const closeModal = () => {
-        setCreateNewUser(false);
         reset();
     };
 
+    // Closes the modal.
+    const closeModal = () => {
+        setCreateNewUser(false);
+        reset();
+        setSelectedUser(false);
+    };
+
+    /**
+     * Form Data.
+     */
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
@@ -45,16 +54,26 @@ export default function Admin(props) {
         password_confirmation: '',
     });
 
+    /**
+     * Effects.
+     */
     useEffect(() => {
         return () => {
             reset('name', 'email', 'isAdmin');
         };
     }, []);
 
+    /**
+     * When an input is changed, update the values.
+     * @param {*} event
+     */
     const onHandleChange = (event) => {
         setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
     };
 
+    /**
+     * Shows the dialog that provides info about what an administrator can do in Pulse.
+     */
     const adminInfo = () => {
         Swal.fire(
             'Administration Rights',
@@ -63,6 +82,10 @@ export default function Admin(props) {
         )
     }
 
+    /**
+     * Asks the user to confirm making the user an admin.
+     * @param {*} value
+     */
     const confirmMakingUserAdmin = (value) => {
         if(!isAdmin) {
             Swal.fire({
@@ -71,7 +94,6 @@ export default function Admin(props) {
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#202226',
-                // cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes'
               }).then((result) => {
                 if (result.isConfirmed) {
@@ -87,6 +109,10 @@ export default function Admin(props) {
         }
     };
 
+    /**
+     * Submits the form.
+     * @param {Object} e
+     */
     const submit = (e) => {
         e.preventDefault();
 
@@ -94,6 +120,10 @@ export default function Admin(props) {
         closeModal();
     };
 
+    /**
+     * Makes the API call to update the user.
+     * @param {Object} e Events
+     */
     const updateUser = (e) => {
         e.preventDefault();
         post(route('admin.user.update', selectedUser.id));
