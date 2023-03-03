@@ -75,11 +75,6 @@ export default function UserCard({ user, callback }) {
                                 >
                                     Edit User
                                 </a>
-                                {/* <Dropdown.Link href={route('projects.archive', project)}  method="post" as="button">
-                                    {
-                                        project.status == 'active' ? 'Archive' : 'Restore'
-                                    }
-                                </Dropdown.Link> */}
                                 <Dropdown.Link href={route('admin.user.toggle', user.id)}  method="post" as="button">
                                     { user.status == 'active' ? 'Disable User' : 'Activate User' }
                                 </Dropdown.Link>

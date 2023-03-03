@@ -113,7 +113,6 @@ Route::middleware(['auth', 'verified', /* 'admin' */])->group(function () {
     Route::get('/admin', [UserManagementController::class, 'index'])->name('admin.index');
     Route::post('/user/create', [UserManagementController::class, 'store'])->name('admin.user.create');
     Route::post('/user/update/{user}', [UserManagementController::class, 'update'])->name('admin.user.update');
-    // Route::post('/user/archive/{id}', [UserManagementController::class, 'archive'])->name('admin.user.archive');
     Route::post('/user/login/{id}', [UserManagementController::class, 'loginAs'])->name('admin.user.login');
     Route::post('/user/status/{user}/toggle', [UserManagementController::class, 'toggleUserStatus'])->name('admin.user.toggle');
 });
