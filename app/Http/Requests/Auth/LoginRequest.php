@@ -49,6 +49,17 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // Make sure that the user is active. Once deactivated the user will not be able to log in.
+        if (Auth::user()->status !== 'active') {
+            // Log the user out immediately
+            Auth::logout();
+            throw ValidationException::withMessages([
+                'email' => 'This user has been deactivated. Please contact your administrator to restore.',
+            ]);
+        }
+
+        Auth::user()->last_login = date('Y-m-d', time());
+        Auth::user()->save();
         RateLimiter::clear($this->throttleKey());
     }
 
