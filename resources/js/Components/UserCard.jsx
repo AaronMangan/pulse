@@ -1,40 +1,62 @@
 import { UserCircleIcon } from "./Icons/UserCircleIcon";
 import SmallText from "./SmallText";
 import Dropdown from "./Dropdown";
+import Badge from "./Badge";
 
-export default function UserCard({ user }) {
+export default function UserCard({ user, callback }) {
+    const selectedUserCallback = (user) => {
+        callback(user);
+    };
     return (
-        <div className="p-2 mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
-            <div className="p-2 bg-white shadow sm:p-8 sm:rounded-lg">
-                <div className="flex inline-block p-0 m-0 d-flex">
+        <div className="w-full px-24 py-2">
+            <div className="p-6 bg-white rounded-lg shadow">
+                <div className="grid inline-block grid-cols-8 p-0 m-0">
                     {/* Icon & Heading */}
-                    <div className="inline-flex w-1/4">
+                    <div className="inline-flex w-full col-span-2">
                         <UserCircleIcon className="flex justify-center w-12 h-auto text-gray-500 place-items-center dark:text-gray-400"/>
                         <h4 className="flex items-center justify-center ml-2 text-2xl font-bold text-gray-500">{user.name}</h4>
                     </div>
 
                     {/* User Details */}
-                    <div className="grid w-3/4 w-full grid-cols-2 gap-2 px-2 pl-6 pr-12 bg-white">
-                        <div className="w-full">
-                            <SmallText value="Email: " className="font-bold"/>
-                            <SmallText value={user.email} className="font-thin"/>
-                        </div>
-                        <div className="w-full">
-                            <SmallText value="Last Login: " className="font-bold"/>
-                            <SmallText value={new Date(user.created_at).toLocaleDateString("en-AU")} className="font-thin"/>
-                        </div>
-                        <div className="w-full">
-                            <SmallText value="User Level: " className="font-bold"/>
-                            <SmallText value={user.isAdmin ? 'Admin' : 'User'} className="font-thin"/>
-                        </div>
-                        <div className="w-full">
-                            <SmallText value="Verified: " className="font-bold"/>
-                            <SmallText value='Yes' className="font-thin"/>
+                    <div className="col-span-5"> {/* This div is used to control the parent grid */}
+                        <div className="grid w-full grid-cols-2 gap-2 px-2 pl-6 pr-12 bg-white">
+                            <div className="w-full">
+                                <SmallText value="Email: " className="font-bold"/>
+                                <SmallText value={user.email} className="font-thin"/>
+                            </div>
+                            <div className="w-full">
+                                <SmallText value="Last Login: " className="font-bold"/>
+                                <SmallText value={
+                                    user.last_login !== null ? new Date(user.last_login).toLocaleDateString("en-AU") : 'N/A'
+                                } className="font-thin"/>
+                            </div>
+                            <div className="w-full">
+                                <SmallText value="User Level: " className="font-bold"/>
+                                {
+                                    user.isAdmin ?
+                                        (
+                                            <Badge value='Admin' type='custom' custom='purple' />
+                                        ) : (
+                                            <Badge value='User' type='default' />
+                                        )
+                                }
+                            </div>
+                            <div className="w-full">
+                                <SmallText value="Status: " className="font-bold"/>
+                                {
+                                    user.status == 'active' ?
+                                    (
+                                        <Badge value='Active' type='success' />
+                                    ) : (
+                                        <Badge value='Inactive' type='danger' />
+                                    )
+                                }
+                            </div>
                         </div>
                     </div>
 
                     {/* Dropdown */}
-                    <div className="float-right w-1/4 h-4 mt-2">
+                    <div className="flex items-center justify-end col-span-1">
                         <Dropdown className="float-right">
                             <Dropdown.Trigger>
                                 <span className="inline-flex rounded-md">
@@ -57,27 +79,16 @@ export default function UserCard({ user }) {
                                     </button>
                                 </span>
                             </Dropdown.Trigger>
-
-                            {/* Use href={route('project.edit')} when the routes have been added. */}
                             <Dropdown.Content>
-                                {/* <Dropdown.Link onClick={(e) => {showViewProjectModal(e, project)}}>View</Dropdown.Link> */}
                                 <a
-                                    // onClick={() => {showEditProjectModal(project)}}
+                                    onClick={() => {selectedUserCallback(user)}}
                                     className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                                 >
                                     Edit User
                                 </a>
-                                {/* <Dropdown.Link href={route('projects.archive', project)}  method="post" as="button">
-                                    {
-                                        project.status == 'active' ? 'Archive' : 'Restore'
-                                    }
-                                </Dropdown.Link> */}
-                                <a
-                                    // onClick={() => {deleteProject(project)}}
-                                    className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
-                                >
-                                    Disable User
-                                </a>
+                                <Dropdown.Link href={route('admin.user.toggle', user.id)}  method="post" as="button">
+                                    { user.status == 'active' ? 'Disable User' : 'Activate User' }
+                                </Dropdown.Link>
                                 <Dropdown.Link href={route('admin.user.login', user)}  method="post" as="button">
                                     Login As User
                                 </Dropdown.Link>
@@ -86,8 +97,6 @@ export default function UserCard({ user }) {
                     </div>
                 </div>
             </div>
-
-            {/* Create / Edit User Modal */}
         </div>
     );
 }
