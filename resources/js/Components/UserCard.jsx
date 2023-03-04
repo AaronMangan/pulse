@@ -1,3 +1,13 @@
+/**
+ * User Card Component
+ * This component is displayed in the Admin section as a list of users. Each user gets its own card
+ * generated, with dropdown, stats, etc.
+ *
+ * @returns A User Card component with sub-elements.
+ * @author Aaron Mangan
+ * @when 2023
+ */
+
 import { UserCircleIcon } from "./Icons/UserCircleIcon";
 import SmallText from "./SmallText";
 import Dropdown from "./Dropdown";

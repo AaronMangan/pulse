@@ -15,13 +15,6 @@ export default function Welcome(props) {
                             <Link href={route('login')} className="text-sm text-gray-700 underline dark:text-gray-500">
                                 Log in
                             </Link>
-
-                            {/* <Link
-                                href={route('register')}
-                                className="ml-4 text-sm text-gray-700 underline dark:text-gray-500"
-                            >
-                                Register
-                            </Link> */}
                         </>
                     )}
                 </div>
