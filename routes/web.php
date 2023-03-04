@@ -11,6 +11,7 @@ use App\Http\Controllers\RevisionController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ProjectSettingsController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\UserManagementController;
 use Inertia\Inertia;
 
 /*
@@ -52,7 +53,7 @@ Route::middleware('auth')->group(function () {
 /**
  * Project Routes.
  */
-Route::middleware(['auth', 'verified'])->group(function() {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::post('/projects/create', [ProjectController::class, 'store'])->name('projects.create');
     Route::post('/projects/update/{id}', [ProjectController::class, 'update'])->name('projects.update');
@@ -64,7 +65,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
  * Settings Routes.
  * TODO: Let's split these into their own groups eventually. We can then make finer-grain permissions.
  */
-Route::middleware(['auth', 'verified'])->group(function() {
+Route::middleware(['auth', 'verified'])->group(function () {
     // Return the setup index. This shows types, revisions, etc.
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
 
@@ -79,13 +80,13 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::post('/settings/status/archive/{status}', [StatusController::class, 'archive'])->name('settings.status.archive');
     Route::post('/settings/status/update/{status}', [StatusController::class, 'update'])->name('settings.status.update');
     Route::delete('/settings/status/delete/{status}', [StatusController::class, 'destroy'])->name('settings.status.delete');
-    
+
     // Disciplines CRUD Routes.
     Route::post('/settings/discipline/archive/{discipline}', [DisciplineController::class, 'archive'])->name('settings.discipline.archive');
     Route::post('/settings/discipline', [DisciplineController::class, 'store'])->name('settings.discipline.create');
     Route::post('/settings/discipline/update/{discipline}', [DisciplineController::class, 'update'])->name('settings.discipline.update');
     Route::delete('/settings/discipline/delete/{discipline}', [DisciplineController::class, 'destroy'])->name('settings.discipline.delete');
-    
+
     // Types CRUD Routes,
     Route::post('/settings/type/archive/{type}', [TypeController::class, 'archive'])->name('settings.type.archive');
     Route::post('/settings/type', [TypeController::class, 'store'])->name('settings.type.create');
@@ -96,7 +97,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
 /**
  * Individual Project Settings Routes.
  */
-Route::middleware(['auth', 'verified'])->group(function(){
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/projects/{id}/settings', [ProjectSettingsController::class, 'index'])->name('projects.settings.get');
     Route::post('/projects/{id}/settings', [ProjectSettingsController::class, 'store'])->name('projects.settings.save');
 });
@@ -104,10 +105,17 @@ Route::middleware(['auth', 'verified'])->group(function(){
 /**
  * History Routes
  */
-Route::middleware(['auth', 'verified'])->group(function(){
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
 });
 
+Route::middleware(['auth', 'verified', /* 'admin' */])->group(function () {
+    Route::get('/admin', [UserManagementController::class, 'index'])->name('admin.index');
+    Route::post('/user/create', [UserManagementController::class, 'store'])->name('admin.user.create');
+    Route::post('/user/update/{user}', [UserManagementController::class, 'update'])->name('admin.user.update');
+    Route::post('/user/login/{id}', [UserManagementController::class, 'loginAs'])->name('admin.user.login');
+    Route::post('/user/status/{user}/toggle', [UserManagementController::class, 'toggleUserStatus'])->name('admin.user.toggle');
+});
 
 
 // Used by authentication.

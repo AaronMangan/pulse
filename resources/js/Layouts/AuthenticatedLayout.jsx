@@ -23,7 +23,7 @@ export default function Authenticated({ auth, header, children, footer, flash })
     };
     return (
         <div className="min-h-screen bg-gray-100">
-            <NavBar />
+            <NavBar auth={auth}/>
             {/* Flash Messages */}
             {flash.success && (
                 // Show any flashed message to the session
