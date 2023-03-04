@@ -14,7 +14,7 @@ trait WritesEvents
             return;
         }
         $date = date('d-m-Y @ H:i:s', time());
-        $text = ($level == 'user') ? "{$user->name} on {$date}" : "system on {$date}";
+        $text = ($level == 'user') ? "{$name} on {$date}" : "system on {$date}";
         $what = $model->code ?? $model->name ?? $model->revision ?? '';
         History::create([
             'model' => $model::class,
