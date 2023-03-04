@@ -33,7 +33,7 @@ class UserObserver
     public function deleted(User $user): void
     {
         //
-        $this->write($user, 'deleted', 'user');
+        // $this->write($user, 'deleted', 'user');
     }
 
     /**
@@ -51,6 +51,6 @@ class UserObserver
     public function forceDeleted(User $user): void
     {
         //
-        $this->write($user, 'force deleted', 'user');
+        // $this->write($user, 'force deleted', 'user');
     }
 }
