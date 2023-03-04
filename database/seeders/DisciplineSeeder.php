@@ -47,7 +47,7 @@ class DisciplineSeeder extends Seeder
             $model = new Discipline($discipline);
             $model->created_at = date('Y-m-d H:i:s', time());
             $model->updated_at = date('Y-m-d H:i:s', time());
-            $model->save();
+            $model->saveQuietly();
         }
     }
 }

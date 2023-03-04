@@ -53,7 +53,7 @@ class RevisionSeeder extends Seeder
                 'created_at' => date('Y-m-d H:i:s', time()) ?? '2023-02-03 22:31:58', // yyyy-mm-dd hh:mm:ss
                 'updated_at' => date('Y-m-d H:i:s', time()) ?? '2023-02-03 22:31:58', // yyyy-mm-dd hh:mm:ss
             ]);
-            $model->save();
+            $model->saveQuietly();
         }
     }
 }

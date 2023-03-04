@@ -15,12 +15,13 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         if(env('APP_ENV') === 'local'){
-            \App\Models\User::create([
+            $user = new \App\Models\User([
                 'name' => 'Aaron Mangan',
                 'email' => 'azza.mangan@gmail.com',
                 'email_verified_at' => '2023-02-03 22:31:58',
                 'password' => '$2y$10$Va/KW5rmRpOW5gKROSc3SeZYd3PmhQ9FGQNaXOsrqDdfIatfa01Ye',
             ]);
+            $user->saveQuietly();
             $this->call(RevisionSeeder::class);
             $this->call(StatusSeeder::class);
             $this->call(ProjectSeeder::class);
