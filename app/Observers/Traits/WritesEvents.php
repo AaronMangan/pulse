@@ -9,7 +9,10 @@ trait WritesEvents
 {
     protected function write(Model $model, string $event = 'created', ?string $level = 'user')
     {
-        $user = \Auth::user();
+        $user = \Auth::user() ?? false;
+        if (!$user) {
+            return;
+        }
         $date = date('d-m-Y @ H:i:s', time());
         $text = ($level == 'user') ? "{$user->name} on {$date}" : "system on {$date}";
         $what = $model->code ?? $model->name ?? $model->revision ?? '';

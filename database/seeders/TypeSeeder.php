@@ -51,7 +51,9 @@ class TypeSeeder extends Seeder
         if(env('APP_ENV') == 'local') {
             foreach($this->types as $type)
             {
-                Type::create($type);
+                // Type::create($type);
+                $type = new Type($type);
+                $type->saveQuietly();
             }
         }
     }

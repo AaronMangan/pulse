@@ -8,6 +8,7 @@ use App\Mail\NewUserMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use App\Providers\RouteServiceProvider;
 use App\Http\Requests\User\CreateUserRequest;
@@ -40,15 +41,22 @@ class UserManagementController extends Controller
     {
         // Get the safe data to use when making a user.
         $validated = $request->safe()->only(['name', 'email', 'isAdmin', 'password', 'password_confirmation']);
+        $validated['status'] = 'active';
 
         // Create the user.
-        $user = User::create($validated);
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'isAdmin' => $validated['isAdmin'],
+        ]);
+        event(new Registered($user));
 
         // If a user was created, add the notifications. Both a flash msg and an email are created.
         if (isset($user->id) && isset($user->email)) {
             // Add notifications.
             $request->session()->flash('success', 'User was created successfully, and will receive a verification email');
-            Mail::to($user->email)->queue(new NewUserMail($user ?? []));
+            // Mail::to($user->email)->queue(new NewUserMail($user ?? []));
         }
         return redirect()->route('admin.index');
     }

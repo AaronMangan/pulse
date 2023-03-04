@@ -17,10 +17,10 @@ class ProjectSettingsController extends Controller
     public function index(Request $request, int $id)
     {
         $settings = ProjectSettings::where('project_id', $id)->first(['id', 'settings']) ?? null;
-        if(!is_null($settings)){
+        if (!is_null($settings)) {
             $settings = $settings->toArray();
         }
-        if(!isset($settings['settings'])) {
+        if (!isset($settings['settings'])) {
             $settings = [
                 'manualNumbering' => false,
                 'enforceUploads' => false,
@@ -51,10 +51,21 @@ class ProjectSettingsController extends Controller
     {
         //
         $validated = $request->safe()->only(['manualNumbering', 'enforceUploads', 'numberFormat']);
-        $projectSettings = ProjectSettings::findOrFail($id);
-        
-        $projectSettings->settings = $validated;
-        $saved = $projectSettings->save();
+        $projectSettings = ProjectSettings::find($id);
+
+        if (isset($projectSettings->id)) {
+            $projectSettings->settings = $validated;
+            $saved = $projectSettings->save();
+        } else {
+            $projectSettings = ProjectSettings::create([
+                'project_id' => $id,
+                'settings' => [
+                    'manualNumbering' => $validated['manualNumbering'] ?? false,
+                    'enforceUploads' => $validated['enforceUploads'] ?? false,
+                    'numberFormat' => $validated['numberFormat'] ?? '[project]-[type]-[discipline]-[id]',
+                ]
+            ]);
+        }
 
         return redirect()->route('projects.index');
     }
@@ -67,7 +78,7 @@ class ProjectSettingsController extends Controller
      */
     public function show(ProjectSettings $projectSettings)
     {
-        // 
+        //
     }
 
     /**
