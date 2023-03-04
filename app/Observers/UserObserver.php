@@ -15,7 +15,7 @@ class UserObserver
     public function created(User $user): void
     {
         //
-        $this->write($user, 'created', 'system');
+        $this->write($user, 'created', 'user');
     }
 
     /**
@@ -24,7 +24,7 @@ class UserObserver
     public function updated(User $user): void
     {
         //
-        $this->write($user, 'updated', 'system');
+        $this->write($user, 'updated', 'user');
     }
 
     /**
@@ -33,7 +33,7 @@ class UserObserver
     public function deleted(User $user): void
     {
         //
-        $this->write($user, 'deleted', 'system');
+        $this->write($user, 'deleted', 'user');
     }
 
     /**
@@ -42,7 +42,7 @@ class UserObserver
     public function restored(User $user): void
     {
         //
-        $this->write($user, 'restored', 'system');
+        $this->write($user, 'restored', 'user');
     }
 
     /**
@@ -51,6 +51,6 @@ class UserObserver
     public function forceDeleted(User $user): void
     {
         //
-        $this->write($user, 'force deleted', 'system');
+        $this->write($user, 'force deleted', 'user');
     }
 }
