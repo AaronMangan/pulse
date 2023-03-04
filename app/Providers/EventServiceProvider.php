@@ -16,6 +16,8 @@ use App\Models\Type;
 use App\Observers\TypeObserver;
 use App\Models\Revision;
 use App\Observers\RevisionObserver;
+use App\Models\User;
+use App\Observers\UserObserver;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -41,6 +43,7 @@ class EventServiceProvider extends ServiceProvider
         Discipline::class => [DisciplineObserver::class],
         Type::class => [TypeObserver::class],
         Revision::class => [RevisionObserver::class],
+        User::class => [UserObserver::class],
     ];
 
     /**

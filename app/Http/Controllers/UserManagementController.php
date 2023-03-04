@@ -40,15 +40,17 @@ class UserManagementController extends Controller
     {
         // Get the safe data to use when making a user.
         $validated = $request->safe()->only(['name', 'email', 'isAdmin', 'password', 'password_confirmation']);
+        $validated['status'] = 'active';
 
         // Create the user.
         $user = User::create($validated);
+        event(new Registered($user));
 
         // If a user was created, add the notifications. Both a flash msg and an email are created.
         if (isset($user->id) && isset($user->email)) {
             // Add notifications.
             $request->session()->flash('success', 'User was created successfully, and will receive a verification email');
-            Mail::to($user->email)->queue(new NewUserMail($user ?? []));
+            // Mail::to($user->email)->queue(new NewUserMail($user ?? []));
         }
         return redirect()->route('admin.index');
     }

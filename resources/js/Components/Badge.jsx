@@ -6,7 +6,7 @@ import SmallText from "./SmallText";
  * @param {*} props type: The type of badge to make | value: What is written on the badge | custom: If you want to use a custom color specify it here. The type must also be 'custom'.
  * @returns
  */
-export default function Badge({ type, value, custom = '' }) {
+export default function Badge({ type, value, custom = 'info' }) {
     const whichType = () => {
         switch(type) {
             case 'default':
@@ -24,7 +24,7 @@ export default function Badge({ type, value, custom = '' }) {
             case 'custom':
                 return custom;
             default:
-                return 'purple';
+                return 'gray';
         }
     };
     return (

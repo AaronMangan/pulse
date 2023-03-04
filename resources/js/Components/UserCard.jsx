@@ -35,9 +35,9 @@ export default function UserCard({ user, callback }) {
                                 {
                                     user.isAdmin ?
                                         (
-                                            <Badge value='Admin' type='custom' custom='purple' />
+                                            <Badge value='Admin' type='warning' />
                                         ) : (
-                                            <Badge value='User' type='default' />
+                                            <Badge value='User' type='info' />
                                         )
                                 }
                             </div>
