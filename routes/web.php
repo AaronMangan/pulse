@@ -1,18 +1,19 @@
 <?php
 
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\TypeController;
+use App\Http\Controllers\StatusController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TypeController;
-use App\Http\Controllers\DisciplineController;
-use App\Http\Controllers\StatusController;
+use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\RevisionController;
 use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\ProjectSettingsController;
-use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\DisciplineController;
 use App\Http\Controllers\UserManagementController;
-use Inertia\Inertia;
+use App\Http\Controllers\ProjectSettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,7 +70,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Return the setup index. This shows types, revisions, etc.
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
 
-    // Revisions CRUD Routes
+    // Revisions CRUD Routes.
     Route::post('/settings/revision', [RevisionController::class, 'store'])->name('settings.revision.create');
     Route::post('/settings/revision/archive/{revision}', [RevisionController::class, 'archive'])->name('settings.revision.archive');
     Route::post('/settings/revision/update/{revision}', [RevisionController::class, 'update'])->name('settings.revision.update');
@@ -87,7 +88,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/settings/discipline/update/{discipline}', [DisciplineController::class, 'update'])->name('settings.discipline.update');
     Route::delete('/settings/discipline/delete/{discipline}', [DisciplineController::class, 'destroy'])->name('settings.discipline.delete');
 
-    // Types CRUD Routes,
+    // Types CRUD Routes.
     Route::post('/settings/type/archive/{type}', [TypeController::class, 'archive'])->name('settings.type.archive');
     Route::post('/settings/type', [TypeController::class, 'store'])->name('settings.type.create');
     Route::post('/settings/type/update/{type}', [TypeController::class, 'update'])->name('settings.type.update');
@@ -103,12 +104,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 /**
- * History Routes
+ * History Routes.
  */
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
 });
 
+/**
+ * User Management Routes.
+ */
 Route::middleware(['auth', 'verified', /* 'admin' */])->group(function () {
     Route::get('/admin', [UserManagementController::class, 'index'])->name('admin.index');
     Route::post('/user/create', [UserManagementController::class, 'store'])->name('admin.user.create');
@@ -117,6 +121,13 @@ Route::middleware(['auth', 'verified', /* 'admin' */])->group(function () {
     Route::post('/user/status/{user}/toggle', [UserManagementController::class, 'toggleUserStatus'])->name('admin.user.toggle');
 });
 
+/**
+ * Document Routes.
+ */
+Route::middleware(['auth', 'verified'])->group(function () {
+    //
+    Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+});
 
 // Used by authentication.
 require __DIR__.'/auth.php';

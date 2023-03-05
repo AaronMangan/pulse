@@ -8,55 +8,55 @@ export default function Dashboard(props) {
     const getChildren = () => {
         return (
             <div className="grid grid-cols-1 gap-4 px-2 pr-12 bg-gray-100 max-w-screen md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-                <GridItem 
+                <GridItem
                     title="Documents"
                     blurb="Manage your documents"
-                    href="#"
+                    href="documents"
                     icon="document"
                     className="invisible hidden md:visible md:block"
                 />
-                <GridItem 
+                <GridItem
                     title="Transmittals"
                     blurb="Send and receive documents to other parties"
                     href="#"
                     icon='plane'
                     className="invisible hidden md:visible md:block"
                 />
-                <GridItem 
+                <GridItem
                     title="Projects"
                     blurb="Manage your projects"
                     href="projects"
                     icon="project"
                     className="invisible hidden md:visible md:block"
                 />
-                <GridItem 
+                <GridItem
                     title="History"
                     blurb="Review the history of your documents and more"
                     href="history"
                     icon="history"
                     className="invisible hidden md:visible md:block"
                 />
-                <GridItem 
+                <GridItem
                     title="Reports"
                     blurb="Discover how you use your documents"
                     href="#"
                     icon="reports"
                     className="invisible hidden md:visible md:block"
                 />
-                <GridItem 
+                <GridItem
                     title="Settings"
                     blurb="Modify your settings"
                     href="settings"
                     icon="settings"
                     className="invisible hidden md:visible md:block"
                 />
-                <GridItem 
+                <GridItem
                     title="Profile"
                     blurb="Manage and update your user profile"
                     href="profile"
                     icon="user"
                 />
-                <GridItem 
+                <GridItem
                     title="Admin"
                     blurb="Perform Administration Tasks like creating Users"
                     href={route('admin.index')}
