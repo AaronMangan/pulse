@@ -16,7 +16,7 @@ class DocumentController extends Controller
     {
         //
         return Inertia::render('Documents/Documents', [
-            'documents' => \App\Models\Document::all()
+            'documents' => \App\Models\Document::with(['type', 'discipline', 'revision', 'status'])->get()
         ]);
     }
 

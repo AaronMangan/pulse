@@ -3,11 +3,16 @@ import NoData from '@/Components/NoData';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { useRef, useState } from 'react';
 import FloatButton from '@/Components/FloatButton';
+import DocumentCard from '@/Components/DocumentCard';
 
 export default function Documents(props) {
+    console.log(props.documents);
     const hasData = props.documents.length ? true : false;
     const [createNewDocument, setCreateNewDocument] = useState(false);
-
+    const [selectedDocument, setSelectedDocument] = useState(false);
+    const selectedDocumentCallback = (document) => {
+        setSelectedDocument(document);
+    };
     return (
         <AuthenticatedLayout
             auth={props.auth}
@@ -19,7 +24,7 @@ export default function Documents(props) {
                     hasData ? (
                         <>
                             {props.documents.map(document => (
-                                <h2 className="font-bold">{document.number}</h2>
+                                <DocumentCard key={document.id} document={document} callback={selectedDocumentCallback}/>
                             ))}
                         </>
                     ) : (
@@ -30,7 +35,7 @@ export default function Documents(props) {
 
             {/* Create a User Button */}
             <FloatButton
-                action={() => {setCreateNewUser(true)}}
+                action={() => {setCreateNewDocument(true)}}
             />
         </AuthenticatedLayout>
     );
