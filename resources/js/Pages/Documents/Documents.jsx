@@ -6,7 +6,6 @@ import FloatButton from '@/Components/FloatButton';
 import DocumentCard from '@/Components/DocumentCard';
 
 export default function Documents(props) {
-    console.log(props.documents);
     const hasData = props.documents.length ? true : false;
     const [createNewDocument, setCreateNewDocument] = useState(false);
     const [selectedDocument, setSelectedDocument] = useState(false);

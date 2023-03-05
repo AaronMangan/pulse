@@ -20,32 +20,15 @@ export default function DocumentCard({ document, callback }) {
         <div className="w-full px-24 py-2">
             <div className="p-6 bg-white rounded-lg shadow">
                 <div className="grid inline-block grid-cols-8 p-0 m-0">
-                    {/* Icon & Heading */}
+                    {/* Icon & Doc Number */}
                     <div className="inline-flex w-full col-span-2">
                         <ApplicationLogo className="flex justify-center w-12 h-auto text-gray-500 place-items-center dark:text-gray-400"/>
                         <h4 className="flex items-center justify-center ml-2 text-2xl font-bold text-gray-500">{document.number}</h4>
                     </div>
 
-                    {/* User Details */}
-                    <div className="col-span-5"> {/* This div is used to control the parent grid */}
-                        <div className="grid w-full grid-cols-2 gap-2 px-2 pl-6 pr-12 bg-white">
-                            <div className="w-full">
-                                <SmallText value="Type: " className="font-bold"/>
-                                <SmallText value={document.type.name} className="font-thin"/>
-                            </div>
-                            <div className="w-full">
-                                <SmallText value="Discipline: " className="font-bold"/>
-                                <SmallText value={document.discipline.name} className="font-thin"/>
-                            </div>
-                            <div className="w-full">
-                                <SmallText value="Revision: " className="font-bold"/>
-                                <SmallText value={document.revision.name} className="font-thin"/>
-                            </div>
-                            <div className="w-full">
-                                <SmallText value="Status: " className="font-bold"/>
-                                <SmallText value={document.status.name} className="font-thin"/>
-                            </div>
-                        </div>
+                    {/* Description */}
+                    <div className="inline-flex w-full col-span-5">
+                        <h4 className="flex items-center justify-center ml-2 text-xl font-thin text-gray-500">{document.description}</h4>
                     </div>
 
                     {/* Dropdown */}
