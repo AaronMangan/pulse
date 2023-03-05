@@ -16,4 +16,14 @@ class Revision extends Model
     protected $visible = [
         'id', 'name', 'status', 'description', 'created_at', 'updated_at'
     ];
+
+    /**
+     * Return the documents associated with this revision.
+     *
+     * @return HasMany
+     */
+    public function documents(): HasMany
+    {
+        return $this->hasMany(\App\Models\Document::class);
+    }
 }

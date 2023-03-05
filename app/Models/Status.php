@@ -16,4 +16,14 @@ class Status extends Model
     protected $visible = [
         'id', 'name', 'code', 'status', 'description', 'created_at', 'updated_at'
     ];
+
+    /**
+     * Return the documents associated with this status.
+     *
+     * @return HasMany
+     */
+    public function documents(): HasMany
+    {
+        return $this->hasMany(\App\Models\Document::class);
+    }
 }
