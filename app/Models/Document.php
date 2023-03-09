@@ -17,7 +17,7 @@ class Document extends Model
      * @var array
      */
     protected $fillable = [
-        'number', 'description', 'project_id', 'type_id', 'discipline_id',
+        'number', 'title', 'description', 'project_id', 'type_id', 'discipline_id',
         'status_id', 'revision_id', 'attachment_id', 'state', 'latest', 'metadata',
         'created_at', 'updated_at', 'created_by', 'last_updated_by'
     ];

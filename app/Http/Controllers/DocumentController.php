@@ -16,7 +16,11 @@ class DocumentController extends Controller
     {
         //
         return Inertia::render('Documents/Documents', [
-            'documents' => \App\Models\Document::with(['type', 'discipline', 'revision', 'status'])->get()
+            'documents' => \App\Models\Document::with(['type', 'discipline', 'revision', 'status'])->get(),
+            'types' => \App\Models\Type::where('status', 'active')->get(),
+            'disciplines' => \App\Models\Discipline::where('status', 'active')->get(['id', 'code', 'name']),
+            'revisions' => \App\Models\Revision::where('status', 'active')->get(['id', 'name']),
+            'statuses' => \App\Models\Status::where('status', 'active')->get(['id', 'code', 'name']),
         ]);
     }
 
