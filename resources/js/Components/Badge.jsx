@@ -10,17 +10,35 @@ export default function Badge({ className, type, value, custom = 'info' }) {
     const whichType = (type) => {
         switch(type) {
             case 'default':
-                return 'info';
+                return {
+                    bg: 'info',
+                    text: 'gray-500'
+                };
             case 'success':
-                return 'success';
+                return {
+                    bg: 'success',
+                    text: 'white',
+                };
             case 'info':
-                return 'info';
+                return {
+                    bg: 'info',
+                    text: 'gray-500',
+                };
             case 'warning':
-                return 'warning';
+                return {
+                    bg: 'warning',
+                    text: 'gray-900',
+                };
             case 'danger':
-                return 'danger';
+                return {
+                    bg: 'danger',
+                    text: 'white',
+                };
             case 'error':
-                return 'error';
+                return {
+                    bg: 'danger',
+                    text: 'white',
+                };
             case 'custom':
                 return {custom};
             default:
@@ -28,6 +46,6 @@ export default function Badge({ className, type, value, custom = 'info' }) {
         }
     };
     return (
-        <SmallText value={value} className={`h-5 bg-${whichType(type)} text-white text-xs font-bold px-1.5 py-0.5 rounded dark:bg-${whichType(type)} dark:text-${whichType(type)} ${className}`} />
+        <SmallText value={value} className={`h-5 bg-${whichType(type).bg} text-white text-xs font-bold px-1.5 py-0.5 rounded dark:bg-${whichType(type).bg} dark:text-${whichType(type).text} ${className}`} />
     );
 }
