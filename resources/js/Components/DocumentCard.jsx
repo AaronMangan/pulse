@@ -22,8 +22,15 @@ export default function DocumentCard({ document, callback }) {
                 <div className="grid inline-block grid-cols-8 p-0 m-0">
                     {/* Icon & Doc Number */}
                     <div className="inline-flex w-full col-span-2">
-                        <ApplicationLogo className="flex justify-center w-12 h-auto text-gray-500 place-items-center dark:text-gray-400"/>
+                        <ApplicationLogo className="flex justify-center w-12 h-auto text-primary place-items-center dark:text-gray-400"/>
                         <h4 className="flex items-center justify-center ml-2 text-2xl font-bold text-gray-500">{document.number}</h4>
+                        {
+                            document.state == 'active' ? (
+                                <Badge type='success' value='Active' className='items-center justify-center mt-4 ml-4'/>
+                            ) : (
+                                <Badge type='warning' value='Inactive' className='items-center justify-center mt-4 ml-4'/>
+                            )
+                        }
                     </div>
 
                     {/* Description */}
@@ -38,7 +45,7 @@ export default function DocumentCard({ document, callback }) {
                                 <span className="inline-flex rounded-md">
                                     <button
                                         type="button"
-                                        className="items-center hidden px-3 py-2 text-sm font-medium leading-4 text-white transition duration-150 ease-in-out bg-gray-600 border border-transparent rounded-md md:inline-flex hover:text-sky-200 focus:outline-none"
+                                        className="items-center hidden px-3 py-2 text-sm font-medium leading-4 text-white transition duration-150 ease-in-out bg-gray-600 border border-transparent rounded-md bg-primary md:inline-flex hover:text-sky-200 focus:outline-none"
                                     >Actions
                                         <svg
                                             className="ml-2 -mr-0.5 h-4 w-4"

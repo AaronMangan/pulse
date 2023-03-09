@@ -6,28 +6,28 @@ import SmallText from "./SmallText";
  * @param {*} props type: The type of badge to make | value: What is written on the badge | custom: If you want to use a custom color specify it here. The type must also be 'custom'.
  * @returns
  */
-export default function Badge({ type, value, custom = 'info' }) {
+export default function Badge({ className, type, value, custom = 'info' }) {
     const whichType = (type) => {
         switch(type) {
             case 'default':
-                return 'blue';
+                return 'info';
             case 'success':
-                return 'green';
+                return 'success';
             case 'info':
-                return 'blue';
+                return 'info';
             case 'warning':
-                return 'yellow';
+                return 'warning';
             case 'danger':
-                return 'red';
+                return 'danger';
             case 'error':
-                return 'red';
+                return 'error';
             case 'custom':
                 return {custom};
             default:
-                return 'gray';
+                return 'gray-500';
         }
     };
     return (
-        <SmallText value={value} className={`bg-${whichType(type)}-100 text-${whichType(type)}-800 text-xs font-bold px-1.5 py-0.5 rounded dark:bg-${whichType(type)}-900 dark:text-${whichType(type)}-300`} />
+        <SmallText value={value} className={`h-5 bg-${whichType(type)} text-white text-xs font-bold px-1.5 py-0.5 rounded dark:bg-${whichType(type)} dark:text-${whichType(type)} ${className}`} />
     );
 }

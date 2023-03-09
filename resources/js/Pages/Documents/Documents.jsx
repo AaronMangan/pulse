@@ -20,7 +20,7 @@ export default function Documents(props) {
     const [createNewDocument, setCreateNewDocument] = useState(false);
     const [selectedDocument, setSelectedDocument] = useState(false);
     const [showCreateDocument, setShowCreateDocument] = useState(false);
-    
+
     const selectedDocumentCallback = (document) => {
         setSelectedDocument(document);
         setShowCreateDocument(false);
@@ -29,48 +29,15 @@ export default function Documents(props) {
     const { data, setData, post, processing, errors, reset } = useForm({
         number: '',
         title: '',
-        
+
     });
-    
-    const getTypes = () => {
-        let options = [];
-        props.types.map(type => (
-            options.push({
-                value: type.id,
-                label: type.name,
-            })
-        ));
-        return options;
-    };
 
-    const getDisciplines = () => {
+    const getMetaData = (type) => {
         let options = [];
-        props.disciplines.map(discipline => (
+        props[type].map(item => (
             options.push({
-                value: discipline.id,
-                label: discipline.name,
-            })
-        ));
-        return options;
-    };
-
-    const getStatuses = () => {
-        let options = [];
-        props.statuses.map(status => (
-            options.push({
-                value: status.id,
-                label: `${status.name} [${status.code}]`,
-            })
-        ));
-        return options;
-    };
-
-    const getRevisions = () => {
-        let options = [];
-        props.revisions.map(revision => (
-            options.push({
-                value: revision.id,
-                label: revision.name,
+                value: item.id,
+                label: (item.name) ? item.name : item.code,
             })
         ));
         return options;
@@ -89,7 +56,7 @@ export default function Documents(props) {
             auth={props.auth}
             flash={props.flash}>
             <Head title="Documents" />
-            <div className="w-full py-6 rounded-md">
+            <div className="w-full h-screen py-6 bg-gray-200 rounded-md">
                 {
                     hasData ? (
                         <>
@@ -148,9 +115,9 @@ export default function Documents(props) {
                         {/* Document Type */}
                         <div className='mt-4'>
                             <InputLabel className="font-bold" forInput="number" value="Type" />
-                            <Select 
+                            <Select
                                 className='mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500'
-                                options={getTypes()}
+                                options={getMetaData('types')}
                                 isMulti={false}
                                 required
                             />
@@ -159,9 +126,9 @@ export default function Documents(props) {
                         {/* Document Discipline */}
                         <div className='mt-4'>
                             <InputLabel className="font-bold" forInput="number" value="Discipline" />
-                            <Select 
+                            <Select
                                 className='mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500'
-                                options={getDisciplines()}
+                                options={getMetaData('disciplines')}
                                 isMulti={false}
                                 required
                             />
@@ -171,18 +138,18 @@ export default function Documents(props) {
                         <div className='grid w-full grid-cols-2 gap-2 mt-4'>
                             <div className='col'>
                                 <InputLabel className="font-bold" forInput="number" value="Revision" />
-                                <Select 
+                                <Select
                                     className='mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500'
-                                    options={getRevisions()}
+                                    options={getMetaData('revisions')}
                                     isMulti={false}
                                     required
                                 />
                             </div>
                             <div className='col'>
                                 <InputLabel className="font-bold" forInput="number" value="Status" />
-                                <Select 
+                                <Select
                                     className='mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500'
-                                    options={getStatuses()}
+                                    options={getMetaData('statuses')}
                                     isMulti={false}
                                     required
                                 />
@@ -193,7 +160,7 @@ export default function Documents(props) {
                         <div className="mt-4">
                             <InputLabel className='font-bold' forInput="description" value="Description"/>
                             <TextArea
-                                className="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500" 
+                                className="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500"
                                 value={data.description}
                                 id='description'
                                 name='description'
@@ -216,7 +183,7 @@ export default function Documents(props) {
                     </form>
                 </div>
             </Modal>
-            
+
             {/* Create a User Button */}
             <FloatButton
                 action={() => {setShowCreateDocument(true)}}
