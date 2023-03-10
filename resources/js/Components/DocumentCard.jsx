@@ -22,7 +22,7 @@ export default function DocumentCard({ document, callback }) {
                 <div className="grid inline-block grid-cols-8 p-0 m-0">
                     {/* Icon & Doc Number */}
                     <div className="inline-flex w-full col-span-2">
-                        <ApplicationLogo className="flex justify-center w-12 h-auto text-primary place-items-center dark:text-gray-400"/>
+                        <ApplicationLogo className="flex justify-center w-12 h-auto text-primary place-items-center dark:text-primaryDark"/>
                         <h4 className="flex items-center justify-center ml-2 text-2xl font-bold text-gray-500">{document.number}</h4>
                         {
                             document.state == 'active' ? (

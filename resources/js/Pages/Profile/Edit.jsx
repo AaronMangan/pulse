@@ -13,7 +13,7 @@ export default function Edit({ auth, mustVerifyEmail, status, flash }) {
         >
             <Head title="Profile" />
 
-            <div className="py-12">
+            <div className="py-12 bg-gray-100">
                 <div className="mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
                     <div className="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
                         <UpdateProfileInformationForm

@@ -53,7 +53,7 @@ export default function History(props) {
             // header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Profile</h2>}
         >
         <Head title="History" />
-        <div className="w-full py-12 pl-1/5 pr-1/5">
+        <div className="w-full py-12 bg-gray-100 pl-1/5 pr-1/5">
             <div className="visible lg:invisible lg:hidden">
                 <NoData
                     title="Not Allowed"
@@ -71,7 +71,7 @@ export default function History(props) {
                                         <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Type</th>
                                         <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Event</th>
                                         <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Description</th>
-                                        <th scope="col" className="px-6 py-4 text-sm text-white font-large">Actions</th> 
+                                        <th scope="col" className="px-6 py-4 text-sm text-white font-large">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -91,7 +91,7 @@ export default function History(props) {
                                     ))}
                                 </tbody>
                             </table>
-                            
+
                             {/* View History Item Modal */}
                             <Modal show={confirmingUserDeletion} onClose={closeModal}>
                                 <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeModal}>&times;</span>

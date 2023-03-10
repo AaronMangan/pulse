@@ -59,7 +59,7 @@ export default function Projects(props) {
             setNumberFormat(res.data.settings.numberFormat ?? '[project]-[type]-[discipline]-[id]');
         })
     }
-    
+
     const showSettingsModal = (project) => {
         fetchSettings(project.id);
         setSelectedProject(project);
@@ -144,7 +144,7 @@ export default function Projects(props) {
         setNumberFormat('');
         reset();
     };
-    
+
     const closeViewModal = () => {
         setShowViewModal(false);
     };
@@ -157,7 +157,7 @@ export default function Projects(props) {
             flash={props.flash}
         >
             <Head title="Projects" />
-            <div className="w-full">
+            <div className="w-full bg-gray-100">
                 <div className="visible lg:invisible lg:hidden">
                     <NoData
                         title="Not Allowed"
@@ -166,14 +166,14 @@ export default function Projects(props) {
                 </div>
                 <div className="invisible inline-block min-w-full mx-auto lg:visible md:px-2 max-w-7xl sm:py-1 lg:px-8">
                     <table className="min-w-full rounded xs:table-fixed md:table-auto">
-                        <thead className="bg-gray-600 border-b">
+                        <thead className="border-b rounded-sm bg-primaryDark">
                             <tr>
                                 <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Id</th>
                                 <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Name</th>
                                 <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Code</th>
                                 <th scope="col" className="px-6 py-4 text-sm text-left text-white font-large">Start Date</th>
                                 <th scope="col" className="invisible px-6 py-4 text-sm text-left text-white lg:visible font-large">End Date</th>
-                                <th scope="col" className="invisible px-6 py-4 text-sm text-left text-white lg:visible font-large">Actions</th> 
+                                <th scope="col" className="invisible px-6 py-4 text-sm text-left text-white lg:visible font-large">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -190,7 +190,7 @@ export default function Projects(props) {
                                                 <span className="inline-flex rounded-md">
                                                     <button
                                                         type="button"
-                                                        className="items-center hidden px-3 py-2 text-sm font-medium leading-4 text-white transition duration-150 ease-in-out bg-gray-600 border border-transparent rounded-md md:inline-flex hover:text-sky-200 focus:outline-none"
+                                                        className="items-center hidden px-3 py-2 text-sm font-medium leading-4 text-white transition duration-150 ease-in-out bg-gray-600 border border-transparent rounded-md bg-primaryDark md:inline-flex hover:text-sky-200 focus:outline-none"
                                                     >Actions
                                                         <svg
                                                             className="ml-2 -mr-0.5 h-4 w-4"
@@ -242,7 +242,7 @@ export default function Projects(props) {
                         </tbody>
                     </table>
                 </div>
-                <FloatButton 
+                <FloatButton
                     action={showNewProjectModal}
                 />
                 {/* Create Project Modal */}
@@ -315,7 +315,7 @@ export default function Projects(props) {
 
                         <div className="w-full p-0 mt-6">
                             <InputLabel className="mb-1 font-bold" for="description" value="Project Description" />
-                            <TextArea 
+                            <TextArea
                                 name="description"
                                 id="description"
                                 value={selectedProject.description}
@@ -339,7 +339,7 @@ export default function Projects(props) {
                                 </div>
                             )
                         }
-                        
+
                     </form>
                 </Modal>
 
@@ -348,7 +348,7 @@ export default function Projects(props) {
                     <span className="float-right mx-4 mt-2 text-2xl font-bold text-gray-300 cursor-pointer hover:text-sky-700" onClick={closeSettingsModal}>&times;</span>
                     <form onSubmit={updateProjectSettings} className="p-6">
                         <h2 className="text-lg font-medium font-bold text-gray-900">Edit Project Settings</h2>
-                        <SmallText 
+                        <SmallText
                             value={"Project: " + selectedProject.name}
                             id="labelForModal"
                         />
@@ -427,7 +427,7 @@ export default function Projects(props) {
                     <div>
                         <div className="p-4 mx-3">
                             <h2 className="text-lg font-medium font-bold text-gray-900">{`Project Details: ` + selectedProject.name}</h2>
-                            <SmallText 
+                            <SmallText
                                 value="View the details of this project"
                             />
                         </div>

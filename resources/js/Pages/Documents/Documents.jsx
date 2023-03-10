@@ -56,7 +56,7 @@ export default function Documents(props) {
             auth={props.auth}
             flash={props.flash}>
             <Head title="Documents" />
-            <div className="w-full h-screen py-6 bg-gray-200 rounded-md">
+            <div className="w-full h-screen py-6 bg-gray-100 rounded-md">
                 {
                     hasData ? (
                         <>

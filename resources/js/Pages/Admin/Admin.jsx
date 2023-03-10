@@ -136,7 +136,7 @@ export default function Admin(props) {
             flash={props.flash}
         >
             <Head title="Admin" />
-            <div className="w-full py-6 rounded-md">
+            <div className="w-full py-6 bg-gray-100 rounded-md">
                 {
                     hasData ? (
                         <>
