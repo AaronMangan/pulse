@@ -22,7 +22,7 @@ class CreateNewDocumentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 'number' => '',
+            'project_id' => 'numeric|required|exists:projects,id',
             'title' => 'string|max:255|required',
             'type_id' => 'numeric|required|exists:types,id',
             'discipline_id' => 'numeric|required|exists:disciplines,id',

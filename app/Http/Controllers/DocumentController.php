@@ -7,6 +7,7 @@ use Inertia\Response;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use App\Http\Requests\Documents\CreateNewDocumentRequest;
+use App\Classes\Auditor;
 
 class DocumentController extends Controller
 {
