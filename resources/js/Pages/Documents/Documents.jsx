@@ -29,7 +29,11 @@ export default function Documents(props) {
     const { data, setData, post, processing, errors, reset } = useForm({
         number: '',
         title: '',
-
+        type: '',
+        discipline: '',
+        revision: '',
+        status: '',
+        project: '',
     });
 
     const getMetaData = (type) => {
@@ -47,10 +51,30 @@ export default function Documents(props) {
      * When an input is changed, update the values.
      * @param {*} event
      */
-       const onHandleChange = (event) => {
+    const onHandleChange = (event) => {
         setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
     };
 
+    const onSelectChange = (event) => {
+        setData(event.label, event.value);
+        // if(['discipline', 'type'].includes(event.target.name)) {
+            // alert('detected');
+        // }
+        // renderDocNumber();
+        // alert(JSON.stringify(props.projects));
+        renderDocNumber();
+        // data.number = `${props.project.code}`;
+    };
+
+    const closeModal = () => {
+        setShowCreateDocument(false);
+    };
+
+    const renderDocNumber = () => {
+        //
+        setData('number', 'Testing 1234')
+    };
+    
     return (
         <AuthenticatedLayout
             auth={props.auth}
@@ -70,6 +94,7 @@ export default function Documents(props) {
                 }
             </div>
 
+            {/* Create / Edit Document Modal */}
             <Modal className='py-4' show={showCreateDocument}>
                 <span className="float-right mx-4 mt-2 text-xl cursor-pointer text-grey-100 hover:text-sky-700" onClick={() => {setShowCreateDocument(false)}}>&times;</span>
                 <div className='p-6'>
@@ -112,12 +137,31 @@ export default function Documents(props) {
                             <InputError message={errors.number} className="mt-2" />
                         </div>
 
+                        {/* Project */}
+                        <div className='mt-4'>
+                            <InputLabel className="font-bold" forInput="number" value="Project" />
+                            <Select
+                                className='mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500'
+                                options={getMetaData('projects')}
+                                onChange={(e) => {onSelectChange(e)}}
+                                id='project'
+                                name='project'
+                                selectOption={data.project}
+                                isMulti={false}
+                                required
+                            />
+                        </div>
+
                         {/* Document Type */}
                         <div className='mt-4'>
                             <InputLabel className="font-bold" forInput="number" value="Type" />
                             <Select
                                 className='mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500'
                                 options={getMetaData('types')}
+                                onChange={(e) => {onSelectChange(e)}}
+                                id='type'
+                                name='type'
+                                selectOption={data.type}
                                 isMulti={false}
                                 required
                             />
@@ -129,6 +173,10 @@ export default function Documents(props) {
                             <Select
                                 className='mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500'
                                 options={getMetaData('disciplines')}
+                                handleChange={onHandleChange}
+                                id='discipline'
+                                name='discipline'
+                                selectOption={data.discipline}
                                 isMulti={false}
                                 required
                             />
@@ -141,16 +189,24 @@ export default function Documents(props) {
                                 <Select
                                     className='mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500'
                                     options={getMetaData('revisions')}
+                                    handleChange={onHandleChange}
+                                    id='revision'
+                                    name='revision'
+                                    selectOption={data.revision}
                                     isMulti={false}
                                     required
                                 />
                             </div>
                             <div className='col'>
-                                <InputLabel className="font-bold" forInput="number" value="Status" />
+                                <InputLabel className="font-bold" forInput="status" value="Status" />
                                 <Select
                                     className='mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500'
                                     options={getMetaData('statuses')}
                                     isMulti={false}
+                                    name='status'
+                                    id='status'
+                                    selectOption={data.status}
+                                    handleChange={onHandleChange}
                                     required
                                 />
                             </div>
