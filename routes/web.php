@@ -127,6 +127,8 @@ Route::middleware(['auth', 'verified', /* 'admin' */])->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     //
     Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+    Route::post('/documentS/create', [DocumentController::class, 'create'])->name('documents.create');
+    Route::post('/documents/{id}/update', [DocumentController::class, 'update'])->name('documents.update');
 });
 
 // Used by authentication.
