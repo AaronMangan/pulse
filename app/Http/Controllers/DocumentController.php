@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Document;
 use Illuminate\Http\Request;
+use App\Http\Requests\Documents\CreateNewDocumentRequest;
 
 class DocumentController extends Controller
 {
@@ -28,9 +29,10 @@ class DocumentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(CreateNewDocumentRequest $request)
     {
         //
+        dd($request->all());
     }
 
     /**

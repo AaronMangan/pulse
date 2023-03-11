@@ -53,7 +53,6 @@ class Auditor
             if ($key == 'project') {
                 $temp[$key] = config('pulse.objectMap')[$key]['model']::where('id', '=', $this->projectId)->with($relationships ?? [])->first(config("pulse.objectMap.{$key}.columns") ?? ['*'])->toArray();
             } else {
-                // $temp[$key] = config('pulse.objectMap')[$key]['model']::where('status', '!=', 'inactive')->with($relationships ?? [])->get(config("pulse.objectMap.{$key}.columns") ?? ['*'])->toArray();
                 $results = config('pulse.objectMap')[$key]['model']::where('status', '!=', 'inactive')->with($relationships ?? [])->get(config("pulse.objectMap.{$key}.columns") ?? ['*'])->toArray();
                 foreach ($results as $result) {
                     $temp[$key][$result['id']] = $result;
@@ -61,10 +60,6 @@ class Auditor
             }
         }
         $this->cache = $temp ?? [];
-        // $this->cache = (isset($this->projectId)) ? [
-        //     'project' => \App\Models\Project::where('id', '=', $this->projectId)->with($relationships ?? [])->get(config('pulse.objectMap.project.columns') ?? ['*'])->toArray(),
-        //     '' => '',
-        // ] : [];
         return $this;
     }
 
