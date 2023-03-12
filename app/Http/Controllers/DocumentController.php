@@ -23,7 +23,7 @@ class DocumentController extends Controller
             'disciplines' => \App\Models\Discipline::where('status', 'active')->get(['id', 'code', 'name']),
             'revisions' => \App\Models\Revision::where('status', 'active')->get(['id', 'name']),
             'statuses' => \App\Models\Status::where('status', 'active')->get(['id', 'code', 'name']),
-            'projects' => \App\models\Project::where('status', 'active')->get(['id', 'code', 'name']),
+            'projects' => \App\Models\Project::where('status', 'active')->with('settings')->get(['id', 'code', 'name', 'settings']),
         ]);
     }
 

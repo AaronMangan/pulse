@@ -32,7 +32,7 @@ return [
                 'id', 'name', 'code', 'status'
             ],
             'relationships' => [
-                'projectSettings'
+                'settings'
             ],
         ],
         'type' => [

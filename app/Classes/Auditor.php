@@ -74,11 +74,17 @@ class Auditor
             return [];
         }
 
-        $this->leader = "{$this->cache['project']['code']}-{$this->cache['type'][$input['type_id']]['code']}-{$this->cache['discipline'][$input['discipline_id']]['code']}";
+        $this->populateLeader();
+        // $this->leader = "{$this->cache['project']['code']}-{$this->cache['type'][$input['type_id']]['code']}-{$this->cache['discipline'][$input['discipline_id']]['code']}";
 
-        return [
-            'leader' => $this->leader ?? ''
-        ];
+        // return [
+        //     'leader' => $this->leader ?? ''
+        // ];
+    }
+
+    private function populateLeader()
+    {
+        dd($this->cache['project']);
     }
 
     /**
@@ -98,7 +104,7 @@ class Auditor
             // Get the matching project.
             if ($key == 'project') {
                 $temp[$key] = config('pulse.objectMap')[$key]['model']::where('id', '=', $this->projectId)
-                    ->with($relationships ?? [])
+                    ->with(config("pulse.objectMap.{$key}.relationships"))
                     ->first(config("pulse.objectMap.{$key}.columns") ?? ['*'])
                     ->toArray();
             }
