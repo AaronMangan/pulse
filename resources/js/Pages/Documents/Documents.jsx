@@ -20,21 +20,43 @@ export default function Documents(props) {
     const [createNewDocument, setCreateNewDocument] = useState(false);
     const [selectedDocument, setSelectedDocument] = useState(false);
     const [showCreateDocument, setShowCreateDocument] = useState(false);
+    const [readOnlyNumber, setReadOnlyNumber] = useState(true);
 
     const selectedDocumentCallback = (document) => {
         setSelectedDocument(document);
+        setReadOnlyNumber(true);
         setShowCreateDocument(false);
     };
 
     const { data, setData, post, processing, errors, reset } = useForm({
         number: '',
         title: '',
-        type: '',
-        discipline: '',
-        revision: '',
-        status: '',
-        project: '',
+        type_id: '',
+        discipline_id: '',
+        revision_id: '',
+        status_id: '',
+        project_id: '',
+        description: '',
     });
+
+    const translator = {
+        projects: 'project_id',
+        types: 'type_id',
+        disciplines: 'discipline_id',
+        statuses: 'status_id',
+        revisions: 'revision_id'
+    };
+
+    const createDocument = (e) => {
+        e.preventDefault();
+
+        post(route('documents.create', data), {
+            preserveScroll: true,
+            onSuccess: () => closeModal(),
+            // onError: () => title.current.focus(),
+            onFinish: () => reset(),
+        });
+    };
 
     const getMetaData = (type) => {
         let options = [];
@@ -42,6 +64,7 @@ export default function Documents(props) {
             options.push({
                 value: item.id,
                 label: (item.name) ? item.name : item.code,
+                key: translator[type],
             })
         ));
         return options;
@@ -56,25 +79,33 @@ export default function Documents(props) {
     };
 
     const onSelectChange = (event) => {
-        setData(event.label, event.value);
-        // if(['discipline', 'type'].includes(event.target.name)) {
-            // alert('detected');
-        // }
-        // renderDocNumber();
-        // alert(JSON.stringify(props.projects));
-        renderDocNumber();
-        // data.number = `${props.project.code}`;
+        setData(event.key, event.value);
+        if(event.key == 'project_id'){
+            checkSettings(event.value, event.key);
+        }
     };
 
     const closeModal = () => {
         setShowCreateDocument(false);
     };
-
-    const renderDocNumber = () => {
-        //
-        setData('number', 'Testing 1234')
-    };
     
+    const checkSettings = (id, key) => {
+        props.projects.map((project) => {
+            if(project.id == id) {
+                let project_settings = project.settings.settings;
+                if(key == 'project_id') {
+                    if(project_settings.manualNumbering == true) {
+                        setReadOnlyNumber(false);
+                    }
+                    else {
+                        setReadOnlyNumber(true);
+                        setData('number', '');
+                    }
+                }
+            }
+        });
+    };
+
     return (
         <AuthenticatedLayout
             auth={props.auth}
@@ -106,7 +137,7 @@ export default function Documents(props) {
                         />
                         <hr className='mt-2 mb-2' />
                     </div>
-                    <form>
+                    <form onSubmit={createDocument}>
                         {/* Document Number */}
                         <div>
                             <InputLabel className="font-bold" forInput="number" value="Document Number" />
@@ -114,11 +145,11 @@ export default function Documents(props) {
                                 id="number"
                                 name="number"
                                 value={data.number}
-                                className="block w-full mt-2"
+                                className={`block w-full mt-2`}
                                 autoComplete="number"
                                 isFocused={true}
                                 handleChange={onHandleChange}
-                                readOnly={true}
+                                readOnly={readOnlyNumber}
                             />
                             <InputError message={errors.number} className="mt-2" />
                         </div>
@@ -146,7 +177,7 @@ export default function Documents(props) {
                                 onChange={(e) => {onSelectChange(e)}}
                                 id='project'
                                 name='project'
-                                selectOption={data.project}
+                                selectOption={data.project_id}
                                 isMulti={false}
                                 required
                             />
@@ -173,10 +204,10 @@ export default function Documents(props) {
                             <Select
                                 className='mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500'
                                 options={getMetaData('disciplines')}
-                                handleChange={onHandleChange}
+                                onChange={(e) => {onSelectChange(e)}}
                                 id='discipline'
                                 name='discipline'
-                                selectOption={data.discipline}
+                                selectOption={data.discipline_id}
                                 isMulti={false}
                                 required
                             />
@@ -189,10 +220,10 @@ export default function Documents(props) {
                                 <Select
                                     className='mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500'
                                     options={getMetaData('revisions')}
-                                    handleChange={onHandleChange}
+                                    onChange={(e) => {onSelectChange(e)}}
                                     id='revision'
                                     name='revision'
-                                    selectOption={data.revision}
+                                    selectOption={data.revision_id}
                                     isMulti={false}
                                     required
                                 />
@@ -205,8 +236,8 @@ export default function Documents(props) {
                                     isMulti={false}
                                     name='status'
                                     id='status'
-                                    selectOption={data.status}
-                                    handleChange={onHandleChange}
+                                    selectOption={data.status_id}
+                                    onChange={(e) => {onSelectChange(e)}}
                                     required
                                 />
                             </div>

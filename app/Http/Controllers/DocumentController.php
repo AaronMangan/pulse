@@ -23,7 +23,7 @@ class DocumentController extends Controller
             'disciplines' => \App\Models\Discipline::where('status', 'active')->get(['id', 'code', 'name']),
             'revisions' => \App\Models\Revision::where('status', 'active')->get(['id', 'name']),
             'statuses' => \App\Models\Status::where('status', 'active')->get(['id', 'code', 'name']),
-            'projects' => \App\Models\Project::where('status', 'active')->with('settings')->get(['id', 'code', 'name', 'settings']),
+            'projects' => \App\Models\Project::where('status', 'active')->with('settings')->get(['id', 'code', 'name']),
         ]);
     }
 
@@ -33,7 +33,19 @@ class DocumentController extends Controller
     public function create(CreateNewDocumentRequest $request)
     {
         //
-        dd($request->all());
+        $valid = $request->safe()->only([
+            'number',
+            'title',
+            'type_id',
+            'discipline_id',
+            'revision_id',
+            'status_id',
+            'project_id',
+            'description',
+        ]);
+
+        $auditor = new \App\Classes\Auditor($valid['project_id'], true);
+        dd($auditor->assign($valid));
     }
 
     /**
