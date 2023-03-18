@@ -31,21 +31,13 @@ export default function Documents(props) {
     const { data, setData, post, processing, errors, reset } = useForm({
         number: '',
         title: '',
-        type_id: '',
-        discipline_id: '',
-        revision_id: '',
-        status_id: '',
-        project_id: '',
+        type: '',
+        discipline: '',
+        revision: '',
+        status: '',
+        project: '',
         description: '',
     });
-
-    const translator = {
-        projects: 'project_id',
-        types: 'type_id',
-        disciplines: 'discipline_id',
-        statuses: 'status_id',
-        revisions: 'revision_id'
-    };
 
     const createDocument = (e) => {
         e.preventDefault();
@@ -64,7 +56,7 @@ export default function Documents(props) {
             options.push({
                 value: item.id,
                 label: (item.name) ? item.name : item.code,
-                key: translator[type],
+                key: type,
             })
         ));
         return options;
@@ -88,7 +80,7 @@ export default function Documents(props) {
     const closeModal = () => {
         setShowCreateDocument(false);
     };
-    
+
     const checkSettings = (id, key) => {
         props.projects.map((project) => {
             if(project.id == id) {
