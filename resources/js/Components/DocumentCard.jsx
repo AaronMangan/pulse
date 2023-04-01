@@ -33,9 +33,9 @@ export default function DocumentCard({ document, callback }) {
                         }
                     </div>
 
-                    {/* Description */}
+                    {/* Title */}
                     <div className="inline-flex w-full col-span-5">
-                        <h4 className="flex items-center justify-center ml-2 text-xl font-thin text-gray-500">{document.description}</h4>
+                        <h4 className="flex items-center justify-center ml-2 text-xl font-thin text-gray-500">{document.title}</h4>
                     </div>
 
                     {/* Dropdown */}

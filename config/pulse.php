@@ -45,6 +45,7 @@ return [
             'columns' => [
                 'id', 'name', 'code', 'status'
             ],
+            'relationships' => [],
         ],
         'discipline' => [
             'model' => \App\Models\Discipline::class,
@@ -56,6 +57,7 @@ return [
             'columns' => [
                 'id', 'name', 'code', 'status'
             ],
+            'relationships' => [],
         ],
         'revision' => [
             'model' => \App\Models\Revision::class,
@@ -66,6 +68,7 @@ return [
             'columns' => [
                 'id', 'name', 'status'
             ],
+            'relationships' => [],
         ],
         'status' => [
             'model' => \App\Models\Status::class,
@@ -77,6 +80,7 @@ return [
             'columns' => [
                 'id', 'name', 'code', 'status'
             ],
+            'relationships' => [],
         ]
     ],
 ];

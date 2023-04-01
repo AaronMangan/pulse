@@ -62,7 +62,7 @@ class Auditor
 
         //
         if ($this->projectId != false) {
-            $this->setCache();
+            $this->setAuditCache();
         }
 
         $this->new = $new;
@@ -104,7 +104,7 @@ class Auditor
      * @param string|null $refresh
      * @return self|null
      */
-    protected function setCache(?string $refresh = 'all'): ?self
+    protected function setAuditCache(?string $refresh = 'all'): ?self
     {
         $temp = [];
         $keys = ($refresh == 'all')
@@ -122,7 +122,7 @@ class Auditor
             // Get the metadata fields
             else {
                 $results = config('pulse.objectMap')[$key]['model']::where('status', '!=', 'inactive')
-                ->with(config("pulse.objectMap.{$key}.relationships"))
+                    ->with(config("pulse.objectMap.{$key}.relationships"))
                     ->get(config("pulse.objectMap.{$key}.columns") ?? ['*'])
                     ->toArray();
 

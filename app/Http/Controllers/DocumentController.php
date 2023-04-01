@@ -36,12 +36,19 @@ class DocumentController extends Controller
         $valid = $request->safe()->only([
             'number',
             'title',
+            'description',
+            'project_id',
             'type_id',
             'discipline_id',
-            'revision_id',
             'status_id',
-            'project_id',
-            'description',
+            'revision_id',
+            'created_by',
+            'last_updated_by',
+            'state',
+            'latest',
+            'metadata',
+            'created_at',
+            'updated_at',
         ]);
 
         $auditor = new \App\Classes\Auditor($valid['project_id'], true);
@@ -49,15 +56,18 @@ class DocumentController extends Controller
         if ($data['status']) {
             $valid['number'] = $data['number'] ?? '';
             $new = new Document([
-                // 'title' => $valid['title'] ?? '',
                 'number' => $valid['number'] ?? null,
-                'type_id' => $valid[''] ?? null,
-                'discipline_id' => $valid[''] ?? null,
-                'revision_id' => $valid[''] ?? null,
-                'status_id' => $valid[''] ?? null,
-                'description' => $valid[''] ?? null,
-                'created_at' => $valid[''] ?? null,
-                'updated_at' => $valid[''] ?? null,
+                'title' => $valid['title'] ?? '',
+                'project_id' => $valid['project_id'] ?? '',
+                'type_id' => $valid['type_id'] ?? null,
+                'discipline_id' => $valid['discipline_id'] ?? null,
+                'revision_id' => $valid['revision_id'] ?? null,
+                'status_id' => $valid['status_id'] ?? null,
+                'description' => $valid['description'] ?? null,
+                'created_at' => $valid['created_at'] ?? null,
+                'updated_at' => $valid['updated_at'] ?? null,
+                'created_by' => $request->user()->id,
+                'last_updated_by' => $request->user()->id,
                 'state' => 'active',
                 'latest' => true,
                 'metadata' => json_encode([]) ?? null,
@@ -65,7 +75,9 @@ class DocumentController extends Controller
             $new->save();
         }
 
-        $request->session()->flash(($data['status']) ? 'success' : 'error', ($data['success']) ? 'Document created successfully' : 'An error occurred');
+        // QBR1-MEC-REP-001
+        // Qld BR-1 Maintenance Report 2022 Summary - All Zones
+        // $request->session()->flash(($data['status']) ? 'success' : 'error', ($data['success']) ? 'Document created successfully' : 'An error occurred');
         return redirect()->route('documents.index');
     }
 
@@ -109,3 +121,22 @@ class DocumentController extends Controller
         //
     }
 }
+
+/*
+
+number,
+title,
+description,
+project_id,
+type_id,
+discipline_id,
+status_id,
+revision_id,
+created_by,
+last_updated_by,
+state,
+latest,
+metadata,
+created_at,
+updated_at,
+*/
