@@ -41,6 +41,7 @@ module.exports = {
                 900: '#111827',
             },
             white: colors.white,
+            red: colors.red,
         }
     },
 

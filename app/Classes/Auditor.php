@@ -42,6 +42,14 @@ class Auditor
      */
     private $leader = '';
 
+
+    /**
+     * Undocumented variable
+     *
+     * @var string
+     */
+    private $documentNumber = '';
+
     /**
      * Class Constructor.
      *
@@ -62,8 +70,6 @@ class Auditor
         // if (!$new) {
         //     $this->load($id);
         // }
-
-        return $this;
     }
 
 
@@ -74,19 +80,24 @@ class Auditor
             return [];
         }
 
-        $this->populateLeader();
-        // $this->leader = "{$this->cache['project']['code']}-{$this->cache['type'][$input['type_id']]['code']}-{$this->cache['discipline'][$input['discipline_id']]['code']}";
-
-        // return [
-        //     'leader' => $this->leader ?? ''
-        // ];
+        $this->populateLeader($input);
+        $this->documentNumber = $this->setIndex();
+        return [
+            'status' => true,
+            'number' => $this->documentNumber,
+        ];
     }
 
-    private function populateLeader()
+    private function populateLeader(array $input): self
     {
-        dd($this->cache['project']);
+        $this->leader = "{$this->cache['project']['code']}-{$this->cache['type'][$input['type_id']]['code']}-{$this->cache['discipline'][$input['discipline_id']]['code']}";
+        return $this;
     }
 
+    private function setIndex(): ?string
+    {
+        return "{$this->leader}-001";
+    }
     /**
      * Sets a cache to use for metadata to help limit the number of DB Calls.
      *
@@ -111,7 +122,7 @@ class Auditor
             // Get the metadata fields
             else {
                 $results = config('pulse.objectMap')[$key]['model']::where('status', '!=', 'inactive')
-                    ->with($relationships ?? [])
+                ->with(config("pulse.objectMap.{$key}.relationships"))
                     ->get(config("pulse.objectMap.{$key}.columns") ?? ['*'])
                     ->toArray();
 

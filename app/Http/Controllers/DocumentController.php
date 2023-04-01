@@ -45,7 +45,28 @@ class DocumentController extends Controller
         ]);
 
         $auditor = new \App\Classes\Auditor($valid['project_id'], true);
-        dd($auditor->assign($valid));
+        $data = $auditor->assign($valid);
+        if ($data['status']) {
+            $valid['number'] = $data['number'] ?? '';
+            $new = new Document([
+                // 'title' => $valid['title'] ?? '',
+                'number' => $valid['number'] ?? null,
+                'type_id' => $valid[''] ?? null,
+                'discipline_id' => $valid[''] ?? null,
+                'revision_id' => $valid[''] ?? null,
+                'status_id' => $valid[''] ?? null,
+                'description' => $valid[''] ?? null,
+                'created_at' => $valid[''] ?? null,
+                'updated_at' => $valid[''] ?? null,
+                'state' => 'active',
+                'latest' => true,
+                'metadata' => json_encode([]) ?? null,
+            ]);
+            $new->save();
+        }
+
+        $request->session()->flash(($data['status']) ? 'success' : 'error', ($data['success']) ? 'Document created successfully' : 'An error occurred');
+        return redirect()->route('documents.index');
     }
 
     /**

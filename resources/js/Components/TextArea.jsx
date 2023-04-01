@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useRef } from 'react';
 export default forwardRef(function TextArea(
-    { type = 'textarea', name, id, value, className, autoComplete, required, isFocused, handleChange, rows, placeholder },
+    { type = 'textarea', name, id, value, className, autoComplete, required, isFocused, handleChange, rows, placeholder, disabled = false },
     ref
 ) {
     const input = ref ? ref : useRef();
@@ -27,6 +27,7 @@ export default forwardRef(function TextArea(
                 required={required}
                 onChange={(e) => handleChange(e)}
                 placeholder={placeholder}
+                disabled={disabled}
             />
         </div>
     );

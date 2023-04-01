@@ -1,4 +1,4 @@
-export default function PrimaryButton({ type = 'submit', className = '', processing, children, onClick }) {
+export default function PrimaryButton({ type = 'submit', className = '', processing, children, onClick, disabled = false }) {
     return (
         <button
             type={type}
@@ -8,7 +8,8 @@ export default function PrimaryButton({ type = 'submit', className = '', process
                     processing && 'opacity-25'
                 } ` + className
             }
-            disabled={processing}
+            // disabled={processing}
+            disabled={disabled}
         >
             {children}
         </button>

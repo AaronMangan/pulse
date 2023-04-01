@@ -1,7 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import NoData from '@/Components/NoData';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import FloatButton from '@/Components/FloatButton';
 import DocumentCard from '@/Components/DocumentCard';
 import Modal from '@/Components/Modal';
@@ -13,6 +13,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 import Select from 'react-select';
 import TextArea from '@/Components/TextArea';
+import Swal from 'sweetalert2';
 
 export default function Documents(props) {
     const hasData = props.documents.length ? true : false;
@@ -21,7 +22,16 @@ export default function Documents(props) {
     const [selectedDocument, setSelectedDocument] = useState(false);
     const [showCreateDocument, setShowCreateDocument] = useState(false);
     const [readOnlyNumber, setReadOnlyNumber] = useState(true);
+    const [noProjectSelected, setNoProjectSelected] = useState(true);
 
+    // useEffect(()=>{
+    //     setNoProjectSelected(true);
+    // }, []);
+
+    /**
+     * Callback used to edit an existing document.
+     * @param {Object} document
+     */
     const selectedDocumentCallback = (document) => {
         setSelectedDocument(document);
         setReadOnlyNumber(true);
@@ -32,13 +42,14 @@ export default function Documents(props) {
         number: '',
         title: '',
         type: '',
-        discipline: '',
-        revision: '',
-        status: '',
-        project: '',
+        discipline_id: '',
+        revision_id: '',
+        status_id: '',
+        project_id: '',
         description: '',
     });
 
+    // Create a document.
     const createDocument = (e) => {
         e.preventDefault();
 
@@ -50,13 +61,35 @@ export default function Documents(props) {
         });
     };
 
+    /**
+     * Translates a property name.
+     * @param {String} value
+     * @returns
+     */
+    const translate = (value) => {
+        let items = {
+            projects: 'project_id',
+            types: 'type_id',
+            disciplines: 'discipline_id',
+            statuses: 'status_id',
+            revisions: 'revision_id',
+        };
+        return items[value] ? items[value] : null;
+    };
+
+    /**
+     * Returns the data for that object
+     * @param {Object} type
+     * @returns
+     */
     const getMetaData = (type) => {
         let options = [];
         props[type].map(item => (
             options.push({
                 value: item.id,
                 label: (item.name) ? item.name : item.code,
-                key: type,
+                key: translate(type),
+                code: item.code ? item.code : ''
             })
         ));
         return options;
@@ -70,34 +103,29 @@ export default function Documents(props) {
         setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
     };
 
+    /**
+     * When a dropdown is changed.
+     * @param {object} event
+     */
     const onSelectChange = (event) => {
-        setData(event.key, event.value);
-        if(event.key == 'project_id'){
-            checkSettings(event.value, event.key);
+        if(event.key === 'project_id' && event.value != null) {
+            setNoProjectSelected(false);
         }
+        setData(event.key, event.value);
+        // setData('number', hydrateDocumentNumber());
     };
 
+    /**
+     * Close the modal.
+     */
     const closeModal = () => {
         setShowCreateDocument(false);
+        reset();
     };
 
-    const checkSettings = (id, key) => {
-        props.projects.map((project) => {
-            if(project.id == id) {
-                let project_settings = project.settings.settings;
-                if(key == 'project_id') {
-                    if(project_settings.manualNumbering == true) {
-                        setReadOnlyNumber(false);
-                    }
-                    else {
-                        setReadOnlyNumber(true);
-                        setData('number', '');
-                    }
-                }
-            }
-        });
-    };
-
+    /**
+     * Return the page.
+     */
     return (
         <AuthenticatedLayout
             auth={props.auth}
@@ -129,10 +157,29 @@ export default function Documents(props) {
                         />
                         <hr className='mt-2 mb-2' />
                     </div>
+
+                    {/* Create a document form. A project must be selected before anything else, so that the settings for the project */}
                     <form onSubmit={createDocument}>
+                        {/* Project */}
+                        <div>
+                            <InputLabel className="font-bold" forInput="number" value="Project" />
+                            <Select
+                                className='mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500'
+                                options={getMetaData('projects')}
+                                onChange={(e) => {onSelectChange(e)}}
+                                id='project'
+                                name='project'
+                                selectOption={data.projects}
+                                isMulti={false}
+                                required
+                            />
+                            { noProjectSelected ?
+                                <label class="text-xs text-red-500">A project must be selected first</label> : ''
+                            }
+                        </div>
                         {/* Document Number */}
                         <div>
-                            <InputLabel className="font-bold" forInput="number" value="Document Number" />
+                            <InputLabel className="mt-4 font-bold" forInput="number" value="Document Number" />
                             <TextInput
                                 id="number"
                                 name="number"
@@ -141,7 +188,8 @@ export default function Documents(props) {
                                 autoComplete="number"
                                 isFocused={true}
                                 handleChange={onHandleChange}
-                                readOnly={readOnlyNumber}
+                                // readOnly={readOnlyNumber}
+                                disabled={noProjectSelected}
                             />
                             <InputError message={errors.number} className="mt-2" />
                         </div>
@@ -156,23 +204,9 @@ export default function Documents(props) {
                                 className="block w-full mt-2"
                                 handleChange={onHandleChange}
                                 placeholder='Document Title'
+                                disabled={noProjectSelected ? 'disabled' : ''}
                             />
                             <InputError message={errors.number} className="mt-2" />
-                        </div>
-
-                        {/* Project */}
-                        <div className='mt-4'>
-                            <InputLabel className="font-bold" forInput="number" value="Project" />
-                            <Select
-                                className='mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500'
-                                options={getMetaData('projects')}
-                                onChange={(e) => {onSelectChange(e)}}
-                                id='project'
-                                name='project'
-                                selectOption={data.project_id}
-                                isMulti={false}
-                                required
-                            />
                         </div>
 
                         {/* Document Type */}
@@ -182,11 +216,12 @@ export default function Documents(props) {
                                 className='mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500'
                                 options={getMetaData('types')}
                                 onChange={(e) => {onSelectChange(e)}}
-                                id='type'
-                                name='type'
+                                id='types'
+                                name='types'
                                 selectOption={data.type}
                                 isMulti={false}
                                 required
+                                isDisabled={noProjectSelected}
                             />
                         </div>
 
@@ -197,11 +232,12 @@ export default function Documents(props) {
                                 className='mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500'
                                 options={getMetaData('disciplines')}
                                 onChange={(e) => {onSelectChange(e)}}
-                                id='discipline'
-                                name='discipline'
+                                id='disciplines'
+                                name='disciplines'
                                 selectOption={data.discipline_id}
                                 isMulti={false}
                                 required
+                                isDisabled={noProjectSelected}
                             />
                         </div>
 
@@ -213,11 +249,12 @@ export default function Documents(props) {
                                     className='mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500'
                                     options={getMetaData('revisions')}
                                     onChange={(e) => {onSelectChange(e)}}
-                                    id='revision'
-                                    name='revision'
+                                    id='revisions'
+                                    name='revisions'
                                     selectOption={data.revision_id}
                                     isMulti={false}
                                     required
+                                    isDisabled={noProjectSelected}
                                 />
                             </div>
                             <div className='col'>
@@ -226,11 +263,12 @@ export default function Documents(props) {
                                     className='mt-2 border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500'
                                     options={getMetaData('statuses')}
                                     isMulti={false}
-                                    name='status'
-                                    id='status'
+                                    name='statuses'
+                                    id='statuses'
                                     selectOption={data.status_id}
                                     onChange={(e) => {onSelectChange(e)}}
                                     required
+                                    isDisabled={noProjectSelected}
                                 />
                             </div>
                         </div>
@@ -244,12 +282,13 @@ export default function Documents(props) {
                                 id='description'
                                 name='description'
                                 handleChange={onHandleChange}
+                                disabled={noProjectSelected}
                             />
                         </div>
 
                         {/* Buttons */}
                         <div className="flex items-center justify-end mt-4">
-                            <PrimaryButton className="ml-4" processing={processing}>
+                            <PrimaryButton className="ml-4" processing={processing} disabled={noProjectSelected}>
                                 Save
                             </PrimaryButton>
                             <SecondaryButton
