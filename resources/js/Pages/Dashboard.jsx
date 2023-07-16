@@ -18,7 +18,7 @@ export default function Dashboard(props) {
                 <GridItem
                     title="Transmittals"
                     blurb="Send and receive documents to other parties"
-                    href="#"
+                    href="transmittals"
                     icon='plane'
                     className="invisible hidden md:visible md:block"
                 />

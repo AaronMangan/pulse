@@ -14,6 +14,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\DisciplineController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\ProjectSettingsController;
+use App\Http\Controllers\TransmittalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -129,6 +130,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
     Route::post('/documentS/create', [DocumentController::class, 'create'])->name('documents.create');
     Route::post('/documents/{id}/update', [DocumentController::class, 'update'])->name('documents.update');
+});
+
+/**
+ * Transmittal Routes
+ */
+Route::middleware(['auth', 'verified'])->group(function () {
+    //
+    Route::get('/transmittals', [TransmittalController::class, 'index'])->name('transmittals.index');
 });
 
 // Used by authentication.
