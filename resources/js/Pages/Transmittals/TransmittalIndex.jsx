@@ -21,7 +21,7 @@ export default function TransmittalIndex(props) {
                 <GridItem
                     title="Outgoing"
                     blurb="View, Create & Send Documents"
-                    href="#"
+                    href="/transmittals/outgoing/create"
                     icon='plane'
                     className="invisible hidden md:visible md:block"
                 />

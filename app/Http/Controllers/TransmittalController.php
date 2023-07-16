@@ -75,4 +75,9 @@ class TransmittalController extends Controller
     {
         //
     }
+
+    public function createOutgoing(Request $request)
+    {
+        return Inertia::render('Transmittals/Outgoing/CreateTransmittal');
+    }
 }

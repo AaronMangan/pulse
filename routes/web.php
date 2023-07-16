@@ -138,6 +138,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     //
     Route::get('/transmittals', [TransmittalController::class, 'index'])->name('transmittals.index');
+    Route::get('/transmittals/outgoing/create', [TransmittalController::class, 'createOutgoing'])->name('transmittals.create');
 });
 
 // Used by authentication.
