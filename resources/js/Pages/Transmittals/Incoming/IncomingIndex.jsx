@@ -134,9 +134,7 @@ export default function IncomingTransmittals(props) {
                 {
                     hasData ? (
                         <>
-                            {props.transmittals.forEach(transmittal => (
-                                <p>A Transmittal</p>
-                            ))}
+                            <p className="text-center text-gray-400">[Table Here]</p>
                         </>
                     ) : (
                         <NoData value="No Data" />
