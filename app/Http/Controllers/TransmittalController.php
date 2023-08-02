@@ -74,6 +74,10 @@ class TransmittalController extends Controller
     public function incoming(Request $request)
     {
         //
+        $transmittals = \Auth::user()->transmittals();
+        return Inertia::render('Transmittals/Incoming/IncomingIndex', [
+            'transmittals' => $transmittals,
+        ]);
     }
 
     public function createOutgoing(Request $request)

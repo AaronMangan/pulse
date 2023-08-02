@@ -12,7 +12,7 @@ export default function TransmittalIndex(props) {
                 <GridItem
                     title="Incoming"
                     blurb="View transmittals you have received"
-                    href="{route('incoming-transmittals')}"
+                    href="/transmittals/incoming"
                     icon="document"
                     className="invisible hidden md:visible md:block"
                 />

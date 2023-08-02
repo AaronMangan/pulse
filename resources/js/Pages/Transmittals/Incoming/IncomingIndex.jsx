@@ -15,12 +15,11 @@ import Select from 'react-select';
 import TextArea from '@/Components/TextArea';
 import Swal from 'sweetalert2';
 
-export default function IncomingIndex(props) {
-    const hasData = props.documents.length ? true : false;
-
-    const [createNewDocument, setCreateNewDocument] = useState(false);
-    const [selectedDocument, setSelectedDocument] = useState(false);
-    const [showCreateDocument, setShowCreateDocument] = useState(false);
+export default function IncomingTransmittals(props) {
+    const hasData = (props.transmittals.length > 0) ? true : false;
+    const [createNewTransmittal, setCreateNewTransmittal] = useState(false);
+    const [selectedTransmittal, setSelectedTransmittal] = useState(false);
+    const [showCreateTransmittal, setShowCreateTransmittal] = useState(false);
     const [readOnlyNumber, setReadOnlyNumber] = useState(true);
     const [noProjectSelected, setNoProjectSelected] = useState(true);
 
@@ -32,10 +31,10 @@ export default function IncomingIndex(props) {
      * Callback used to edit an existing document.
      * @param {Object} document
      */
-    const selectedDocumentCallback = (document) => {
-        setSelectedDocument(document);
+    const selectedTransmittalCallback = (document) => {
+        setSelectedTransmittal(document);
         setReadOnlyNumber(true);
-        setShowCreateDocument(false);
+        setShowCreateTransmittal(false);
     };
 
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -50,7 +49,7 @@ export default function IncomingIndex(props) {
     });
 
     // Create a document.
-    const createDocument = (e) => {
+    const createTransmittal = (e) => {
         e.preventDefault();
 
         post(route('documents.create', data), {
@@ -112,14 +111,14 @@ export default function IncomingIndex(props) {
             setNoProjectSelected(false);
         }
         setData(event.key, event.value);
-        // setData('number', hydrateDocumentNumber());
+        // setData('number', hydrateTransmittalNumber());
     };
 
     /**
      * Close the modal.
      */
     const closeModal = () => {
-        setShowCreateDocument(false);
+        setShowCreateTransmittal(false);
         reset();
     };
 
@@ -130,13 +129,13 @@ export default function IncomingIndex(props) {
         <AuthenticatedLayout
             auth={props.auth}
             flash={props.flash}>
-            <Head title="Documents" />
+            <Head title="Transmittals" />
             <div className="w-full h-screen py-6 bg-gray-100 rounded-md">
                 {
                     hasData ? (
                         <>
-                            {props.documents.map(document => (
-                                <DocumentCard key={document.id} document={document} callback={selectedDocumentCallback}/>
+                            {props.transmittals.forEach(transmittal => (
+                                <p>A Transmittal</p>
                             ))}
                         </>
                     ) : (
@@ -145,12 +144,12 @@ export default function IncomingIndex(props) {
                 }
             </div>
 
-            {/* Create / Edit Document Modal */}
-            <Modal className='py-4' show={showCreateDocument}>
-                <span className="float-right mx-4 mt-2 text-xl cursor-pointer text-grey-100 hover:text-sky-700" onClick={() => {setShowCreateDocument(false)}}>&times;</span>
+            {/* Create / Edit Transmittal Modal */}
+            {/* <Modal className='py-4' show={showCreateTransmittal}>
+                <span className="float-right mx-4 mt-2 text-xl cursor-pointer text-grey-100 hover:text-sky-700" onClick={() => {setShowCreateTransmittal(false)}}>&times;</span>
                 <div className='p-6'>
                     <div className='mb-2'>
-                        <h2 className="text-lg font-medium font-bold text-gray-900">Create New Document</h2>
+                        <h2 className="text-lg font-medium font-bold text-gray-900">Create New Transmittal</h2>
                         <SmallText
                             value='Fill out the form to add a new document to the project.'
                             className='mb-2'
@@ -158,9 +157,7 @@ export default function IncomingIndex(props) {
                         <hr className='mt-2 mb-2' />
                     </div>
 
-                    {/* Create a document form. A project must be selected before anything else, so that the settings for the project */}
-                    <form onSubmit={createDocument}>
-                        {/* Project */}
+                    <form onSubmit={createTransmittal}>
                         <div>
                             <InputLabel className="font-bold" forInput="number" value="Project" />
                             <Select
@@ -177,9 +174,8 @@ export default function IncomingIndex(props) {
                                 <label class="text-xs text-red-500">A project must be selected first</label> : ''
                             }
                         </div>
-                        {/* Document Number */}
                         <div>
-                            <InputLabel className="mt-4 font-bold" forInput="number" value="Document Number" />
+                            <InputLabel className="mt-4 font-bold" forInput="number" value="Transmittal Number" />
                             <TextInput
                                 id="number"
                                 name="number"
@@ -193,8 +189,6 @@ export default function IncomingIndex(props) {
                             />
                             <InputError message={errors.number} className="mt-2" />
                         </div>
-
-                        {/* Document Title */}
                         <div>
                             <InputLabel className="mt-2 font-bold" forInput="title" value="Title" />
                             <TextInput
@@ -203,13 +197,11 @@ export default function IncomingIndex(props) {
                                 value={data.title}
                                 className="block w-full mt-2"
                                 handleChange={onHandleChange}
-                                placeholder='Document Title'
+                                placeholder='Transmittal Title'
                                 disabled={noProjectSelected ? 'disabled' : ''}
                             />
                             <InputError message={errors.number} className="mt-2" />
                         </div>
-
-                        {/* Document Type */}
                         <div className='mt-4'>
                             <InputLabel className="font-bold" forInput="number" value="Type" />
                             <Select
@@ -224,8 +216,6 @@ export default function IncomingIndex(props) {
                                 isDisabled={noProjectSelected}
                             />
                         </div>
-
-                        {/* Document Discipline */}
                         <div className='mt-4'>
                             <InputLabel className="font-bold" forInput="number" value="Discipline" />
                             <Select
@@ -240,8 +230,6 @@ export default function IncomingIndex(props) {
                                 isDisabled={noProjectSelected}
                             />
                         </div>
-
-                        {/* Revision & Status */}
                         <div className='grid w-full grid-cols-2 gap-2 mt-4'>
                             <div className='col'>
                                 <InputLabel className="font-bold" forInput="number" value="Revision" />
@@ -272,8 +260,6 @@ export default function IncomingIndex(props) {
                                 />
                             </div>
                         </div>
-
-                        {/* Description */}
                         <div className="mt-4">
                             <InputLabel className='font-bold' forInput="description" value="Description"/>
                             <TextArea
@@ -285,8 +271,6 @@ export default function IncomingIndex(props) {
                                 disabled={noProjectSelected}
                             />
                         </div>
-
-                        {/* Buttons */}
                         <div className="flex items-center justify-end mt-4">
                             <PrimaryButton className="ml-4" processing={processing} disabled={noProjectSelected}>
                                 Save
@@ -300,11 +284,11 @@ export default function IncomingIndex(props) {
                         </div>
                     </form>
                 </div>
-            </Modal>
+            </Modal> */}
 
             {/* Create a User Button */}
             <FloatButton
-                action={() => {setShowCreateDocument(true)}}
+                action={() => {setShowCreateTransmittal(true)}}
             />
         </AuthenticatedLayout>
     );

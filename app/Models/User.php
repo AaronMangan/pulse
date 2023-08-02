@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->isAdmin ?? false;
     }
+
+    public function transmittals(): ?array
+    {
+        return \App\Models\Transmittal::whereJsonContains('addresses', $this->email)->orWhere('to_user_id', $this->id)->get()->toArray();
+    }
 }
